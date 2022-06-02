@@ -89,7 +89,8 @@ class DrugWidget extends StatelessWidget {
       return Container();
     }
 
-    for (var calculation in drug.calculations!) {}
+    List<Widget> variablesWidgets = [];
+    for (var calculation in drug.variables!) {}
     return Card(
         child: Column(
       children: [],
