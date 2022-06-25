@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const primaryColor = const Color(0xFF2963C8);
-
+    const secondaryColor = const Color(0xFF218838);
     ThemeData themeData = ThemeData(
       // Define the default brightness and colors.
       brightness: Brightness.light,
@@ -40,8 +40,11 @@ class MyApp extends StatelessWidget {
         headline6: GoogleFonts.montserrat(fontSize: 22.0, color: primaryColor),
         headline4: GoogleFonts.montserrat(
             fontSize: 18.0, color: Colors.white, backgroundColor: primaryColor),
+        headline5:
+            GoogleFonts.montserrat(fontSize: 32.0, color: secondaryColor),
         bodyText1: GoogleFonts.montserrat(fontSize: 14.0),
         bodyText2: GoogleFonts.montserrat(fontSize: 12.0),
+        caption: GoogleFonts.montserrat(fontSize: 14.0, color: primaryColor),
       ),
       cardTheme: const CardTheme(clipBehavior: Clip.none),
     );
