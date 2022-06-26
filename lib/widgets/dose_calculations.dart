@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -29,6 +30,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
   final DrugService _drugService = DrugService();
   final AuthenticationService _authenticationService = AuthenticationService();
   List<DoseCalculationResult> _doseCalculationsResults = [];
+  bool _loading = false;
 
   Timer? _debounce;
 
@@ -46,11 +48,17 @@ class DoseCalculationsState extends State<DoseCalculations> {
       // do something with query
       if (!mapOfVariables.containsValue(null) &&
           !mapOfVariables.containsValue("")) {
+        setState(() {
+          _loading = true;
+        });
+
         var doseCalculationsResults = await _drugService.doseCalculation(
             widget.drug.id!,
             mapOfVariables,
             await _authenticationService.getUserToken());
+
         setState(() {
+          _loading = false;
           _doseCalculationsResults = doseCalculationsResults;
         });
       }
@@ -186,27 +194,8 @@ class DoseCalculationsState extends State<DoseCalculations> {
     for (var variable in widget.drug.variables!) {
       formFields.add(variableWidget(context, variable));
       mapOfVariables[variable.id] = null;
-      //listVariables.add({'id': variable.id, 'value': null});
     }
 
-    // formFields.add(Padding(
-    //   padding: const EdgeInsets.symmetric(vertical: 16.0),
-    //   child: ElevatedButton(
-    //     onPressed: () {
-    //       // Validate returns true if the form is valid, or false otherwise.
-    //       if (_formKey.currentState!.validate()) {
-    //         // If the form is valid, display a snackbar. In the real world,
-    //         // you'd often call a server or save the information in a database.
-    //         ScaffoldMessenger.of(context).showSnackBar(
-    //           const SnackBar(content: Text('Processing Data')),
-    //         );
-    //       }
-    //     },
-    //     child: const Text('Calcular'),
-    //   ),
-    // ));
-
-    // Build a Form widget using the _formKey created above.
     return Column(children: [
       Form(
         key: _formKey,
@@ -217,7 +206,9 @@ class DoseCalculationsState extends State<DoseCalculations> {
       ),
       Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: doseCalculationResultsWidget(context))
+          child: _loading
+              ? const Loading()
+              : doseCalculationResultsWidget(context))
     ]);
   }
 }

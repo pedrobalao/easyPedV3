@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../models/drug.dart';
 import '../../services/auth_service.dart';
 import '../../widgets/ep_divider.dart';
+import '../../widgets/loading.dart';
 import '../../widgets/title_value.dart';
 
 class DrugScreen extends StatefulWidget {
@@ -76,7 +77,7 @@ class DrugWidget extends StatelessWidget {
               ],
             );
           } else {
-            return const CircularProgressIndicator();
+            return const Loading();
           }
         });
   }

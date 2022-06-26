@@ -43,7 +43,8 @@ class MyApp extends StatelessWidget {
         headline5:
             GoogleFonts.montserrat(fontSize: 32.0, color: secondaryColor),
         bodyText1: GoogleFonts.montserrat(fontSize: 14.0),
-        bodyText2: GoogleFonts.montserrat(fontSize: 12.0),
+        bodyText2:
+            GoogleFonts.montserrat(fontSize: 12.0, color: secondaryColor),
         caption: GoogleFonts.montserrat(fontSize: 14.0, color: primaryColor),
       ),
       cardTheme: const CardTheme(clipBehavior: Clip.none),

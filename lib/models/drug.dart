@@ -6,6 +6,7 @@ class Drug {
   String? comercialBrands;
   String? obs;
   String? presentation;
+  String? subcategoryDescription;
   DateTime? createdAt;
   DateTime? updatedAt;
   List<Indications>? indications;
@@ -20,6 +21,7 @@ class Drug {
       this.comercialBrands,
       this.obs,
       this.presentation,
+      this.subcategoryDescription,
       this.createdAt,
       this.updatedAt,
       this.indications,
@@ -34,6 +36,7 @@ class Drug {
     comercialBrands = json['comercialBrands'];
     obs = json['obs'];
     presentation = json['presentation'];
+    subcategoryDescription = json['subcategoryDescription'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     if (json['indications'] != null) {
@@ -65,6 +68,7 @@ class Drug {
     data['comercialBrands'] = comercialBrands;
     data['obs'] = obs;
     data['presentation'] = presentation;
+    data['subcategoryDescription'] = subcategoryDescription;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     if (indications != null) {
