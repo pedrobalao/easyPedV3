@@ -1,5 +1,6 @@
 import 'package:easypedv3/services/auth_service.dart';
 import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/widgets/loading.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/drug.dart';
@@ -59,7 +60,11 @@ class DrugSearchDelegate extends SearchDelegate<Drug> {
           return ListView.builder(
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(snapshot.data![index].name ?? ""),
+                title: Text(snapshot.data![index].name ?? "",
+                    style: Theme.of(context).textTheme.headline3),
+                subtitle: Text(
+                    snapshot.data![index].subcategoryDescription ?? "",
+                    style: Theme.of(context).textTheme.bodyText2),
                 onTap: () {
                   //close(context, snapshot.data![index]);
                   Navigator.push(
@@ -73,9 +78,7 @@ class DrugSearchDelegate extends SearchDelegate<Drug> {
             itemCount: snapshot.data!.length,
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Loading();
         }
       },
     );

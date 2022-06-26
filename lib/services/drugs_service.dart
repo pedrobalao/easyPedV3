@@ -23,10 +23,7 @@ class DrugService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      String resp = response.body.replaceFirst("{\"drug\":", "");
-      resp = resp.replaceRange(resp.length - 1, resp.length, "");
-
-      var drug = Drug.fromJson(jsonDecode(resp));
+      var drug = Drug.fromJson(jsonDecode(response.body));
 
       return drug;
     } else {
@@ -44,16 +41,47 @@ class DrugService {
     };
 
     final response = await http.get(
-        Uri.parse('$apiBaseUrl/drugs/search?drugname=$searchString'),
+        Uri.parse('$apiBaseUrl/drugs?searchtoken=$searchString'),
         headers: requestHeaders);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      String resp = response.body.replaceFirst("{\"drugs\":", "");
-      resp = resp.replaceRange(resp.length - 1, resp.length, "");
+      return listDrugFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to search Drug');
+    }
+  }
 
-      return listDrugFromJson(resp);
+  List<DoseCalculationResult> listDoseCalculationResultFromJson(String str) =>
+      List<DoseCalculationResult>.from(
+          json.decode(str).map((x) => DoseCalculationResult.fromJson(x)));
+
+  Future<List<DoseCalculationResult>> doseCalculation(
+      int drugId, Map<dynamic, dynamic> data, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    List<CalculationInput> calInput = [];
+
+    data.forEach((key, value) =>
+        {calInput.add(CalculationInput(value: value, variable: key))});
+
+    final response = await http.post(
+        Uri.parse('$apiBaseUrl/drugs/$drugId/calculations'),
+        headers: requestHeaders,
+        body: jsonEncode(calInput));
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+
+      return listDoseCalculationResultFromJson(response.body);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
