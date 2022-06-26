@@ -10,6 +10,62 @@ class DrugService {
 
   final String? apiBaseUrl = dotenv.env['API_BASE_URL'];
 
+  Future<bool> fetchIsFavourite(int drugId, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final responseFav = await http.get(
+        Uri.parse('$apiBaseUrl/users/me/favourite-drugs/$drugId'),
+        headers: requestHeaders);
+    if (responseFav.statusCode >= 200 && responseFav.statusCode < 300) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> addFavourite(int drugId, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final responseFav =
+        await http.post(Uri.parse('$apiBaseUrl/users/me/favourite-drugs'),
+            headers: requestHeaders,
+            body: jsonEncode(<String, int>{
+              'drugId': drugId,
+            }));
+
+    if (responseFav.statusCode >= 200 && responseFav.statusCode < 300) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> deleteFavourite(int drugId, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final responseFav = await http.delete(
+        Uri.parse('$apiBaseUrl/users/me/favourite-drugs/$drugId'),
+        headers: requestHeaders);
+
+    if (responseFav.statusCode >= 200 && responseFav.statusCode < 300) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<Drug> fetchDrug(int drugId, String authToken) async {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
@@ -24,6 +80,15 @@ class DrugService {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       var drug = Drug.fromJson(jsonDecode(response.body));
+
+      var responseFav = await http.get(
+          Uri.parse('$apiBaseUrl/users/me/favourite-drugs/$drugId'),
+          headers: requestHeaders);
+      if (responseFav.statusCode >= 200 && responseFav.statusCode < 300) {
+        drug.isFavourite = true;
+      } else {
+        drug.isFavourite = false;
+      }
 
       return drug;
     } else {

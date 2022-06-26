@@ -12,6 +12,7 @@ class Drug {
   List<Indications>? indications;
   List<Variables>? variables;
   List<Calculations>? calculations;
+  bool? isFavourite;
 
   Drug(
       {this.id,
@@ -26,7 +27,8 @@ class Drug {
       this.updatedAt,
       this.indications,
       this.variables,
-      this.calculations});
+      this.calculations,
+      this.isFavourite = false});
 
   Drug.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -57,6 +59,7 @@ class Drug {
         calculations!.add(Calculations.fromJson(v));
       });
     }
+    isFavourite = json['isFavourite'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +83,7 @@ class Drug {
     if (calculations != null) {
       data['calculations'] = calculations!.map((v) => v.toJson()).toList();
     }
+    data['isFavourite'] = isFavourite;
     return data;
   }
 }

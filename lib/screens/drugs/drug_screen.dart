@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/drug.dart';
 import '../../services/auth_service.dart';
+import '../../widgets/drug_favourite.dart';
 import '../../widgets/ep_divider.dart';
 import '../../widgets/loading.dart';
 import '../../widgets/title_value.dart';
@@ -20,16 +21,9 @@ class _DrugScreenState extends State<DrugScreen> {
   Icon actionIcon = const Icon(Icons.favorite);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            title: Text(widget.drug.name ?? ""),
-            actions: <Widget>[IconButton(icon: actionIcon, onPressed: () {})]),
-        body: SingleChildScrollView(
-          child: DrugWidget(
-            drug: widget.drug,
-          ),
-        ));
+    return DrugWidget(
+      drug: widget.drug,
+    );
   }
 }
 
@@ -49,33 +43,41 @@ class DrugWidget extends StatelessWidget {
         future: fetchDrug(),
         builder: (context, AsyncSnapshot<Drug> snapshot) {
           if (snapshot.hasData) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TitleValue(title: "Nome", value: snapshot.data?.name ?? ""),
-                calculationWidget(context, snapshot.data!),
-                TitleValue(
-                    title: "Contra-Indicações",
-                    value:
-                        snapshot.data?.conterIndications ?? "Sem informação"),
-                TitleValue(
-                    title: "Efeitos-Secundários",
-                    value: snapshot.data?.secondaryEffects ?? "Sem informação"),
-                TitleValue(
-                    title: "Apresentação",
-                    value: snapshot.data?.presentation ?? "Sem informação"),
-                TitleValue(
-                    title: "Marcas Comerciais",
-                    value: snapshot.data?.comercialBrands ?? "Sem informação"),
-                Container(
-                    child: Text("Indicações",
-                        textAlign: TextAlign.left,
-                        overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.headline6),
-                    padding: const EdgeInsets.all(5.5)),
-                indicationsWidget(context, snapshot.data?.indications)
-              ],
-            );
+            return Scaffold(
+                appBar: AppBar(
+                    centerTitle: true,
+                    title: Text(snapshot.data?.name ?? ""),
+                    actions: <Widget>[DrugFavourite(drugId: drug.id!)]),
+                body: SingleChildScrollView(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TitleValue(title: "Nome", value: snapshot.data?.name ?? ""),
+                    calculationWidget(context, snapshot.data!),
+                    TitleValue(
+                        title: "Contra-Indicações",
+                        value: snapshot.data?.conterIndications ??
+                            "Sem informação"),
+                    TitleValue(
+                        title: "Efeitos-Secundários",
+                        value: snapshot.data?.secondaryEffects ??
+                            "Sem informação"),
+                    TitleValue(
+                        title: "Apresentação",
+                        value: snapshot.data?.presentation ?? "Sem informação"),
+                    TitleValue(
+                        title: "Marcas Comerciais",
+                        value:
+                            snapshot.data?.comercialBrands ?? "Sem informação"),
+                    Container(
+                        child: Text("Indicações",
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.clip,
+                            style: Theme.of(context).textTheme.headline6),
+                        padding: const EdgeInsets.all(5.5)),
+                    indicationsWidget(context, snapshot.data?.indications)
+                  ],
+                )));
           } else {
             return const Loading();
           }
