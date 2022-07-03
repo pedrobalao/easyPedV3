@@ -334,3 +334,44 @@ class CalculationInput {
     return data;
   }
 }
+
+class DrugCategory {
+  int? id;
+  String? description;
+
+  DrugCategory({this.id, this.description});
+
+  DrugCategory.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    description = json['description'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['description'] = description;
+    return data;
+  }
+}
+
+class DrugSubCategory {
+  int? id;
+  String? description;
+  int? categoryId;
+
+  DrugSubCategory({this.id, this.description, this.categoryId});
+
+  DrugSubCategory.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    description = json['description'];
+    categoryId = json['categoryId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['description'] = description;
+    data['categoryId'] = categoryId;
+    return data;
+  }
+}

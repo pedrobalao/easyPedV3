@@ -10,6 +10,28 @@ class DrugService {
 
   final String? apiBaseUrl = dotenv.env['API_BASE_URL'];
 
+  Future<List<Drug>> fetchFavourites(String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(
+        Uri.parse('$apiBaseUrl/users/me/favourite-drugs'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listDrugFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to search Drug');
+    }
+  }
+
   Future<bool> fetchIsFavourite(int drugId, String authToken) async {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
@@ -151,6 +173,82 @@ class DrugService {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to search Drug');
+    }
+  }
+
+  List<DrugCategory> listCatorgoriesFromJson(String str) =>
+      List<DrugCategory>.from(
+          json.decode(str).map((x) => DrugCategory.fromJson(x)));
+
+  Future<List<DrugCategory>> fetchCategories(String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(Uri.parse('$apiBaseUrl/categories'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listCatorgoriesFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchCategories');
+    }
+  }
+
+  List<DrugSubCategory> listDrugSubCategoryFromJson(String str) =>
+      List<DrugSubCategory>.from(
+          json.decode(str).map((x) => DrugSubCategory.fromJson(x)));
+
+  Future<List<DrugSubCategory>> fetchSubCategories(
+      int categoryId, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(
+        Uri.parse('$apiBaseUrl/categories/$categoryId/sub-categories'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listDrugSubCategoryFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchCategories');
+    }
+  }
+
+  Future<List<Drug>> fetchDrugsBySubCategory(
+      int categoryId, int subCategoryId, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(
+        Uri.parse(
+            '$apiBaseUrl/categories/$categoryId/sub-categories/$subCategoryId/drugs'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listDrugFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchCategories');
     }
   }
 }
