@@ -4,6 +4,9 @@ import 'package:easypedv3/widgets/loading.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/drug.dart';
+import '../../widgets/base_page_layout.dart';
+import '../../widgets/drug_categories_list.dart';
+import '../../widgets/drugs_favourites_list.dart';
 import 'drug_screen.dart';
 
 class DrugsScreen extends StatefulWidget {
@@ -28,6 +31,18 @@ class _DrugsScreenState extends State<DrugsScreen> {
                 delegate: DrugSearchDelegate(),
               );
             })
+      ]),
+      body: BasePageLayout(children: [
+        Text("Os teus favoritos",
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.clip,
+            style: Theme.of(context).textTheme.headline6),
+        DrugsFavouritesList(),
+        Text("Explora",
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.clip,
+            style: Theme.of(context).textTheme.headline6),
+        DrugsCategoriesList()
       ]),
     );
   }

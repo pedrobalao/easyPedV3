@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'drugs/drugs_screen.dart';
+import 'surgeries_referral/surgeries_referral_list_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({Key? key}) : super(key: key);
 
   List<_Menu> _menus(BuildContext context) {
     return [
-      _Menu(
-          title: "Favoritos",
-          icon: const Icon(Icons.favorite),
-          action: const DrugsScreen()),
       _Menu(
           title: "Medicamentos",
           icon: const Icon(Icons.polyline_outlined),
@@ -30,7 +27,7 @@ class MenuScreen extends StatelessWidget {
       _Menu(
           title: "Referenciação Cirúrgica",
           icon: const Icon(Icons.meeting_room),
-          action: const DrugsScreen()),
+          action: const SurgeriesReferralListScreen()),
       _Menu(
           title: "Sobre",
           icon: const Icon(Icons.app_shortcut),
