@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'diseases/diseases_list_screen.dart';
 import 'drugs/drugs_screen.dart';
 import 'surgeries_referral/surgeries_referral_list_screen.dart';
 
@@ -15,7 +16,7 @@ class MenuScreen extends StatelessWidget {
       _Menu(
           title: "Doenças",
           icon: const Icon(Icons.coronavirus),
-          action: const DrugsScreen()),
+          action: const DiseasesListScreen()),
       _Menu(
           title: "Percentis",
           icon: const Icon(Icons.percent),

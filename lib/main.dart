@@ -34,18 +34,16 @@ class MyApp extends StatelessWidget {
       // Define the default `TextTheme`. Use this to specify the default
       // text styling for headlines, titles, bodies of text, and more.
       textTheme: TextTheme(
-        headline1: GoogleFonts.montserrat(fontSize: 42.0),
-        headline2: GoogleFonts.montserrat(fontSize: 42.0, color: primaryColor),
-        headline3: GoogleFonts.montserrat(fontSize: 14.0, color: primaryColor),
-        headline6: GoogleFonts.montserrat(fontSize: 22.0, color: primaryColor),
-        headline4: GoogleFonts.montserrat(
+        headline1: GoogleFonts.openSans(fontSize: 42.0),
+        headline2: GoogleFonts.openSans(fontSize: 42.0, color: primaryColor),
+        headline3: GoogleFonts.openSans(fontSize: 14.0, color: primaryColor),
+        headline6: GoogleFonts.openSans(fontSize: 22.0, color: primaryColor),
+        headline4: GoogleFonts.openSans(
             fontSize: 18.0, color: Colors.white, backgroundColor: primaryColor),
-        headline5:
-            GoogleFonts.montserrat(fontSize: 32.0, color: secondaryColor),
-        bodyText1: GoogleFonts.montserrat(fontSize: 14.0),
-        bodyText2:
-            GoogleFonts.montserrat(fontSize: 12.0, color: secondaryColor),
-        caption: GoogleFonts.montserrat(fontSize: 14.0, color: primaryColor),
+        headline5: GoogleFonts.openSans(fontSize: 32.0, color: secondaryColor),
+        bodyText1: GoogleFonts.openSans(fontSize: 14.0),
+        bodyText2: GoogleFonts.openSans(fontSize: 12.0, color: secondaryColor),
+        caption: GoogleFonts.openSans(fontSize: 14.0, color: primaryColor),
       ),
       cardTheme: const CardTheme(clipBehavior: Clip.none),
     );

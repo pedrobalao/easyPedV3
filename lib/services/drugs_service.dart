@@ -5,6 +5,8 @@ import 'package:easypedv3/models/surgery_referral.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/disease.dart';
+
 class DrugService {
   List<Drug> listDrugFromJson(String str) =>
       List<Drug>.from(json.decode(str).map((x) => Drug.fromJson(x)));
@@ -275,6 +277,76 @@ class DrugService {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to fetchSurgeriesReferral');
+    }
+  }
+
+  List<Disease> listDiseaseFromJson(String str) =>
+      List<Disease>.from(json.decode(str).map((x) => Disease.fromJson(x)));
+
+  Future<List<Disease>> fetchDiseases(String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(Uri.parse('$apiBaseUrl/diseases'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listDiseaseFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchDiseases');
+    }
+  }
+
+  Future<List<Disease>> searchDiseases(
+      String searchStr, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(
+        Uri.parse('$apiBaseUrl/diseases/?search=$searchStr'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listDiseaseFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchDiseases');
+    }
+  }
+
+  Future<Disease> fetchDisease(int id, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(Uri.parse('$apiBaseUrl/diseases/$id'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var disease = Disease.fromJson(jsonDecode(response.body));
+
+      return disease;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to search disease $id');
     }
   }
 }
