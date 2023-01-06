@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:easypedv3/models/drug.dart';
+import 'package:easypedv3/models/medical_calculation.dart';
 import 'package:easypedv3/models/surgery_referral.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -347,6 +348,86 @@ class DrugService {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to search disease $id');
+    }
+  }
+
+  //medical calculations
+  List<MedicalCalculation> listMedicalCalculationsFromJson(String str) =>
+      List<MedicalCalculation>.from(
+          json.decode(str).map((x) => MedicalCalculation.fromJson(x)));
+
+  Future<MedicalCalculation> fetchMedicalCalculation(
+      int id, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(
+        Uri.parse('$apiBaseUrl/medical-calculations/$id'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = MedicalCalculation.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to search disease $id');
+    }
+  }
+
+  Future<List<MedicalCalculation>> fetchMedicalCalculations(
+      String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(
+        Uri.parse('$apiBaseUrl/medical-calculations'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listMedicalCalculationsFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchDiseases');
+    }
+  }
+
+  Future<CalculationOutput> executeMedicalCalculation(
+      int id, CalculationInput data, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.post(
+        Uri.parse('$apiBaseUrl/medical-calculations/$id/calculations'),
+        headers: requestHeaders,
+        body: data);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = CalculationOutput.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception(
+          'Failed to execute calculation of MedicalCalculation $id');
     }
   }
 }

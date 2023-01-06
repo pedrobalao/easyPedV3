@@ -1,3 +1,4 @@
+import 'package:easypedv3/screens/medical_calculations/medical_calculations_list_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'diseases/diseases_list_screen.dart';
@@ -24,7 +25,7 @@ class MenuScreen extends StatelessWidget {
       _Menu(
           title: "Calculos Médicos",
           icon: const Icon(Icons.calculate),
-          action: const DrugsScreen()),
+          action: const MedicalCalculationsListScreen()),
       _Menu(
           title: "Referenciação Cirúrgica",
           icon: const Icon(Icons.meeting_room),
