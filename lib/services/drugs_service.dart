@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/disease.dart';
+import '../models/percentile.dart';
 
 class DrugService {
   List<Drug> listDrugFromJson(String str) =>
@@ -405,7 +406,7 @@ class DrugService {
   }
 
   Future<CalculationOutput> executeMedicalCalculation(
-      int id, CalculationInput data, String authToken) async {
+      int id, List<CalculationInput> data, String authToken) async {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
@@ -415,7 +416,7 @@ class DrugService {
     final response = await http.post(
         Uri.parse('$apiBaseUrl/medical-calculations/$id/calculations'),
         headers: requestHeaders,
-        body: data);
+        body: json.encode(data));
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
@@ -428,6 +429,82 @@ class DrugService {
       // then throw an exception.
       throw Exception(
           'Failed to execute calculation of MedicalCalculation $id');
+    }
+  }
+
+  Future<PercentileOutput> executeWeightPercentile(
+      PercentileInput data, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.post(
+        Uri.parse('$apiBaseUrl/percentiles/weight'),
+        headers: requestHeaders,
+        body: json.encode(data));
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = PercentileOutput.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to execute weight percentile');
+    }
+  }
+
+  Future<PercentileOutput> executeLengthPercentile(
+      PercentileInput data, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.post(
+        Uri.parse('$apiBaseUrl/percentiles/length'),
+        headers: requestHeaders,
+        body: json.encode(data));
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = PercentileOutput.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to execute length percentile');
+    }
+  }
+
+  Future<BMIOutput> executeBMIPercentile(
+      BMIInput data, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.post(Uri.parse('$apiBaseUrl/percentiles/bmi'),
+        headers: requestHeaders, body: json.encode(data));
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = BMIOutput.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to execute bmi percentile');
     }
   }
 }

@@ -54,6 +54,7 @@ class Variable {
   String? description;
   String? idUnit;
   String? type;
+  List<String>? values;
 
   Variable(
       {this.id,
@@ -62,7 +63,8 @@ class Variable {
       this.optional,
       this.description,
       this.idUnit,
-      this.type});
+      this.type,
+      this.values});
 
   Variable.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -72,6 +74,9 @@ class Variable {
     description = json['description'];
     idUnit = json['idUnit'];
     type = json['type'];
+    values = json.containsKey('values')
+        ? (json['values'] as List).map((item) => item as String).toList()
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -83,6 +88,7 @@ class Variable {
     data['description'] = description;
     data['idUnit'] = idUnit;
     data['type'] = type;
+    data['values'] = values;
     return data;
   }
 }

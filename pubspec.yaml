@@ -38,6 +38,7 @@ dependencies:
   http: ^0.13.4
   flutter_dotenv: ^5.0.2
   google_fonts: ^3.0.1
+  date_time_picker: ^2.1.0
 
 dev_dependencies:
   flutter_test:

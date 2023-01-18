@@ -1,4 +1,5 @@
 import 'package:easypedv3/screens/medical_calculations/medical_calculations_list_screen.dart';
+import 'package:easypedv3/screens/percentiles/percentiles_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'diseases/diseases_list_screen.dart';
@@ -21,7 +22,7 @@ class MenuScreen extends StatelessWidget {
       _Menu(
           title: "Percentis",
           icon: const Icon(Icons.percent),
-          action: const DrugsScreen()),
+          action: const PercentilesScreen()),
       _Menu(
           title: "Calculos Médicos",
           icon: const Icon(Icons.calculate),

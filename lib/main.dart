@@ -23,10 +23,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const primaryColor = const Color(0xFF2963C8);
     const secondaryColor = const Color(0xFF218838);
+
+    const warningColor = const Color(0xFFffc107);
+    const negativeColor = const Color(0xFF651F06);
+    const successColor = const Color(0xFF28a745);
+
     ThemeData themeData = ThemeData(
       // Define the default brightness and colors.
       brightness: Brightness.light,
       primaryColor: primaryColor,
+      errorColor: negativeColor,
 
       // Define the default font family.
       fontFamily: 'Montserrat',
