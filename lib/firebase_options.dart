@@ -58,15 +58,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCI1bCH8_HGVKFPpixcs4-z1Mm1L7gW8Ag',
-    appId: '1:330541011565:ios:1c81f9cf001ab807e0e564',
+    appId: '1:330541011565:ios:62097a5bf379a1cbe0e564',
     messagingSenderId: '330541011565',
     projectId: 'easyped-894ba',
     databaseURL: 'https://easyped-894ba.firebaseio.com',
     storageBucket: 'easyped-894ba.appspot.com',
-    androidClientId:
-        '330541011565-0ekek1brvq39m6c34i8en2tl2jtqj99a.apps.googleusercontent.com',
-    iosClientId:
-        '330541011565-lboc2bd92egf0te1dplhdvbvamhteuhd.apps.googleusercontent.com',
+    androidClientId: '330541011565-0ekek1brvq39m6c34i8en2tl2jtqj99a.apps.googleusercontent.com',
+    iosClientId: '330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com',
     iosBundleId: 'com.easymedicine',
   );
 }

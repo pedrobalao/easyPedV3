@@ -33,16 +33,28 @@ class _DrugsScreenState extends State<DrugsScreen> {
             })
       ]),
       body: BasePageLayout(children: [
-        Text("Os teus favoritos",
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.clip,
-            style: Theme.of(context).textTheme.headline6),
-        DrugsFavouritesList(),
-        Text("Explora",
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.clip,
-            style: Theme.of(context).textTheme.headline6),
-        DrugsCategoriesList()
+        Column(children: [
+          ListTile(
+            tileColor: const Color(0xFF28a745),
+            title: Text("Os teus favoritos",
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.clip,
+                style: Theme.of(context).textTheme.headline4),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(2.0), child: DrugsFavouritesList())
+        ]),
+        Column(children: [
+          ListTile(
+            tileColor: const Color(0xFF28a745),
+            title: Text("Explora",
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.clip,
+                style: Theme.of(context).textTheme.headline4),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(2.0), child: DrugsCategoriesList())
+        ])
       ]),
     );
   }

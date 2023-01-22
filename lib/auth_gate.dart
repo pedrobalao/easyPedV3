@@ -1,7 +1,7 @@
 import 'package:easypedv3/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/auth.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({Key? key}) : super(key: key);
@@ -13,13 +13,34 @@ class AuthGate extends StatelessWidget {
       builder: (context, snapshot) {
         // User is not signed in
         if (!snapshot.hasData) {
-          return const SignInScreen(
-            providerConfigs: [
-              EmailProviderConfiguration(),
-              GoogleProviderConfiguration(
-                  clientId:
-                      "330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com")
-            ],
+          return SignInScreen(
+            showAuthActionSwitch: false,
+            headerBuilder: (context, constraints, _) {
+              return Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(10),
+                      child: Column(children: const [
+                        Text('easyPed',
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 40)),
+                        Text('#makinghealthcareeasier',
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10))
+                      ])));
+            },
+            footerBuilder: (context, action) {
+              return const Text(
+                'Made with ❤️ in Porto',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey),
+              );
+            },
           );
         }
         // Render your application if authenticated
@@ -28,3 +49,19 @@ class AuthGate extends StatelessWidget {
     );
   }
 }
+
+/*
+
+{
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Text(
+                            action == AuthAction.signIn
+                                ? 'A informação presente no easyPed pode conter erros. Não nos responsabilizamos por qualquer consequência do uso da mesma. Toda a informação deve ser validada pelo médico. Ao avançar concorda.'
+                                : 'A informação presente no easyPed pode conter erros. Não nos responsabilizamos por qualquer consequência do uso da mesma. Toda a informação deve ser validada pelo médico. Ao avançar concorda.',
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      );
+                    }*/

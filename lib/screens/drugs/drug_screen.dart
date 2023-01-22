@@ -69,12 +69,12 @@ class DrugWidget extends StatelessWidget {
                         title: "Marcas Comerciais",
                         value:
                             snapshot.data?.comercialBrands ?? "Sem informação"),
-                    Container(
+                    Padding(
+                        padding: const EdgeInsets.all(5.5),
                         child: Text("Indicações",
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.clip,
-                            style: Theme.of(context).textTheme.headline6),
-                        padding: const EdgeInsets.all(5.5)),
+                            style: Theme.of(context).textTheme.headline6)),
                     indicationsWidget(context, snapshot.data?.indications)
                   ],
                 )));
@@ -165,29 +165,23 @@ class DrugWidget extends StatelessWidget {
 
   Widget indicationWidget(context, Indications? indication) {
     if (indication != null) {
-      return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Card(
-            elevation: 4,
-            clipBehavior: Clip.antiAlias,
+      return Column(
+        children: [
+          ListTile(
+            tileColor: const Color(0xFF28a745),
+            title: Text(indication.indicationText ?? "",
+                textAlign: TextAlign.left,
+                overflow: TextOverflow.clip,
+                style: Theme.of(context).textTheme.headline4),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
             child: Column(
-              children: [
-                ListTile(
-                  tileColor: const Color(0xFF2963C8),
-                  title: Text(indication.indicationText ?? "",
-                      textAlign: TextAlign.left,
-                      overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.headline4),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Column(
-                    children: dosesWidget(context, indication.doses),
-                  ),
-                ),
-              ],
+              children: dosesWidget(context, indication.doses),
             ),
-          ));
+          ),
+        ],
+      );
     }
     return Container();
   }

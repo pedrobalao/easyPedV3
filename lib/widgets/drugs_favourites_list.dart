@@ -28,7 +28,7 @@ class DrugsFavouritesList extends StatelessWidget {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return ListTile(
+              return Card(child:ListTile(
                 title: Text(snapshot.data![index].name ?? "",
                     style: Theme.of(context).textTheme.headline3),
                 subtitle: Text(
@@ -42,7 +42,7 @@ class DrugsFavouritesList extends StatelessWidget {
                           builder: (context) =>
                               DrugScreen(drug: snapshot.data![index])));
                 },
-              );
+              ));
             },
             itemCount: snapshot.data!.length,
           );
