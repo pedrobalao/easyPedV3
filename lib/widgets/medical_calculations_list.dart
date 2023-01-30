@@ -28,17 +28,15 @@ class MedicalCalculationsList extends StatelessWidget {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return ListTile(
+              return Card(
+                  child: ListTile(
                 title: Text(snapshot.data![index].description ?? "",
                     style: Theme.of(context).textTheme.headline3),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MedicalCalculationScreen(
-                              medicalCalculation: snapshot.data![index])));
+                  var id = snapshot.data![index].id;
+                  Navigator.pushNamed(context, "/medical-calculations/$id");
                 },
-              );
+              ));
             },
             itemCount: snapshot.data!.length,
           );

@@ -94,11 +94,12 @@ class DrugSearchDelegate extends SearchDelegate<Drug> {
                     style: Theme.of(context).textTheme.bodyText2),
                 onTap: () {
                   //close(context, snapshot.data![index]);
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              DrugScreen(drug: snapshot.data![index])));
+                              DrugScreen(id: snapshot.data![index].id!)));
                 },
               );
             },

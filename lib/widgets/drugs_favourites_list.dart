@@ -28,19 +28,23 @@ class DrugsFavouritesList extends StatelessWidget {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return Card(child:ListTile(
+              return Card(
+                  child: ListTile(
                 title: Text(snapshot.data![index].name ?? "",
                     style: Theme.of(context).textTheme.headline3),
                 subtitle: Text(
                     snapshot.data![index].subcategoryDescription ?? "",
                     style: Theme.of(context).textTheme.bodyText2),
                 onTap: () {
+                  var id = snapshot.data![index].id;
+                  Navigator.pushNamed(context, "/drugs/$id");
+
                   //close(context, snapshot.data![index]);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DrugScreen(drug: snapshot.data![index])));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) =>
+                  //             DrugScreen(id: snapshot.data![index].id!)));
                 },
               ));
             },

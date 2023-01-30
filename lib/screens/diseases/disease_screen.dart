@@ -7,9 +7,9 @@ import '../../widgets/loading.dart';
 import '../../widgets/title_value.dart';
 
 class DiseaseScreen extends StatefulWidget {
-  const DiseaseScreen({Key? key, required this.disease}) : super(key: key);
+  const DiseaseScreen({Key? key, required this.diseaseId}) : super(key: key);
 
-  final Disease disease;
+  final int diseaseId;
   @override
   _DiseaseScreenState createState() => _DiseaseScreenState();
 }
@@ -19,25 +19,25 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
   @override
   Widget build(BuildContext context) {
     return DiseaseWidget(
-      disease: widget.disease,
+      diseaseId: widget.diseaseId,
     );
   }
 }
 
 class DiseaseWidget extends StatelessWidget {
-  DiseaseWidget({Key? key, required this.disease}) : super(key: key);
+  DiseaseWidget({Key? key, required this.diseaseId}) : super(key: key);
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authService = AuthenticationService();
-  final Disease disease;
+  final int diseaseId;
 
-  Future<Disease> fetchDisease() async => _drugService.fetchDisease(
-      disease.id ?? 0, await _authService.getUserToken());
+  Future<Disease> fetchDisease(id) async =>
+      _drugService.fetchDisease(id, await _authService.getUserToken());
 
   @override
   Widget build(context) {
     return FutureBuilder<Disease>(
-        future: fetchDisease(),
+        future: fetchDisease(diseaseId),
         builder: (context, AsyncSnapshot<Disease> snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
@@ -115,7 +115,7 @@ class DiseaseWidget extends StatelessWidget {
       List<Widget> wgs = [];
 
       wgs.add(ListTile(
-        tileColor: const Color(0xFF2963C8),
+        tileColor: const Color(0xFF28a745),
         title: Text(condition.condition ?? "",
             textAlign: TextAlign.left,
             overflow: TextOverflow.clip,
@@ -134,16 +134,14 @@ class DiseaseWidget extends StatelessWidget {
             TitleValue(title: "3ª Linha", value: condition.thirdline ?? ""));
       }
 
-      return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Card(
-            elevation: 4,
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: wgs,
-            ),
-          ));
+      return Card(
+        elevation: 4,
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: wgs,
+        ),
+      );
     }
     return Container();
   }

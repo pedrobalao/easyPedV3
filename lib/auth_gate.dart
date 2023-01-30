@@ -24,12 +24,12 @@ class AuthGate extends StatelessWidget {
                       child: Column(children: const [
                         Text('easyPed',
                             style: TextStyle(
-                                color: Colors.blue,
+                                color: Color(0xFF2963C8),
                                 fontWeight: FontWeight.w500,
                                 fontSize: 40)),
                         Text('#makinghealthcareeasier',
                             style: TextStyle(
-                                color: Colors.blue,
+                                color: Color(0xFF2963C8),
                                 fontWeight: FontWeight.w500,
                                 fontSize: 10))
                       ])));

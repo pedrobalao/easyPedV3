@@ -14,27 +14,27 @@ class MenuScreen extends StatelessWidget {
       _Menu(
           title: "Medicamentos",
           icon: const Icon(Icons.polyline_outlined),
-          action: const DrugsScreen()),
+          route: "/drugs"),
       _Menu(
           title: "Doenças",
           icon: const Icon(Icons.coronavirus),
-          action: const DiseasesListScreen()),
+          route: "/diseases"),
       _Menu(
           title: "Percentis",
           icon: const Icon(Icons.percent),
-          action: const PercentilesScreen()),
+          route: "/percentiles"),
       _Menu(
           title: "Calculos Médicos",
           icon: const Icon(Icons.calculate),
-          action: const MedicalCalculationsListScreen()),
+          route: "/medical-calculations"),
       _Menu(
           title: "Referenciação Cirúrgica",
           icon: const Icon(Icons.meeting_room),
-          action: const SurgeriesReferralListScreen()),
+          route: "/surgeries-referral"),
       _Menu(
           title: "Sobre",
           icon: const Icon(Icons.app_shortcut),
-          action: const DrugsScreen()),
+          route: "/drugs"),
     ];
   }
 
@@ -50,10 +50,7 @@ class MenuScreen extends StatelessWidget {
       children: _menus(context).map<Widget>((menu) {
         return GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => menu.action),
-              );
+              Navigator.pushNamed(context, menu.route);
             },
             child: Card(
               child: Center(child: Text(menu.title)),
@@ -64,9 +61,10 @@ class MenuScreen extends StatelessWidget {
 }
 
 class _Menu {
-  _Menu({required this.title, required this.icon, required this.action});
+  _Menu({required this.title, required this.icon, required this.route});
 
   final String title;
   final Icon icon;
-  final Widget action;
+  //final Widget action;
+  final String route;
 }

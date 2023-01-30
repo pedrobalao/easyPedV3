@@ -13,10 +13,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'RouterNavigator.dart';
 import 'auth_gate.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'screens/diseases/diseases_list_screen.dart';
+import 'screens/drugs/drug_screen.dart';
+import 'screens/drugs/drugs_screen.dart';
+import 'screens/medical_calculations/medical_calculations_list_screen.dart';
+import 'screens/percentiles/percentiles_screen.dart';
+import 'screens/surgeries_referral/surgeries_referral_list_screen.dart';
 import 'widgets/cerror_screen.dart';
 
 void main() async {
@@ -116,7 +123,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeData,
-      home: const AuthGate(),
+      //home: const AuthGate(),
+      initialRoute: '/',
+      onGenerateRoute: (settings) => RouterNavigator.generateRoute(settings),
+      // routes: {
+      //   // When navigating to the "/" route, build the FirstScreen widget.
+      //   '/': (context) => const AuthGate(),
+      //   // When navigating to the "/second" route, build the SecondScreen widget.
+      //   '/drugs': (context) => const DrugsScreen(),
+      //   '/diseases': (context) => const DiseasesListScreen(),
+      //   '/percentiles': (context) => const PercentilesScreen(),
+      //   '/medical-calculations': (context) =>
+      //       const MedicalCalculationsListScreen(),
+      //   '/surgeries-referral': (context) => const SurgeriesReferralListScreen()
+      // },
     );
   }
 }

@@ -12,10 +12,10 @@ import '../../widgets/loading.dart';
 import '../../widgets/title_value.dart';
 
 class MedicalCalculationScreen extends StatefulWidget {
-  const MedicalCalculationScreen({Key? key, required this.medicalCalculation})
+  const MedicalCalculationScreen({Key? key, required this.medicalCalculationId})
       : super(key: key);
 
-  final MedicalCalculation medicalCalculation;
+  final int medicalCalculationId;
   @override
   _MedicalCalculationScreenState createState() =>
       _MedicalCalculationScreenState();
@@ -26,27 +26,26 @@ class _MedicalCalculationScreenState extends State<MedicalCalculationScreen> {
   @override
   Widget build(BuildContext context) {
     return MedicalCalculationWidget(
-      medicalCalculation: widget.medicalCalculation,
+      medicalCalculationId: widget.medicalCalculationId,
     );
   }
 }
 
 class MedicalCalculationWidget extends StatelessWidget {
-  MedicalCalculationWidget({Key? key, required this.medicalCalculation})
+  MedicalCalculationWidget({Key? key, required this.medicalCalculationId})
       : super(key: key);
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authService = AuthenticationService();
-  final MedicalCalculation medicalCalculation;
+  final int medicalCalculationId;
 
-  Future<MedicalCalculation> fetchItem() async =>
-      _drugService.fetchMedicalCalculation(
-          medicalCalculation.id ?? 0, await _authService.getUserToken());
+  Future<MedicalCalculation> fetchItem(id) async => _drugService
+      .fetchMedicalCalculation(id, await _authService.getUserToken());
 
   @override
   Widget build(context) {
     return FutureBuilder<MedicalCalculation>(
-        future: fetchItem(),
+        future: fetchItem(medicalCalculationId),
         builder: (context, AsyncSnapshot<MedicalCalculation> snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
@@ -222,7 +221,7 @@ class CalculationState extends State<CalculationWidget> {
             clipBehavior: Clip.antiAlias,
             child: Column(children: [
               ListTile(
-                tileColor: const Color(0xFF2963C8),
+                tileColor: const Color(0xFF28a745),
                 title: Text("Resultado",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.clip,

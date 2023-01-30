@@ -253,8 +253,8 @@ class PercentileState extends State<PercentilesWidget> {
             clipBehavior: Clip.antiAlias,
             child: Column(children: [
               ListTile(
-                tileColor: const Color(0xFF2963C8),
-                title: Text("Percentil " + type,
+                tileColor: const Color(0xFF28a745),
+                title: Text("Percentil $type",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.headline4),
@@ -304,7 +304,7 @@ class PercentileState extends State<PercentilesWidget> {
             clipBehavior: Clip.antiAlias,
             child: Column(children: [
               ListTile(
-                tileColor: const Color(0xFF2963C8),
+                tileColor: const Color(0xFF28a745),
                 title: Text("IMC",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.clip,

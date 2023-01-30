@@ -27,17 +27,20 @@ class DiseasesList extends StatelessWidget {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return ListTile(
+              return Card(
+                  child: ListTile(
                 title: Text(snapshot.data![index].description ?? "",
                     style: Theme.of(context).textTheme.headline3),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DiseaseScreen(disease: snapshot.data![index])));
+                  var id = snapshot.data![index].id;
+                  Navigator.pushNamed(context, "/diseases/$id");
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) =>
+                  //             DiseaseScreen(disease: snapshot.data![index])));
                 },
-              );
+              ));
             },
             itemCount: snapshot.data!.length,
           );

@@ -33,17 +33,12 @@ class DrugsList extends StatelessWidget {
             itemBuilder: (context, index) {
               return Card(
                   child: ListTile(
-                title: Text(snapshot.data![index].name ?? "",
-                    style: Theme.of(context).textTheme.headline3),
-                onTap: () {
-                  //close(context, snapshot.data![index]);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DrugScreen(drug: snapshot.data![index])));
-                },
-              ));
+                      title: Text(snapshot.data![index].name ?? "",
+                          style: Theme.of(context).textTheme.headline3),
+                      onTap: () {
+                        var id = snapshot.data![index].id;
+                        Navigator.pushNamed(context, "/drugs/$id");
+                      }));
             },
             itemCount: snapshot.data!.length,
           );

@@ -66,12 +66,9 @@ class DiseasesSearchDelegate extends SearchDelegate<Disease> {
                 title: Text(snapshot.data![index].description ?? "",
                     style: Theme.of(context).textTheme.headline3),
                 onTap: () {
+                  var id = snapshot.data![index].id;
+                  Navigator.pushNamed(context, "/diseases/$id");
                   //close(context, snapshot.data![index]);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DiseaseScreen(disease: snapshot.data![index])));
                 },
               );
             },

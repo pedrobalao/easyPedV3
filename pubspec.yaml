@@ -71,6 +71,9 @@ flutter:
   assets:
     - .env
     - assets/images/error_pic.png
+    - assets/images/e404.png
+    - assets/images/connection.png
+    - assets/images/generic_error.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

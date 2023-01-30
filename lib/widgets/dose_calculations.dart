@@ -145,7 +145,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
               clipBehavior: Clip.antiAlias,
               child: Column(children: [
                 ListTile(
-                  tileColor: const Color(0xFF2963C8),
+                  tileColor: const Color(0xFF28a745),
                   title: Text(result.description ?? "",
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.clip,
@@ -157,9 +157,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
                       Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Text(
-                              result.result.toString() +
-                                  " " +
-                                  result.resultIdUnit!,
+                              "${result.result} ${result.resultIdUnit!}",
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.clip,
                               style: Theme.of(context).textTheme.headline5)),

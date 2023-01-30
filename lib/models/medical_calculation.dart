@@ -98,7 +98,7 @@ class CalculationOutput {
   String? description;
   String? resultDescription;
   String? resultIdUnit;
-  double? result;
+  num? result;
 
   CalculationOutput(
       {this.id,
