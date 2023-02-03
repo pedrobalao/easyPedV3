@@ -6,7 +6,9 @@ import 'package:easypedv3/models/surgery_referral.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/congress.dart';
 import '../models/disease.dart';
+import '../models/news.dart';
 import '../models/percentile.dart';
 
 class DrugService {
@@ -505,6 +507,54 @@ class DrugService {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to execute bmi percentile');
+    }
+  }
+
+  List<Congress> listCongressesFromJson(String str) =>
+      List<Congress>.from(json.decode(str).map((x) => Congress.fromJson(x)));
+
+  Future<List<Congress>> fetchCongresses(String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(Uri.parse('$apiBaseUrl/congresses'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listCongressesFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchCongresses');
+    }
+  }
+
+  List<News> listNewsFromJson(String str) =>
+      List<News>.from(json.decode(str).map((x) => News.fromJson(x)));
+
+  Future<List<News>> fetchNews(String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response =
+        await http.get(Uri.parse('$apiBaseUrl/news'), headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listNewsFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchNews');
     }
   }
 }

@@ -15,6 +15,7 @@ class Menu extends StatelessWidget {
 
   List<_Menu> _menus() {
     return [
+      _Menu(title: "Home", icon: const Icon(Icons.home), route: "/"),
       _Menu(
           title: "Medicamentos",
           icon: const Icon(Icons.polyline_outlined),
