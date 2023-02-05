@@ -18,14 +18,6 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: const Text("easyPed"), actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.search),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
-            },
-          ),
-          IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Sair',
             onPressed: () {
@@ -46,6 +38,7 @@ class HomeScreen extends StatelessWidget {
                   overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.headline4),
             ),
+            const Gap(5),
             CongressesSlide(),
             Gap(10),
             ListTile(
@@ -55,6 +48,7 @@ class HomeScreen extends StatelessWidget {
                   overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.headline4),
             ),
+            const Gap(5),
             NewsSlide(),
             Gap(10),
           ]),
