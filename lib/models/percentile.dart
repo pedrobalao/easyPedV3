@@ -9,8 +9,8 @@ class BMIInput {
   BMIInput.fromJson(Map<String, dynamic> json) {
     gender = json['gender'];
     birthdate = json['birthdate'];
-    weight = json['weight'];
-    length = json['length'];
+    weight = json['weight'].toDouble();
+    length = json['length'].toDouble();
   }
 
   Map<String, dynamic> toJson() {
@@ -31,8 +31,8 @@ class BMIOutput {
   BMIOutput({this.bmi, this.percentile, this.result});
 
   BMIOutput.fromJson(Map<String, dynamic> json) {
-    bmi = json['bmi'];
-    percentile = json['percentile'];
+    bmi = json['bmi'].toDouble();
+    percentile = json['percentile'].toDouble();
     result = json['result'];
   }
 
@@ -55,7 +55,7 @@ class PercentileInput {
   PercentileInput.fromJson(Map<String, dynamic> json) {
     gender = json['gender'];
     birthdate = json['birthdate'];
-    value = json['value'];
+    value = json['value'].toDouble();
   }
 
   Map<String, dynamic> toJson() {
@@ -74,7 +74,7 @@ class PercentileOutput {
   PercentileOutput({this.percentile, this.description});
 
   PercentileOutput.fromJson(Map<String, dynamic> json) {
-    percentile = json['percentile'];
+    percentile = json['percentile'].toDouble();
     description = json['description'];
   }
 

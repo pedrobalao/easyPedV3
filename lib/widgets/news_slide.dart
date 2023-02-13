@@ -62,8 +62,8 @@ class NewsScreen extends StatelessWidget {
           _launchUrl(Uri.parse(news.url!));
         },
         child: Container(
-          width: size.width * 0.8,
-          height: AppLayout.getHeight(330),
+          width: 300,
+          height: 340,
           padding: EdgeInsets.symmetric(
               horizontal: AppLayout.getWidth(10),
               vertical: AppLayout.getHeight(10)),

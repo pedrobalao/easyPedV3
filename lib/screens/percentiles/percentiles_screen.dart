@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import '../../services/drugs_service.dart';
 import '../../services/auth_service.dart';
 import '../../utils/string_utils.dart';
-import '../../widgets/title_value.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
 class PercentilesScreen extends StatefulWidget {
@@ -21,7 +20,7 @@ class _PercentilesScreenState extends State<PercentilesScreen> {
   Icon actionIcon = const Icon(Icons.favorite);
   @override
   Widget build(BuildContext context) {
-    return PercentilesWidget();
+    return const PercentilesWidget();
   }
 }
 
@@ -364,8 +363,17 @@ class PercentileState extends State<PercentilesWidget> {
               percentile: _bmiPercentileResult?.percentile, description: "")));
       resultWidgets.add(bmiResult(context, _bmiPercentileResult!));
     }
-    return Row(
-      children: resultWidgets,
-    );
+
+    return Column(children: [
+      ListView.builder(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return resultWidgets[index];
+        },
+        itemCount: resultWidgets.length,
+      )
+    ]);
   }
 }

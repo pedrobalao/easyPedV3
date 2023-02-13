@@ -2,6 +2,10 @@ import 'package:easypedv3/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+
+import 'screens/auth/signin_screen.dart';
+import 'widgets/signin.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({Key? key}) : super(key: key);
@@ -13,35 +17,34 @@ class AuthGate extends StatelessWidget {
       builder: (context, snapshot) {
         // User is not signed in
         if (!snapshot.hasData) {
-          return SignInScreen(
-            showAuthActionSwitch: false,
-            headerBuilder: (context, constraints, _) {
-              return Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(10),
-                      child: Column(children: const [
-                        Text('easyPed',
-                            style: TextStyle(
-                                color: Color(0xFF2963C8),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 40)),
-                        Text('#makinghealthcareeasier',
-                            style: TextStyle(
-                                color: Color(0xFF2963C8),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10))
-                      ])));
-            },
-            footerBuilder: (context, action) {
-              return const Text(
-                'Made with ❤️ in Porto',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
-              );
-            },
-          );
+          return const EPSignScreen();
+          // return SignInScreen(
+          //   showAuthActionSwitch: false,
+          //   headerBuilder: (context, constraints, _) {
+          //     return Padding(
+          //         padding: const EdgeInsets.all(20),
+          //         child: Center(
+          //             child: Column(children: const [
+          //           Text('easyPed',
+          //               style: TextStyle(
+          //                   color: Color(0xFF2963C8),
+          //                   fontWeight: FontWeight.w500,
+          //                   fontSize: 40)),
+          //           Text('#makinghealthcareeasier',
+          //               style: TextStyle(
+          //                   color: Color(0xFF2963C8),
+          //                   fontWeight: FontWeight.w500,
+          //                   fontSize: 10))
+          //         ])));
+          //   },
+          //   footerBuilder: (context, action) {
+          //     return const Text(
+          //       'Made with ❤️ in Porto',
+          //       textAlign: TextAlign.center,
+          //       style: TextStyle(color: Colors.grey),
+          //     );
+          //   },
+          // );
         }
         // Render your application if authenticated
         return const HomeScreen();
