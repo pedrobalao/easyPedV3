@@ -67,7 +67,8 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
   Widget numberVariableWidget(context, Variables variable) {
     return TextFormField(
-      keyboardType: TextInputType.number,
+      keyboardType:
+          const TextInputType.numberWithOptions(signed: true, decimal: true),
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly
       ],
@@ -170,9 +171,17 @@ class DoseCalculationsState extends State<DoseCalculations> {
       resultWidgets.add(widg);
     }
 
-    return Row(
-      children: resultWidgets,
-    );
+    return Column(children: [
+      ListView.builder(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return resultWidgets[index];
+        },
+        itemCount: resultWidgets.length,
+      )
+    ]);
   }
 
   @override
