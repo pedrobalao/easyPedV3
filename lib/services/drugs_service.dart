@@ -1,9 +1,15 @@
 import 'dart:convert';
 
 import 'package:easypedv3/models/drug.dart';
+import 'package:easypedv3/models/medical_calculation.dart';
 import 'package:easypedv3/models/surgery_referral.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/congress.dart';
+import '../models/disease.dart';
+import '../models/news.dart';
+import '../models/percentile.dart';
 
 class DrugService {
   List<Drug> listDrugFromJson(String str) =>
@@ -275,6 +281,280 @@ class DrugService {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to fetchSurgeriesReferral');
+    }
+  }
+
+  List<Disease> listDiseaseFromJson(String str) =>
+      List<Disease>.from(json.decode(str).map((x) => Disease.fromJson(x)));
+
+  Future<List<Disease>> fetchDiseases(String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(Uri.parse('$apiBaseUrl/diseases'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listDiseaseFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchDiseases');
+    }
+  }
+
+  Future<List<Disease>> searchDiseases(
+      String searchStr, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(
+        Uri.parse('$apiBaseUrl/diseases/?search=$searchStr'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listDiseaseFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchDiseases');
+    }
+  }
+
+  Future<Disease> fetchDisease(int id, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(Uri.parse('$apiBaseUrl/diseases/$id'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var disease = Disease.fromJson(jsonDecode(response.body));
+
+      return disease;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to search disease $id');
+    }
+  }
+
+  //medical calculations
+  List<MedicalCalculation> listMedicalCalculationsFromJson(String str) =>
+      List<MedicalCalculation>.from(
+          json.decode(str).map((x) => MedicalCalculation.fromJson(x)));
+
+  Future<MedicalCalculation> fetchMedicalCalculation(
+      int id, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(
+        Uri.parse('$apiBaseUrl/medical-calculations/$id'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = MedicalCalculation.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to search disease $id');
+    }
+  }
+
+  Future<List<MedicalCalculation>> fetchMedicalCalculations(
+      String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(
+        Uri.parse('$apiBaseUrl/medical-calculations'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listMedicalCalculationsFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchDiseases');
+    }
+  }
+
+  Future<CalculationOutput> executeMedicalCalculation(
+      int id, List<CalculationInput> data, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.post(
+        Uri.parse('$apiBaseUrl/medical-calculations/$id/calculations'),
+        headers: requestHeaders,
+        body: json.encode(data));
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = CalculationOutput.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception(
+          'Failed to execute calculation of MedicalCalculation $id');
+    }
+  }
+
+  Future<PercentileOutput> executeWeightPercentile(
+      PercentileInput data, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.post(
+        Uri.parse('$apiBaseUrl/percentiles/weight'),
+        headers: requestHeaders,
+        body: json.encode(data));
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = PercentileOutput.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to execute weight percentile');
+    }
+  }
+
+  Future<PercentileOutput> executeLengthPercentile(
+      PercentileInput data, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.post(
+        Uri.parse('$apiBaseUrl/percentiles/length'),
+        headers: requestHeaders,
+        body: json.encode(data));
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = PercentileOutput.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to execute length percentile');
+    }
+  }
+
+  Future<BMIOutput> executeBMIPercentile(
+      BMIInput data, String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.post(Uri.parse('$apiBaseUrl/percentiles/bmi'),
+        headers: requestHeaders, body: json.encode(data));
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      var ret = BMIOutput.fromJson(jsonDecode(response.body));
+
+      return ret;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to execute bmi percentile');
+    }
+  }
+
+  List<Congress> listCongressesFromJson(String str) =>
+      List<Congress>.from(json.decode(str).map((x) => Congress.fromJson(x)));
+
+  Future<List<Congress>> fetchCongresses(String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response = await http.get(Uri.parse('$apiBaseUrl/congresses'),
+        headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listCongressesFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchCongresses');
+    }
+  }
+
+  List<News> listNewsFromJson(String str) =>
+      List<News>.from(json.decode(str).map((x) => News.fromJson(x)));
+
+  Future<List<News>> fetchNews(String authToken) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': authToken
+    };
+
+    final response =
+        await http.get(Uri.parse('$apiBaseUrl/news'), headers: requestHeaders);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return listNewsFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to fetchNews');
     }
   }
 }

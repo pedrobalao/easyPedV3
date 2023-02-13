@@ -10,9 +10,9 @@ import '../../widgets/loading.dart';
 import '../../widgets/title_value.dart';
 
 class DrugScreen extends StatefulWidget {
-  const DrugScreen({Key? key, required this.drug}) : super(key: key);
+  const DrugScreen({Key? key, required this.id}) : super(key: key);
 
-  final Drug drug;
+  final int id;
   @override
   _DrugScreenState createState() => _DrugScreenState();
 }
@@ -22,32 +22,32 @@ class _DrugScreenState extends State<DrugScreen> {
   @override
   Widget build(BuildContext context) {
     return DrugWidget(
-      drug: widget.drug,
+      id: widget.id,
     );
   }
 }
 
 class DrugWidget extends StatelessWidget {
-  DrugWidget({Key? key, required this.drug}) : super(key: key);
+  DrugWidget({Key? key, required this.id}) : super(key: key);
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authService = AuthenticationService();
-  final Drug drug;
+  final int id;
 
-  Future<Drug> fetchDrug() async =>
-      _drugService.fetchDrug(drug.id ?? 0, await _authService.getUserToken());
+  Future<Drug> fetchDrug(int id) async =>
+      _drugService.fetchDrug(id, await _authService.getUserToken());
 
   @override
   Widget build(context) {
     return FutureBuilder<Drug>(
-        future: fetchDrug(),
+        future: fetchDrug(id),
         builder: (context, AsyncSnapshot<Drug> snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
                     title: Text(snapshot.data?.name ?? ""),
-                    actions: <Widget>[DrugFavourite(drugId: drug.id!)]),
+                    actions: <Widget>[DrugFavourite(drugId: id)]),
                 body: SingleChildScrollView(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,12 +69,12 @@ class DrugWidget extends StatelessWidget {
                         title: "Marcas Comerciais",
                         value:
                             snapshot.data?.comercialBrands ?? "Sem informação"),
-                    Container(
+                    Padding(
+                        padding: const EdgeInsets.all(5.5),
                         child: Text("Indicações",
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.clip,
-                            style: Theme.of(context).textTheme.headline6),
-                        padding: const EdgeInsets.all(5.5)),
+                            style: Theme.of(context).textTheme.headline6)),
                     indicationsWidget(context, snapshot.data?.indications)
                   ],
                 )));
@@ -165,29 +165,23 @@ class DrugWidget extends StatelessWidget {
 
   Widget indicationWidget(context, Indications? indication) {
     if (indication != null) {
-      return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Card(
-            elevation: 4,
-            clipBehavior: Clip.antiAlias,
+      return Column(
+        children: [
+          ListTile(
+            tileColor: const Color(0xFF28a745),
+            title: Text(indication.indicationText ?? "",
+                textAlign: TextAlign.left,
+                overflow: TextOverflow.clip,
+                style: Theme.of(context).textTheme.headline4),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
             child: Column(
-              children: [
-                ListTile(
-                  tileColor: const Color(0xFF2963C8),
-                  title: Text(indication.indicationText ?? "",
-                      textAlign: TextAlign.left,
-                      overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.headline4),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Column(
-                    children: dosesWidget(context, indication.doses),
-                  ),
-                ),
-              ],
+              children: dosesWidget(context, indication.doses),
             ),
-          ));
+          ),
+        ],
+      );
     }
     return Container();
   }

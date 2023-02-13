@@ -1,27 +1,26 @@
 import 'package:easypedv3/services/auth_service.dart';
 import 'package:flutter/material.dart';
-
-import '../models/drug.dart';
-import '../screens/drugs/drug_screen.dart';
+import '../models/disease.dart';
+import '../screens/diseases/disease_screen.dart';
 import '../services/drugs_service.dart';
 import 'loading.dart';
 
-class DrugsFavouritesList extends StatelessWidget {
-  DrugsFavouritesList({Key? key}) : super(key: key);
+class DiseasesList extends StatelessWidget {
+  DiseasesList({Key? key}) : super(key: key);
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authenticationService = AuthenticationService();
 
-  Future<List<Drug>> fetchFavourites() async {
+  Future<List<Disease>> fetchDiseases() async {
     var ret = await _drugService
-        .fetchFavourites(await _authenticationService.getUserToken());
+        .fetchDiseases(await _authenticationService.getUserToken());
     return ret;
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Drug>>(
-      future: fetchFavourites(),
+    return FutureBuilder<List<Disease>>(
+      future: fetchDiseases(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
@@ -30,21 +29,16 @@ class DrugsFavouritesList extends StatelessWidget {
             itemBuilder: (context, index) {
               return Card(
                   child: ListTile(
-                title: Text(snapshot.data![index].name ?? "",
+                title: Text(snapshot.data![index].description ?? "",
                     style: Theme.of(context).textTheme.headline3),
-                subtitle: Text(
-                    snapshot.data![index].subcategoryDescription ?? "",
-                    style: Theme.of(context).textTheme.bodyText2),
                 onTap: () {
                   var id = snapshot.data![index].id;
-                  Navigator.pushNamed(context, "/drugs/$id");
-
-                  //close(context, snapshot.data![index]);
+                  Navigator.pushNamed(context, "/diseases/$id");
                   // Navigator.push(
                   //     context,
                   //     MaterialPageRoute(
                   //         builder: (context) =>
-                  //             DrugScreen(id: snapshot.data![index].id!)));
+                  //             DiseaseScreen(disease: snapshot.data![index])));
                 },
               ));
             },

@@ -30,7 +30,8 @@ class DrugsSubCategoriesList extends StatelessWidget {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return ListTile(
+              return Card(
+                  child: ListTile(
                 title: Text(snapshot.data![index].description ?? "",
                     style: Theme.of(context).textTheme.headline3),
                 onTap: () {
@@ -42,7 +43,7 @@ class DrugsSubCategoriesList extends StatelessWidget {
                                 drugSubCategory: snapshot.data![index],
                               )));
                 },
-              );
+              ));
             },
             itemCount: snapshot.data!.length,
           );

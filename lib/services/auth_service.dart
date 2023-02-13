@@ -22,7 +22,7 @@ class AuthenticationService {
 
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
 
-    String? bearerToken = "Bearer " + (token ?? (throw UserNotAuthenticated));
+    String? bearerToken = "Bearer ${token ?? (throw UserNotAuthenticated)}";
     // ignore: todo
     //TODO remove it
     //bearerToken = dotenv.env['TEST_TOKEN'];

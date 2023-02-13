@@ -23,8 +23,6 @@ class Drug {
       this.obs,
       this.presentation,
       this.subcategoryDescription,
-      this.createdAt,
-      this.updatedAt,
       this.indications,
       this.variables,
       this.calculations,
@@ -39,8 +37,7 @@ class Drug {
     obs = json['obs'];
     presentation = json['presentation'];
     subcategoryDescription = json['subcategoryDescription'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+
     if (json['indications'] != null) {
       indications = <Indications>[];
       json['indications'].forEach((v) {
@@ -72,8 +69,7 @@ class Drug {
     data['obs'] = obs;
     data['presentation'] = presentation;
     data['subcategoryDescription'] = subcategoryDescription;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
+
     if (indications != null) {
       data['indications'] = indications!.map((v) => v.toJson()).toList();
     }
@@ -96,20 +92,13 @@ class Indications {
   DateTime? updatedAt;
   List<Doses>? doses;
 
-  Indications(
-      {this.id,
-      this.drugId,
-      this.indicationText,
-      this.createdAt,
-      this.updatedAt,
-      this.doses});
+  Indications({this.id, this.drugId, this.indicationText, this.doses});
 
   Indications.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     drugId = json['drugId'];
     indicationText = json['indicationText'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+
     if (json['doses'] != null) {
       doses = <Doses>[];
       json['doses'].forEach((v) {
@@ -123,8 +112,7 @@ class Indications {
     data['id'] = id;
     data['drugId'] = drugId;
     data['indicationText'] = indicationText;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
+
     if (doses != null) {
       data['doses'] = doses!.map((v) => v.toJson()).toList();
     }
@@ -144,8 +132,6 @@ class Doses {
   String? maxDosePerDay;
   String? idUnityMaxDosePerDay;
   String? obs;
-  DateTime? createdAt;
-  DateTime? updatedAt;
 
   Doses(
       {this.id,
@@ -158,9 +144,7 @@ class Doses {
       this.takesPerDay,
       this.maxDosePerDay,
       this.idUnityMaxDosePerDay,
-      this.obs,
-      this.createdAt,
-      this.updatedAt});
+      this.obs});
 
   Doses.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -174,8 +158,6 @@ class Doses {
     maxDosePerDay = json['maxDosePerDay'];
     idUnityMaxDosePerDay = json['idUnityMaxDosePerDay'];
     obs = json['obs'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -191,8 +173,7 @@ class Doses {
     data['maxDosePerDay'] = maxDosePerDay;
     data['idUnityMaxDosePerDay'] = idUnityMaxDosePerDay;
     data['obs'] = obs;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
+
     return data;
   }
 }
@@ -202,24 +183,14 @@ class Variables {
   String? description;
   String? idUnit;
   String? type;
-  DateTime? createdAt;
-  DateTime? updatedAt;
 
-  Variables(
-      {this.id,
-      this.description,
-      this.idUnit,
-      this.type,
-      this.createdAt,
-      this.updatedAt});
+  Variables({this.id, this.description, this.idUnit, this.type});
 
   Variables.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     description = json['description'];
     idUnit = json['idUnit'];
     type = json['type'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -228,8 +199,7 @@ class Variables {
     data['description'] = description;
     data['idUnit'] = idUnit;
     data['type'] = type;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
+
     return data;
   }
 }
@@ -242,19 +212,16 @@ class Calculations {
   String? resultDescription;
   String? resultIdUnit;
   String? description;
-  DateTime? createdAt;
-  DateTime? updatedAt;
 
-  Calculations(
-      {this.id,
-      this.drugId,
-      this.type,
-      this.function,
-      this.resultDescription,
-      this.resultIdUnit,
-      this.description,
-      this.createdAt,
-      this.updatedAt});
+  Calculations({
+    this.id,
+    this.drugId,
+    this.type,
+    this.function,
+    this.resultDescription,
+    this.resultIdUnit,
+    this.description,
+  });
 
   Calculations.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -264,8 +231,6 @@ class Calculations {
     resultDescription = json['resultDescription'];
     resultIdUnit = json['resultIdUnit'];
     description = json['description'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -277,8 +242,7 @@ class Calculations {
     data['resultDescription'] = resultDescription;
     data['resultIdUnit'] = resultIdUnit;
     data['description'] = description;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
+
     return data;
   }
 }
@@ -288,7 +252,7 @@ class DoseCalculationResult {
   String? description;
   String? resultDescription;
   String? resultIdUnit;
-  double? result;
+  num? result;
 
   DoseCalculationResult(
       {this.id,

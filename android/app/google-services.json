@@ -40,11 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com",
+              "client_id": "330541011565-lboc2bd92egf0te1dplhdvbvamhteuhd.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.easymedicine",
-                "app_store_id": "1158594702"
+                "bundle_id": "com.example.easypedv3"
               }
             }
           ]
@@ -77,11 +76,10 @@
               "client_type": 3
             },
             {
-              "client_id": "330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com",
+              "client_id": "330541011565-lboc2bd92egf0te1dplhdvbvamhteuhd.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.easymedicine",
-                "app_store_id": "1158594702"
+                "bundle_id": "com.example.easypedv3"
               }
             }
           ]

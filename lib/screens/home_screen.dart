@@ -1,7 +1,12 @@
+import 'package:easypedv3/widgets/congresses_slide.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
-import 'menu_screen.dart';
+import '../auth_gate.dart';
+import '../widgets/menu.dart';
+import '../widgets/news_slide.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,105 +16,42 @@ class HomeScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("easyPed"), actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.search),
-          tooltip: 'Show Snackbar',
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('This is a snackbar')));
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.logout),
-          tooltip: 'Sair',
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute<void>(
-              builder: (BuildContext context) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: const Text('Next page'),
-                  ),
-                  body: const Center(
-                    child: Text(
-                      'This is the next page',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),
-                );
-              },
-            ));
-          },
-        ),
-      ]),
-      body: const MenuScreen(),
-    );
+        appBar: AppBar(title: const Text("easyPed"), actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Sair',
+            onPressed: () {
+              FirebaseUIAuth.signOut(context: context);
+
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const AuthGate()));
+            },
+          ),
+        ]),
+        drawer: const Menu(),
+        body: SingleChildScrollView(
+          child: Column(children: [
+            ListTile(
+              tileColor: const Color(0xFF28a745),
+              title: Text("Congressos",
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.clip,
+                  style: Theme.of(context).textTheme.headline4),
+            ),
+            const Gap(5),
+            CongressesSlide(),
+            Gap(10),
+            ListTile(
+              tileColor: const Color(0xFF28a745),
+              title: Text("Novidades",
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.clip,
+                  style: Theme.of(context).textTheme.headline4),
+            ),
+            const Gap(5),
+            NewsSlide(),
+            Gap(10),
+          ]),
+        ));
   }
 }
-
-// class _HomeScreenState extends State<HomeScreen> {
-//   int _counter = 0;
-
-//   void _incrementCounter() {
-//     setState(() {
-//       // This call to setState tells the Flutter framework that something has
-//       // changed in this State, which causes it to rerun the build method below
-//       // so that the display can reflect the updated values. If we changed
-//       // _counter without calling setState(), then the build method would not be
-//       // called again, and so nothing would appear to happen.
-//       _counter++;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // This method is rerun every time setState is called, for instance as done
-//     // by the _incrementCounter method above.
-//     //
-//     // The Flutter framework has been optimized to make rerunning build methods
-//     // fast, so that you can just rebuild anything that needs updating rather
-//     // than having to individually change instances of widgets.
-//     return Scaffold(
-//       appBar: AppBar(
-//         // Here we take the value from the MyHomePage object that was created by
-//         // the App.build method, and use it to set our appbar title.
-//         title: Text(widget.title),
-//       ),
-//       body: Center(
-//         // Center is a layout widget. It takes a single child and positions it
-//         // in the middle of the parent.
-//         child: Column(
-//           // Column is also a layout widget. It takes a list of children and
-//           // arranges them vertically. By default, it sizes itself to fit its
-//           // children horizontally, and tries to be as tall as its parent.
-//           //
-//           // Invoke "debug painting" (press "p" in the console, choose the
-//           // "Toggle Debug Paint" action from the Flutter Inspector in Android
-//           // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-//           // to see the wireframe for each widget.
-//           //
-//           // Column has various properties to control how it sizes itself and
-//           // how it positions its children. Here we use mainAxisAlignment to
-//           // center the children vertically; the main axis here is the vertical
-//           // axis because Columns are vertical (the cross axis would be
-//           // horizontal).
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             const Text(
-//               'You have pushed the button this many times:',
-//             ),
-//             Text(
-//               '$_counter',
-//               style: Theme.of(context).textTheme.headline4,
-//             ),
-//           ],
-//         ),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: _incrementCounter,
-//         tooltip: 'Increment',
-//         child: const Icon(Icons.add),
-//       ), // This trailing comma makes auto-formatting nicer for build methods.
-//     );
-//   }
-// }

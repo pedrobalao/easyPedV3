@@ -67,7 +67,8 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
   Widget numberVariableWidget(context, Variables variable) {
     return TextFormField(
-      keyboardType: TextInputType.number,
+      keyboardType:
+          const TextInputType.numberWithOptions(signed: true, decimal: true),
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly
       ],
@@ -145,7 +146,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
               clipBehavior: Clip.antiAlias,
               child: Column(children: [
                 ListTile(
-                  tileColor: const Color(0xFF2963C8),
+                  tileColor: const Color(0xFF28a745),
                   title: Text(result.description ?? "",
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.clip,
@@ -157,9 +158,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
                       Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Text(
-                              result.result.toString() +
-                                  " " +
-                                  result.resultIdUnit!,
+                              "${result.result} ${result.resultIdUnit!}",
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.clip,
                               style: Theme.of(context).textTheme.headline5)),
@@ -172,9 +171,17 @@ class DoseCalculationsState extends State<DoseCalculations> {
       resultWidgets.add(widg);
     }
 
-    return Row(
-      children: resultWidgets,
-    );
+    return Column(children: [
+      ListView.builder(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return resultWidgets[index];
+        },
+        itemCount: resultWidgets.length,
+      )
+    ]);
   }
 
   @override
