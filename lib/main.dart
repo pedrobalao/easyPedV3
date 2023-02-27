@@ -1,30 +1,20 @@
 // ignore_for_file: unnecessary_const
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:catcher/catcher.dart';
-import 'package:catcher/model/catcher_options.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:easypedv3/utils/network_connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'RouterNavigator.dart';
-import 'auth_gate.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import 'screens/diseases/diseases_list_screen.dart';
-import 'screens/drugs/drug_screen.dart';
-import 'screens/drugs/drugs_screen.dart';
-import 'screens/medical_calculations/medical_calculations_list_screen.dart';
-import 'screens/percentiles/percentiles_screen.dart';
-import 'screens/surgeries_referral/surgeries_referral_list_screen.dart';
-import 'widgets/cerror_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -57,10 +47,9 @@ void main() async {
 
     /// STEP 2. Pass your root widget (MyApp) along with Catcher configuration:
     Catcher(
-        rootWidget: const MyApp(),
+        rootWidget: MyApp(),
         debugConfig: debugOptions,
         releaseConfig: releaseOptions);
-    //runApp(const MyApp());
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 
   // ErrorWidget.builder = (FlutterErrorDetails details) {
@@ -81,10 +70,45 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  Map _source = {ConnectivityResult.none: false};
+  final NetworkConnectivity _networkConnectivity = NetworkConnectivity.instance;
+  String string = '';
 
   @override
   Widget build(BuildContext context) {
+    _networkConnectivity.initialise();
+    _networkConnectivity.myStream.listen((source) {
+      _source = source;
+      print('source $_source');
+      bool online = false;
+
+      switch (_source.keys.toList()[0]) {
+        case ConnectivityResult.mobile:
+          online = _source.values.toList()[0] ? true : false;
+          string =
+              _source.values.toList()[0] ? 'Mobile: Online' : 'Mobile: Offline';
+          break;
+        case ConnectivityResult.wifi:
+          online = _source.values.toList()[0] ? true : false;
+          string =
+              _source.values.toList()[0] ? 'WiFi: Online' : 'WiFi: Offline';
+          break;
+        case ConnectivityResult.none:
+        default:
+          string = 'Offline';
+          online = false;
+      }
+
+      print('connectionStatus: $string');
+      if (!online) {
+        Navigator.pushNamed(context, "/connection-error");
+      }
+
+      // 1.
+    });
+
     const primaryColor = const Color(0xFF2963C8);
     const secondaryColor = const Color(0xFF218838);
 
@@ -126,17 +150,6 @@ class MyApp extends StatelessWidget {
       //home: const AuthGate(),
       initialRoute: '/',
       onGenerateRoute: (settings) => RouterNavigator.generateRoute(settings),
-      // routes: {
-      //   // When navigating to the "/" route, build the FirstScreen widget.
-      //   '/': (context) => const AuthGate(),
-      //   // When navigating to the "/second" route, build the SecondScreen widget.
-      //   '/drugs': (context) => const DrugsScreen(),
-      //   '/diseases': (context) => const DiseasesListScreen(),
-      //   '/percentiles': (context) => const PercentilesScreen(),
-      //   '/medical-calculations': (context) =>
-      //       const MedicalCalculationsListScreen(),
-      //   '/surgeries-referral': (context) => const SurgeriesReferralListScreen()
-      // },
     );
   }
 }

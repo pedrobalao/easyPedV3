@@ -4,9 +4,8 @@ import '../../models/disease.dart';
 import '../../services/auth_service.dart';
 import '../../services/drugs_service.dart';
 import '../../widgets/base_page_layout.dart';
-import '../../widgets/diseases_list.dart';
+import '../../widgets/connection_error.dart';
 import '../../widgets/loading.dart';
-import 'disease_screen.dart';
 
 class DiseasesListScreen extends StatefulWidget {
   const DiseasesListScreen({Key? key}) : super(key: key);
@@ -18,20 +17,68 @@ class DiseasesListScreen extends StatefulWidget {
 class _DiseasesListScreenState extends State<DiseasesListScreen> {
   Widget appBarTitle = const Text("Doenças");
   Icon actionIcon = const Icon(Icons.search);
+
+  final DrugService _drugService = DrugService();
+  final AuthenticationService _authenticationService = AuthenticationService();
+
+  Future<List<Disease>> fetchDiseases() async {
+    var ret = await _drugService
+        .fetchDiseases(await _authenticationService.getUserToken());
+    return ret;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(centerTitle: true, title: appBarTitle, actions: <Widget>[
-        IconButton(
-            icon: actionIcon,
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: DiseasesSearchDelegate(),
-              );
-            })
-      ]),
-      body: BasePageLayout(children: [DiseasesList()]),
+    return FutureBuilder<List<Disease>>(
+      future: fetchDiseases(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return ConnectionError();
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Scaffold(
+              appBar: AppBar(
+                  centerTitle: true,
+                  title: appBarTitle,
+                  actions: <Widget>[
+                    IconButton(
+                        icon: actionIcon,
+                        onPressed: () {
+                          showSearch(
+                            context: context,
+                            delegate: DiseasesSearchDelegate(),
+                          );
+                        })
+                  ]),
+              body: BasePageLayout(children: [
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Card(
+                        child: ListTile(
+                      title: Text(snapshot.data![index].description ?? "",
+                          style: Theme.of(context).textTheme.headline3),
+                      onTap: () {
+                        var id = snapshot.data![index].id;
+                        Navigator.pushNamed(context, "/diseases/$id");
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) =>
+                        //             DiseaseScreen(disease: snapshot.data![index])));
+                      },
+                    ));
+                  },
+                  itemCount: snapshot.data!.length,
+                )
+              ]));
+        } else {
+          return const ScreenLoading(
+            title: "Doenças",
+          );
+        }
+      },
     );
   }
 }

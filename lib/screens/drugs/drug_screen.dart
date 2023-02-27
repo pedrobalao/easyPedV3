@@ -1,4 +1,5 @@
 import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/dose_calculations.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,9 @@ class DrugWidget extends StatelessWidget {
     return FutureBuilder<Drug>(
         future: fetchDrug(id),
         builder: (context, AsyncSnapshot<Drug> snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasError) {
+            return ConnectionError();
+          } else if (snapshot.hasData) {
             return Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
@@ -79,7 +82,7 @@ class DrugWidget extends StatelessWidget {
                   ],
                 )));
           } else {
-            return const Loading();
+            return const ScreenLoading();
           }
         });
   }

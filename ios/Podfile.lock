@@ -7,6 +7,9 @@ PODS:
     - AppAuth/Core
   - catcher (0.0.1):
     - Flutter
+  - connectivity_plus (0.0.1):
+    - Flutter
+    - ReachabilitySwift
   - desktop_webview_auth (0.0.1):
     - Flutter
   - device_info_plus (0.0.1):
@@ -111,12 +114,14 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.1.1)
+  - ReachabilitySwift (5.0.0)
   - Toast (4.0.0)
   - url_launcher_ios (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - catcher (from `.symlinks/plugins/catcher/ios`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - desktop_webview_auth (from `.symlinks/plugins/desktop_webview_auth/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
@@ -148,11 +153,14 @@ SPEC REPOS:
     - GTMSessionFetcher
     - nanopb
     - PromisesObjC
+    - ReachabilitySwift
     - Toast
 
 EXTERNAL SOURCES:
   catcher:
     :path: ".symlinks/plugins/catcher/ios"
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   desktop_webview_auth:
     :path: ".symlinks/plugins/desktop_webview_auth/ios"
   device_info_plus:
@@ -183,6 +191,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   catcher: 67a006a3c121c4bbf1202d1e5ea186afb7ef4a18
+  connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   desktop_webview_auth: d645139460ef203d50bd0cdb33356785dd939cce
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
@@ -209,6 +218,7 @@ SPEC CHECKSUMS:
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_foundation: 37748e03f12783f9de2cb2c4eadfaa25fe6d4852
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: fb12c43172927bb5cf75aeebd073f883801f1993
 

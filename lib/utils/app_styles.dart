@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Color primary = const Color(0xFF2963C8);
+Color error = const Color(0xFF651F06);
 
 class Styles {
   static Color primaryColor = primary;
+  static Color errorColor = error;
   static Color textColor = const Color(0xFF3B3B3B);
   static Color bgColor = const Color(0xFFEEEDF2);
   static Color orangeColor = const Color(0xFFF37B67);

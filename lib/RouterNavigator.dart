@@ -1,6 +1,8 @@
 import 'package:easypedv3/auth_gate.dart';
 import 'package:easypedv3/screens/diseases/disease_screen.dart';
 import 'package:easypedv3/screens/medical_calculations/medical_calculation_screen.dart';
+import 'package:easypedv3/widgets/cerror_screen.dart';
+import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -76,12 +78,15 @@ class RouterNavigator {
         } else {
           return MaterialPageRoute<MedicalCalculationsListScreen>(
               settings: settings,
-              builder: (context) => const MedicalCalculationsListScreen());
+              builder: (context) => MedicalCalculationsListScreen());
         }
       } else if (settings.name == '/surgeries-referral') {
         return MaterialPageRoute<SurgeriesReferralListScreen>(
             settings: settings,
-            builder: (context) => const SurgeriesReferralListScreen());
+            builder: (context) => SurgeriesReferralListScreen());
+      } else if (settings.name == '/connection-error') {
+        return MaterialPageRoute<ConnectionError>(
+            settings: settings, builder: (context) => ConnectionError());
       } else {
         return MaterialPageRoute<Error404Screen>(
             settings: settings, builder: (context) => const Error404Screen());

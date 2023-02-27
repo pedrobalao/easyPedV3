@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import '../../services/drugs_service.dart';
 import '../../services/auth_service.dart';
 import '../../utils/string_utils.dart';
+import '../../widgets/connection_error.dart';
 import '../../widgets/loading.dart';
 import '../../widgets/title_value.dart';
 
@@ -47,7 +48,9 @@ class MedicalCalculationWidget extends StatelessWidget {
     return FutureBuilder<MedicalCalculation>(
         future: fetchItem(medicalCalculationId),
         builder: (context, AsyncSnapshot<MedicalCalculation> snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasError) {
+            return ConnectionError();
+          } else if (snapshot.hasData) {
             return Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
@@ -68,7 +71,7 @@ class MedicalCalculationWidget extends StatelessWidget {
                       ],
                     )));
           } else {
-            return const Loading();
+            return const ScreenLoading();
           }
         });
   }

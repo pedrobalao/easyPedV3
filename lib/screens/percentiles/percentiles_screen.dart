@@ -54,6 +54,7 @@ class PercentileState extends State<PercentilesWidget> {
   BMIOutput? _bmiPercentileResult;
 
   bool _loading = false;
+  bool _onError = false;
 
   _onVariablesValueChange() {
     setState(() {
