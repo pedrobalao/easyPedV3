@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/drug.dart';
 import '../../widgets/base_page_layout.dart';
+import '../../widgets/connection_error.dart';
 import '../../widgets/drug_categories_list.dart';
 import '../../widgets/drugs_favourites_list.dart';
 import 'drug_screen.dart';
@@ -17,46 +18,84 @@ class DrugsScreen extends StatefulWidget {
 }
 
 class _DrugsScreenState extends State<DrugsScreen> {
+  final DrugService _drugService = DrugService();
+  final AuthenticationService _authenticationService = AuthenticationService();
+
+  Future<Map<String, dynamic>> fetchData() async {
+    var req = <Future>[];
+
+    Map<String, dynamic> result = <String, dynamic>{};
+
+    req.add(_drugService
+        .fetchFavourites(await _authenticationService.getUserToken())
+        .then((value) => result['favourites'] = value));
+
+    req.add(_drugService
+        .fetchCategories(await _authenticationService.getUserToken())
+        .then((value) => result['categories'] = value));
+
+    await Future.wait(req);
+
+    return result;
+  }
+
   Widget appBarTitle = const Text("Medicamentos");
   Icon actionIcon = const Icon(Icons.search);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(centerTitle: true, title: appBarTitle, actions: <Widget>[
-        IconButton(
-            icon: actionIcon,
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: DrugSearchDelegate(),
-              );
-            })
-      ]),
-      body: BasePageLayout(children: [
-        Column(children: [
-          ListTile(
-            tileColor: const Color(0xFF28a745),
-            title: Text("Os teus favoritos",
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.clip,
-                style: Theme.of(context).textTheme.headline4),
-          ),
-          Padding(
-              padding: const EdgeInsets.all(2.0), child: DrugsFavouritesList())
-        ]),
-        Column(children: [
-          ListTile(
-            tileColor: const Color(0xFF28a745),
-            title: Text("Explora",
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.clip,
-                style: Theme.of(context).textTheme.headline4),
-          ),
-          Padding(
-              padding: const EdgeInsets.all(2.0), child: DrugsCategoriesList())
-        ])
-      ]),
-    );
+    return FutureBuilder<Map<String, dynamic>>(
+        future: fetchData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return ConnectionError();
+          } else if (snapshot.hasData) {
+            return Scaffold(
+              appBar: AppBar(
+                  centerTitle: true,
+                  title: appBarTitle,
+                  actions: <Widget>[
+                    IconButton(
+                        icon: actionIcon,
+                        onPressed: () {
+                          showSearch(
+                            context: context,
+                            delegate: DrugSearchDelegate(),
+                          );
+                        })
+                  ]),
+              body: BasePageLayout(children: [
+                Column(children: [
+                  ListTile(
+                    tileColor: const Color(0xFF28a745),
+                    title: Text("Os teus favoritos",
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.clip,
+                        style: Theme.of(context).textTheme.headline4),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: DrugsFavouritesList(
+                          drugs: snapshot.data!['favourites']))
+                ]),
+                Column(children: [
+                  ListTile(
+                    tileColor: const Color(0xFF28a745),
+                    title: Text("Explora",
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.clip,
+                        style: Theme.of(context).textTheme.headline4),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: DrugsCategoriesList(
+                          categories: snapshot.data!['categories']))
+                ])
+              ]),
+            );
+          } else {
+            return const ScreenLoading(title: "Medicamentos");
+          }
+        });
   }
 }
 

@@ -31,7 +31,7 @@ class ConnectionError extends StatelessWidget {
                   style: Styles.noteStyle,
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, "/");
+                  Navigator.popAndPushNamed(context, "/");
                 },
               ),
             ])))));

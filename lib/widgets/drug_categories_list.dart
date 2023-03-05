@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import '../models/drug.dart';
 import '../screens/drugs/subcategories_screen.dart';
 import '../services/drugs_service.dart';
-import 'loading.dart';
 
 class DrugsCategoriesList extends StatelessWidget {
-  DrugsCategoriesList({Key? key}) : super(key: key);
+  DrugsCategoriesList({Key? key, required this.categories}) : super(key: key);
 
+  final List<DrugCategory> categories;
   final DrugService _drugService = DrugService();
   final AuthenticationService _authenticationService = AuthenticationService();
 
@@ -20,33 +20,24 @@ class DrugsCategoriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DrugCategory>>(
-      future: fetchCategories(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Card(
-                  child: ListTile(
-                title: Text(snapshot.data![index].description ?? "",
-                    style: Theme.of(context).textTheme.headline3),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DrugsSubCategoriesScreen(
-                              drugCategory: snapshot.data![index])));
-                },
-              ));
-            },
-            itemCount: snapshot.data!.length,
-          );
-        } else {
-          return const Loading();
-        }
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Card(
+            child: ListTile(
+          title: Text(categories[index].description ?? "",
+              style: Theme.of(context).textTheme.headline3),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DrugsSubCategoriesScreen(
+                        drugCategory: categories[index])));
+          },
+        ));
       },
+      itemCount: categories.length,
     );
   }
 }

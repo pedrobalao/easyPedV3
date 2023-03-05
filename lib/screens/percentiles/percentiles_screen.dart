@@ -9,6 +9,8 @@ import '../../services/auth_service.dart';
 import '../../utils/string_utils.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
+import '../../widgets/connection_error.dart';
+
 class PercentilesScreen extends StatefulWidget {
   const PercentilesScreen({Key? key}) : super(key: key);
 
@@ -72,54 +74,63 @@ class PercentileState extends State<PercentilesWidget> {
         setState(() {
           _loading = true;
         });
+        try {
+          var authToken = await _authenticationService.getUserToken();
+          var req = <Future>[];
 
-        var authToken = await _authenticationService.getUserToken();
-        var req = <Future>[];
+          var stdGender = gender == "Masculino" ? "male" : "female";
 
-        var stdGender = gender == "Masculino" ? "male" : "female";
+          if (weight != null) {
+            var wInput = PercentileInput(
+                gender: stdGender,
+                birthdate: birthdate.toIso8601String(),
+                value: weight);
+            req.add(_drugService
+                .executeWeightPercentile(wInput, authToken)
+                .then((value) => _weightPercentileResult = value));
+          }
 
-        if (weight != null) {
-          var wInput = PercentileInput(
-              gender: stdGender,
-              birthdate: birthdate.toIso8601String(),
-              value: weight);
-          req.add(_drugService
-              .executeWeightPercentile(wInput, authToken)
-              .then((value) => _weightPercentileResult = value));
+          if (length != null) {
+            var lInput = PercentileInput(
+                gender: stdGender,
+                birthdate: birthdate.toIso8601String(),
+                value: length);
+            req.add(_drugService
+                .executeLengthPercentile(lInput, authToken)
+                .then((value) => _lengthPercentileResult = value));
+          }
+
+          if (weight != null && length != null) {
+            var bmiInput = BMIInput(
+                gender: stdGender,
+                birthdate: birthdate.toIso8601String(),
+                length: length,
+                weight: weight);
+            req.add(_drugService
+                .executeBMIPercentile(bmiInput, authToken)
+                .then((value) => _bmiPercentileResult = value));
+          }
+
+          await Future.wait(req);
+
+          setState(() {
+            _loading = false;
+            _onError = false;
+          });
+        } catch (exc) {
+          setState(() {
+            _loading = false;
+            _onError = true;
+          });
         }
-
-        if (length != null) {
-          var lInput = PercentileInput(
-              gender: stdGender,
-              birthdate: birthdate.toIso8601String(),
-              value: length);
-          req.add(_drugService
-              .executeLengthPercentile(lInput, authToken)
-              .then((value) => _lengthPercentileResult = value));
-        }
-
-        if (weight != null && length != null) {
-          var bmiInput = BMIInput(
-              gender: stdGender,
-              birthdate: birthdate.toIso8601String(),
-              length: length,
-              weight: weight);
-          req.add(_drugService
-              .executeBMIPercentile(bmiInput, authToken)
-              .then((value) => _bmiPercentileResult = value));
-        }
-
-        await Future.wait(req);
-
-        setState(() {
-          _loading = false;
-        });
       }
     });
   }
 
   @override
   Widget build(context) {
+    if (_onError) return ConnectionError();
+
     return Scaffold(
         appBar: AppBar(centerTitle: true, title: const Text("Percentis")),
         body: SingleChildScrollView(
@@ -235,6 +246,7 @@ class PercentileState extends State<PercentilesWidget> {
                           }
                           return null;
                         })),
+
                 _loading ? const Loading() : calculationResultsWidget(context)
               ],
             )));

@@ -147,7 +147,7 @@ class CalculationState extends State<CalculationWidget> {
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         fillColor: const Color(0xFF2963C8),
-        labelText: variable.description! + " (" + variable.idUnit! + ")",
+        labelText: "${variable.description!} (${variable.idUnit!})",
       ),
       onChanged: (String? value) {
         mapOfVariables[variable.variableId!] =
@@ -178,7 +178,7 @@ class CalculationState extends State<CalculationWidget> {
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         fillColor: const Color(0xFF2963C8),
-        labelText: variable.description! + " (" + variable.idUnit! + ")",
+        labelText: "${variable.description!} (${variable.idUnit!})",
       ),
       isExpanded: true,
       value: mapOfVariables[variable.variableId!],
@@ -205,7 +205,7 @@ class CalculationState extends State<CalculationWidget> {
     } else if (variable.type == 'LISTVALUES') {
       wid = selectVariableWidget(context, variable);
     } else {
-      throw Exception("Invalid variable type: " + variable.type!);
+      throw Exception("Invalid variable type: ${variable.type!}");
     }
 
     return Padding(padding: const EdgeInsets.all(10.0), child: wid);
@@ -236,9 +236,7 @@ class CalculationState extends State<CalculationWidget> {
                     Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                            _calculationOutput!.result.toString() +
-                                " " +
-                                _calculationOutput!.resultIdUnit!,
+                            "${_calculationOutput!.result} ${_calculationOutput!.resultIdUnit!}",
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.clip,
                             style: Theme.of(context).textTheme.headline5)),

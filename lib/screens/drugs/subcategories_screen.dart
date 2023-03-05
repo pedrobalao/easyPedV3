@@ -1,30 +1,45 @@
 import 'package:flutter/material.dart';
 
 import '../../models/drug.dart';
+import '../../services/auth_service.dart';
+import '../../services/drugs_service.dart';
 import '../../widgets/base_page_layout.dart';
+import '../../widgets/connection_error.dart';
 import '../../widgets/drug_subcategories_list.dart';
+import '../../widgets/loading.dart';
 
-class DrugsSubCategoriesScreen extends StatefulWidget {
-  const DrugsSubCategoriesScreen({Key? key, required this.drugCategory})
+class DrugsSubCategoriesScreen extends StatelessWidget {
+  DrugsSubCategoriesScreen({Key? key, required this.drugCategory})
       : super(key: key);
 
   final DrugCategory drugCategory;
-  @override
-  _DrugsSubCategoriesScreenState createState() =>
-      _DrugsSubCategoriesScreenState();
-}
+  final DrugService _drugService = DrugService();
+  final AuthenticationService _authenticationService = AuthenticationService();
 
-class _DrugsSubCategoriesScreenState extends State<DrugsSubCategoriesScreen> {
-  Icon actionIcon = const Icon(Icons.search);
+  Future<List<DrugSubCategory>> fetchSubCategories() async {
+    var ret = await _drugService.fetchSubCategories(
+        drugCategory.id!, await _authenticationService.getUserToken());
+    return ret;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          title: Text(widget.drugCategory.description ?? "")),
-      body: BasePageLayout(children: [
-        DrugsSubCategoriesList(drugCategory: widget.drugCategory)
-      ]),
-    );
+    return FutureBuilder<List<DrugSubCategory>>(
+        future: fetchSubCategories(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return ConnectionError();
+          } else if (snapshot.hasData) {
+            return Scaffold(
+                appBar: AppBar(
+                    centerTitle: true,
+                    title: Text(drugCategory.description ?? "")),
+                body: BasePageLayout(children: [
+                  DrugsSubCategoriesList(subCategories: snapshot.data!)
+                ]));
+          } else {
+            return ScreenLoading(title: drugCategory.description);
+          }
+        });
   }
 }

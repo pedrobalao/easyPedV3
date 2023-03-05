@@ -10,35 +10,17 @@ import '../utils/app_styles.dart';
 import 'loading.dart';
 
 class NewsSlide extends StatelessWidget {
-  NewsSlide({Key? key}) : super(key: key);
+  const NewsSlide({Key? key, required this.news}) : super(key: key);
 
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authenticationService = AuthenticationService();
-
-  Future<List<News>> fetchNews() async {
-    var ret = await _drugService
-        .fetchNews(await _authenticationService.getUserToken());
-    return ret;
-  }
+  final List<News> news;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<News>>(
-      future: fetchNews(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                  children: snapshot.data!
-                      .map((item) => NewsScreen(news: item))
-                      .toList()));
-        } else {
-          return const Loading();
-        }
-      },
-    );
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: 20),
+        child:
+            Row(children: news.map((item) => NewsScreen(news: item)).toList()));
   }
 }
 
@@ -48,9 +30,6 @@ class NewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = AppLayout.getSize(context);
-    //DateFormat('pt_PT');
-
     Future<void> _launchUrl(url) async {
       if (!await launchUrl(url)) {
         throw Exception('Could not launch $url');

@@ -4,41 +4,23 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/congress.dart';
-import '../services/drugs_service.dart';
 import '../utils/app_layout.dart';
 import '../utils/app_styles.dart';
-import 'loading.dart';
 
 class CongressesSlide extends StatelessWidget {
-  CongressesSlide({Key? key}) : super(key: key);
+  CongressesSlide({Key? key, required this.congresses}) : super(key: key);
 
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authenticationService = AuthenticationService();
-
-  Future<List<Congress>> fetchCongresses() async {
-    var ret = await _drugService
-        .fetchCongresses(await _authenticationService.getUserToken());
-    return ret;
-  }
+  final List<Congress> congresses;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Congress>>(
-      future: fetchCongresses(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                  children: snapshot.data!
-                      .map((item) => CongressScreen(congress: item))
-                      .toList()));
-        } else {
-          return const Loading();
-        }
-      },
-    );
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: 20),
+        child: Row(
+            children: congresses
+                .map((item) => CongressScreen(congress: item))
+                .toList()));
   }
 }
 

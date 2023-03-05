@@ -1,59 +1,30 @@
-import 'package:easypedv3/services/auth_service.dart';
 import 'package:flutter/material.dart';
-
 import '../models/drug.dart';
-import '../screens/drugs/drug_screen.dart';
-import '../services/drugs_service.dart';
-import 'loading.dart';
 
 class DrugsFavouritesList extends StatelessWidget {
-  DrugsFavouritesList({Key? key}) : super(key: key);
+  DrugsFavouritesList({Key? key, required this.drugs}) : super(key: key);
 
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authenticationService = AuthenticationService();
-
-  Future<List<Drug>> fetchFavourites() async {
-    var ret = await _drugService
-        .fetchFavourites(await _authenticationService.getUserToken());
-    return ret;
-  }
+  final List<Drug> drugs;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Drug>>(
-      future: fetchFavourites(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Card(
-                  child: ListTile(
-                title: Text(snapshot.data![index].name ?? "",
-                    style: Theme.of(context).textTheme.headline3),
-                subtitle: Text(
-                    snapshot.data![index].subcategoryDescription ?? "",
-                    style: Theme.of(context).textTheme.bodyText2),
-                onTap: () {
-                  var id = snapshot.data![index].id;
-                  Navigator.pushNamed(context, "/drugs/$id");
-
-                  //close(context, snapshot.data![index]);
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) =>
-                  //             DrugScreen(id: snapshot.data![index].id!)));
-                },
-              ));
-            },
-            itemCount: snapshot.data!.length,
-          );
-        } else {
-          return const Loading();
-        }
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Card(
+            child: ListTile(
+          title: Text(drugs[index].name ?? "",
+              style: Theme.of(context).textTheme.headline3),
+          subtitle: Text(drugs[index].subcategoryDescription ?? "",
+              style: Theme.of(context).textTheme.bodyText2),
+          onTap: () {
+            var id = drugs[index].id;
+            Navigator.pushNamed(context, "/drugs/$id");
+          },
+        ));
       },
+      itemCount: drugs.length,
     );
   }
 }
