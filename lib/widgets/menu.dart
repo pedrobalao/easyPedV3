@@ -39,7 +39,7 @@ class Menu extends StatelessWidget {
       _Menu(
           title: "Sobre",
           icon: const Icon(Icons.app_shortcut),
-          route: "/drugs"),
+          route: "/about"),
     ];
   }
 

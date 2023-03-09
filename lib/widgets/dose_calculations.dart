@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easypedv3/services/auth_service.dart';
 import 'package:easypedv3/widgets/loading.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -56,6 +57,11 @@ class DoseCalculationsState extends State<DoseCalculations> {
             widget.drug.id!,
             mapOfVariables,
             await _authenticationService.getUserToken());
+
+        FirebaseAnalytics.instance.logEvent(
+          name: "drug_dose_calculation",
+          parameters: {"drug_id": widget.drug.id},
+        );
 
         setState(() {
           _loading = false;

@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:catcher/catcher.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easypedv3/utils/network_connectivity.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
@@ -33,6 +34,7 @@ void main() async {
       AppleProvider()
     ]);
 
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     // The following lines are the same as previously explained in "Handling uncaught errors"
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
@@ -72,42 +74,44 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  Map _source = {ConnectivityResult.none: false};
-  final NetworkConnectivity _networkConnectivity = NetworkConnectivity.instance;
+  // Map _source = {ConnectivityResult.none: false};
+  // final NetworkConnectivity _networkConnectivity = NetworkConnectivity.instance;
   String string = '';
+  final FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
 
   @override
   Widget build(BuildContext context) {
-    _networkConnectivity.initialise();
-    _networkConnectivity.myStream.listen((source) {
-      _source = source;
-      print('source $_source');
-      bool online = false;
+    // _networkConnectivity.initialise();
+    // _networkConnectivity.myStream.listen((source) {
+    //   _source = source;
+    //   print('source $_source');
+    //   bool online = false;
 
-      switch (_source.keys.toList()[0]) {
-        case ConnectivityResult.mobile:
-          online = _source.values.toList()[0] ? true : false;
-          string =
-              _source.values.toList()[0] ? 'Mobile: Online' : 'Mobile: Offline';
-          break;
-        case ConnectivityResult.wifi:
-          online = _source.values.toList()[0] ? true : false;
-          string =
-              _source.values.toList()[0] ? 'WiFi: Online' : 'WiFi: Offline';
-          break;
-        case ConnectivityResult.none:
-        default:
-          string = 'Offline';
-          online = false;
-      }
+    //   switch (_source.keys.toList()[0]) {
+    //     case ConnectivityResult.mobile:
+    //       online = _source.values.toList()[0] ? true : false;
+    //       string =
+    //           _source.values.toList()[0] ? 'Mobile: Online' : 'Mobile: Offline';
+    //       break;
+    //     case ConnectivityResult.wifi:
+    //       online = _source.values.toList()[0] ? true : false;
+    //       string =
+    //           _source.values.toList()[0] ? 'WiFi: Online' : 'WiFi: Offline';
+    //       break;
+    //     case ConnectivityResult.none:
+    //     default:
+    //       string = 'Offline';
+    //       online = false;
+    //   }
 
-      print('connectionStatus: $string');
-      if (!online) {
-        Navigator.pushNamed(context, "/connection-error");
-      }
+    //   print('connectionStatus: $string');
+    //   if (!online) {
+    //     Navigator.pushNamed(context, "/connection-error");
+    //   }
 
-      // 1.
-    });
+    //   // 1.
+    // });
 
     const primaryColor = const Color(0xFF2963C8);
     const secondaryColor = const Color(0xFF218838);
@@ -145,6 +149,7 @@ class MyApp extends StatelessWidget {
         listTileTheme: const ListTileThemeData());
 
     return MaterialApp(
+      navigatorObservers: [observer],
       debugShowCheckedModeBanner: false,
       theme: themeData,
       //home: const AuthGate(),

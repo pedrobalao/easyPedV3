@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/drugs_service.dart';
@@ -43,6 +44,12 @@ class DiseaseWidget extends StatelessWidget {
           if (snapshot.hasError) {
             return ConnectionError();
           } else if (snapshot.hasData) {
+            FirebaseAnalytics.instance.logViewItem(items: [
+              AnalyticsEventItem(
+                  itemCategory: "disease",
+                  itemId: snapshot.data?.id.toString(),
+                  itemName: snapshot.data?.description)
+            ]);
             return Scaffold(
                 appBar: AppBar(
                     centerTitle: true,

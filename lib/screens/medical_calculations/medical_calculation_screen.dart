@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/models/medical_calculation.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -51,6 +52,12 @@ class MedicalCalculationWidget extends StatelessWidget {
           if (snapshot.hasError) {
             return ConnectionError();
           } else if (snapshot.hasData) {
+            FirebaseAnalytics.instance.logViewItem(items: [
+              AnalyticsEventItem(
+                  itemCategory: "medical_calculation",
+                  itemId: snapshot.data?.id.toString(),
+                  itemName: snapshot.data?.description)
+            ]);
             return Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
@@ -130,6 +137,10 @@ class CalculationState extends State<CalculationWidget> {
             input,
             await _authenticationService.getUserToken());
 
+        FirebaseAnalytics.instance.logEvent(
+          name: "medical_calculation",
+          parameters: {"medical_calculation_id": widget.medicalCalculation.id},
+        );
         setState(() {
           _loading = false;
           _calculationOutput = result;

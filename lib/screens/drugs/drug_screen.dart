@@ -1,6 +1,7 @@
 import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/dose_calculations.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/drug.dart';
@@ -46,6 +47,12 @@ class DrugWidget extends StatelessWidget {
           if (snapshot.hasError) {
             return ConnectionError();
           } else if (snapshot.hasData) {
+            FirebaseAnalytics.instance.logViewItem(items: [
+              AnalyticsEventItem(
+                  itemCategory: "drug",
+                  itemId: id.toString(),
+                  itemName: snapshot.data?.name)
+            ]);
             return Scaffold(
                 appBar: AppBar(
                     centerTitle: true,

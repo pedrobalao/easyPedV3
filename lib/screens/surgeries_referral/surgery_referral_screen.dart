@@ -1,4 +1,5 @@
 import 'package:easypedv3/models/surgery_referral.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/base_page_layout.dart';
 import '../../widgets/title_value.dart';
@@ -11,6 +12,11 @@ class SurgeryReferralScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalytics.instance.logViewItem(items: [
+      AnalyticsEventItem(
+          itemCategory: "surgery_referral", itemName: surgeryReferral.scope)
+    ]);
+
     return Scaffold(
         appBar:
             AppBar(centerTitle: true, title: Text(surgeryReferral.scope ?? "")),

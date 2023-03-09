@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
@@ -12,6 +14,7 @@ class SignIn extends StatelessWidget {
     return AuthStateListener<OAuthController>(
         listener: (oldState, state, controller) {
           if (state is SignedIn) {
+            FirebaseAnalytics.instance.logLogin();
             Navigator.of(context).pushReplacementNamed('/');
           }
         },

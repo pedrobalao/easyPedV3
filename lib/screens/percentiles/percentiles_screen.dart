@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easypedv3/models/percentile.dart';
 import 'package:easypedv3/widgets/loading.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../services/drugs_service.dart';
@@ -22,6 +23,11 @@ class _PercentilesScreenState extends State<PercentilesScreen> {
   Icon actionIcon = const Icon(Icons.favorite);
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalytics.instance.logViewItem(items: [
+      AnalyticsEventItem(
+          itemCategory: "percentiles", itemId: '1', itemName: 'percentiles')
+    ]);
+
     return const PercentilesWidget();
   }
 }
@@ -112,6 +118,11 @@ class PercentileState extends State<PercentilesWidget> {
           }
 
           await Future.wait(req);
+
+          FirebaseAnalytics.instance.logEvent(
+            name: "percentiles_calculation",
+            parameters: {"gender": stdGender},
+          );
 
           setState(() {
             _loading = false;

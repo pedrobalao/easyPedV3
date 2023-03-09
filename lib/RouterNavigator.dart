@@ -1,4 +1,5 @@
 import 'package:easypedv3/auth_gate.dart';
+import 'package:easypedv3/screens/about/about_screen.dart';
 import 'package:easypedv3/screens/diseases/disease_screen.dart';
 import 'package:easypedv3/screens/medical_calculations/medical_calculation_screen.dart';
 import 'package:easypedv3/widgets/cerror_screen.dart';
@@ -84,6 +85,9 @@ class RouterNavigator {
         return MaterialPageRoute<SurgeriesReferralListScreen>(
             settings: settings,
             builder: (context) => SurgeriesReferralListScreen());
+      } else if (settings.name == '/about') {
+        return MaterialPageRoute<AboutScreen>(
+            settings: settings, builder: (context) => AboutScreen());
       } else if (settings.name == '/connection-error') {
         return MaterialPageRoute<ConnectionError>(
             settings: settings, builder: (context) => ConnectionError());
