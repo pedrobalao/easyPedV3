@@ -3,8 +3,6 @@
 import 'dart:async';
 
 import 'package:catcher/catcher.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:easypedv3/utils/network_connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -148,13 +146,22 @@ class MyApp extends StatelessWidget {
         cardTheme: const CardTheme(clipBehavior: Clip.none),
         listTileTheme: const ListTileThemeData());
 
-    return MaterialApp(
-      navigatorObservers: [observer],
-      debugShowCheckedModeBanner: false,
-      theme: themeData,
-      //home: const AuthGate(),
-      initialRoute: '/',
-      onGenerateRoute: (settings) => RouterNavigator.generateRoute(settings),
-    );
+    return GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: MaterialApp(
+          navigatorObservers: [observer],
+          debugShowCheckedModeBanner: false,
+          theme: themeData,
+          //home: const AuthGate(),
+          initialRoute: '/',
+          onGenerateRoute: (settings) =>
+              RouterNavigator.generateRoute(settings),
+        ));
   }
 }

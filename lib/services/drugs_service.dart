@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/models/medical_calculation.dart';
 import 'package:easypedv3/models/surgery_referral.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -164,7 +165,7 @@ class DrugService {
     List<CalculationInput> calInput = [];
 
     data.forEach((key, value) =>
-        {calInput.add(CalculationInput(value: value, variable: key))});
+        {calInput.add(CalculationInput(variable: key, value: value))});
 
     final response = await http.post(
         Uri.parse('$apiBaseUrl/drugs/$drugId/calculations'),
@@ -174,6 +175,12 @@ class DrugService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
+      if (kDebugMode) {
+        for (var element in calInput) {
+          print('Variable: ${element.variable} ${element.value}');
+        }
+        print('response: ${response.body}');
+      }
 
       return listDoseCalculationResultFromJson(response.body);
     } else {

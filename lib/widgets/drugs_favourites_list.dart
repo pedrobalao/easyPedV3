@@ -9,7 +9,8 @@ class DrugsFavouritesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      scrollDirection: Axis.vertical,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(2.0),
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return Card(

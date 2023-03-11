@@ -43,7 +43,7 @@ class AboutScreen extends StatelessWidget {
         shrinkWrap: true,
         itemCount: biblio.length,
         itemBuilder: (BuildContext context, int index) {
-          return Text(biblio[index]);
+          return Text(biblio[index], style: Styles.normalText);
         },
         separatorBuilder: (BuildContext context, int index) => const Divider());
   }
@@ -72,9 +72,10 @@ class AboutScreen extends StatelessWidget {
             ),
             Padding(
                 padding: const EdgeInsetsDirectional.all(5),
-                child: Column(children: const [
+                child: Column(children: [
                   Text(
-                      "Esta aplicação é dirigida a profissionais de saúde. Pretende ser um auxilio à prática da medicina pediátrica. Todos os dados foram inseridos e validados por médicos do corpo clínico do Centro Materno Infantil do Norte e Centro Hospitalar São João. Embora envidemos todos os esforços razoáveis para garantir que as informações contidas na easyPed sejam corretas, esteja ciente de que as informações podem estar incompletas, imprecisas ou desatualizadas e não podem ser garantidas. Assim, está excluída a garantia ou responsabilidade de qualquer tipo. Os autores declinam qualquer responsabilidade na utilização da mesma, devendo qualquer dose ou indicação ser confirmada em documentos de referencia atualizados aquando da prescrição. Qualquer erro relativo aos fármacos pode e deve ser reportado no espaço próprio de cada fármaco. Qualquer sugestão de adição de fármacos ou outra sugestão é bem-vinda e pode ser reportada do mesmo modo que os fármacos."),
+                      "Esta aplicação é dirigida a profissionais de saúde. Pretende ser um auxilio à prática da medicina pediátrica. Todos os dados foram inseridos e validados por médicos do corpo clínico do Centro Materno Infantil do Norte e Centro Hospitalar São João. Embora envidemos todos os esforços razoáveis para garantir que as informações contidas na easyPed sejam corretas, esteja ciente de que as informações podem estar incompletas, imprecisas ou desatualizadas e não podem ser garantidas. Assim, está excluída a garantia ou responsabilidade de qualquer tipo. Os autores declinam qualquer responsabilidade na utilização da mesma, devendo qualquer dose ou indicação ser confirmada em documentos de referencia atualizados aquando da prescrição. Qualquer erro relativo aos fármacos pode e deve ser reportado no espaço próprio de cada fármaco. Qualquer sugestão de adição de fármacos ou outra sugestão é bem-vinda e pode ser reportada do mesmo modo que os fármacos.",
+                      style: Styles.normalText),
                   Gap(1),
                 ])),
             ListTile(

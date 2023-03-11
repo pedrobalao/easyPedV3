@@ -2,6 +2,7 @@ import 'package:easypedv3/services/auth_service.dart';
 import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../models/drug.dart';
 import '../../widgets/base_page_layout.dart';
@@ -63,34 +64,36 @@ class _DrugsScreenState extends State<DrugsScreen> {
                           );
                         })
                   ]),
-              body: BasePageLayout(children: [
-                Column(children: [
-                  ListTile(
-                    tileColor: const Color(0xFF28a745),
-                    title: Text("Os teus favoritos",
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.headline4),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: DrugsFavouritesList(
-                          drugs: snapshot.data!['favourites']))
-                ]),
-                Column(children: [
-                  ListTile(
-                    tileColor: const Color(0xFF28a745),
-                    title: Text("Explora",
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.headline4),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: DrugsCategoriesList(
-                          categories: snapshot.data!['categories']))
-                ])
-              ]),
+              body: SingleChildScrollView(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    ListTile(
+                      tileColor: const Color(0xFF28a745),
+                      title: Text("Os teus favoritos",
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.clip,
+                          style: Theme.of(context).textTheme.headline4),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: DrugsFavouritesList(
+                            drugs: snapshot.data!['favourites'])),
+                    ListTile(
+                      tileColor: const Color(0xFF28a745),
+                      title: Text("Explora",
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.clip,
+                          style: Theme.of(context).textTheme.headline4),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Column(children: [
+                          DrugsCategoriesList(
+                              categories: snapshot.data!['categories']),
+                        ]))
+                  ])),
+              //const Gap(10)
             );
           } else {
             return const ScreenLoading(title: "Medicamentos");

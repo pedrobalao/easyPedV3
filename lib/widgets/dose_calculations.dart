@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:easypedv3/services/auth_service.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -47,12 +48,18 @@ class DoseCalculationsState extends State<DoseCalculations> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       // do something with query
+      if (kDebugMode) {
+        print('Running debounce $mapOfVariables');
+      }
       if (!mapOfVariables.containsValue(null) &&
           !mapOfVariables.containsValue("")) {
         setState(() {
           _loading = true;
         });
 
+        if (kDebugMode) {
+          print('Variables: $mapOfVariables');
+        }
         var doseCalculationsResults = await _drugService.doseCalculation(
             widget.drug.id!,
             mapOfVariables,
@@ -67,6 +74,10 @@ class DoseCalculationsState extends State<DoseCalculations> {
           _loading = false;
           _doseCalculationsResults = doseCalculationsResults;
         });
+      } else {
+        if (kDebugMode) {
+          print('Contains nulls');
+        }
       }
     });
   }
@@ -81,12 +92,16 @@ class DoseCalculationsState extends State<DoseCalculations> {
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         fillColor: const Color(0xFF2963C8),
-        labelText: variable.description! + " (" + variable.idUnit! + ")",
+        labelText: "${variable.description!} (${variable.idUnit!})",
       ),
       onChanged: (String? value) {
         mapOfVariables[variable.id] =
             (value == null || value == "" ? null : double.parse(value));
+        if (kDebugMode) {
+          print("Value: $mapOfVariables[variable.id]");
+        }
         _onVariablesValueChange();
+
         // listVariables[listVariables
         //     .indexWhere((item) => item['id'] == variable.id)]['value'] = value;
       },
@@ -133,7 +148,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
     } else if (variable.type == 'LISTVALUES') {
       wid = selectVariableWidget(context, variable);
     } else {
-      throw Exception("Invalid variable type: " + variable.type!);
+      throw Exception("Invalid variable type: ${variable.type!}");
     }
 
     return Padding(padding: const EdgeInsets.all(10.0), child: wid);
@@ -196,6 +211,8 @@ class DoseCalculationsState extends State<DoseCalculations> {
     super.dispose();
   }
 
+  bool isFirstTimeRunning = true;
+
   @override
   Widget build(BuildContext context) {
     if (widget.drug.variables == null || widget.drug.variables!.isEmpty) {
@@ -206,8 +223,12 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
     for (var variable in widget.drug.variables!) {
       formFields.add(variableWidget(context, variable));
-      mapOfVariables[variable.id] = null;
+      if (!mapOfVariables.containsKey(variable.id)) {
+        mapOfVariables[variable.id] = null;
+      }
     }
+
+    isFirstTimeRunning = false;
 
     return Column(children: [
       Form(
