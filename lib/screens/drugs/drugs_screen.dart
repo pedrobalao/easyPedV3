@@ -65,34 +65,36 @@ class _DrugsScreenState extends State<DrugsScreen> {
                         })
                   ]),
               body: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                    ListTile(
-                      tileColor: const Color(0xFF28a745),
-                      title: Text("Os teus favoritos",
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.clip,
-                          style: Theme.of(context).textTheme.headline4),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: DrugsFavouritesList(
-                            drugs: snapshot.data!['favourites'])),
-                    ListTile(
-                      tileColor: const Color(0xFF28a745),
-                      title: Text("Explora",
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.clip,
-                          style: Theme.of(context).textTheme.headline4),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Column(children: [
-                          DrugsCategoriesList(
-                              categories: snapshot.data!['categories']),
-                        ]))
-                  ])),
+                        ListTile(
+                          tileColor: const Color(0xFF28a745),
+                          title: Text("Os teus favoritos",
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.clip,
+                              style: Theme.of(context).textTheme.headline4),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: DrugsFavouritesList(
+                                drugs: snapshot.data!['favourites'])),
+                        ListTile(
+                          tileColor: const Color(0xFF28a745),
+                          title: Text("Explora",
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.clip,
+                              style: Theme.of(context).textTheme.headline4),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Column(children: [
+                              DrugsCategoriesList(
+                                  categories: snapshot.data!['categories']),
+                            ]))
+                      ])),
               //const Gap(10)
             );
           } else {

@@ -59,35 +59,39 @@ class DrugWidget extends StatelessWidget {
                     title: Text(snapshot.data?.name ?? ""),
                     actions: <Widget>[DrugFavourite(drugId: id)]),
                 body: SingleChildScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TitleValue(title: "Nome", value: snapshot.data?.name ?? ""),
-                    calculationWidget(context, snapshot.data!),
-                    TitleValue(
-                        title: "Contra-Indicações",
-                        value: snapshot.data?.conterIndications ??
-                            "Sem informação"),
-                    TitleValue(
-                        title: "Efeitos-Secundários",
-                        value: snapshot.data?.secondaryEffects ??
-                            "Sem informação"),
-                    TitleValue(
-                        title: "Apresentação",
-                        value: snapshot.data?.presentation ?? "Sem informação"),
-                    TitleValue(
-                        title: "Marcas Comerciais",
-                        value:
-                            snapshot.data?.comercialBrands ?? "Sem informação"),
-                    Padding(
-                        padding: const EdgeInsets.all(5.5),
-                        child: Text("Indicações",
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.clip,
-                            style: Theme.of(context).textTheme.headline6)),
-                    indicationsWidget(context, snapshot.data?.indications)
-                  ],
-                )));
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TitleValue(
+                            title: "Nome", value: snapshot.data?.name ?? ""),
+                        calculationWidget(context, snapshot.data!),
+                        TitleValue(
+                            title: "Contra-Indicações",
+                            value: snapshot.data?.conterIndications ??
+                                "Sem informação"),
+                        TitleValue(
+                            title: "Efeitos-Secundários",
+                            value: snapshot.data?.secondaryEffects ??
+                                "Sem informação"),
+                        TitleValue(
+                            title: "Apresentação",
+                            value: snapshot.data?.presentation ??
+                                "Sem informação"),
+                        TitleValue(
+                            title: "Marcas Comerciais",
+                            value: snapshot.data?.comercialBrands ??
+                                "Sem informação"),
+                        Padding(
+                            padding: const EdgeInsets.all(5.5),
+                            child: Text("Indicações",
+                                textAlign: TextAlign.left,
+                                overflow: TextOverflow.clip,
+                                style: Theme.of(context).textTheme.headline6)),
+                        indicationsWidget(context, snapshot.data?.indications)
+                      ],
+                    )));
           } else {
             return const ScreenLoading();
           }

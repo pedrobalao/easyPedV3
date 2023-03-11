@@ -145,6 +145,7 @@ class PercentileState extends State<PercentilesWidget> {
     return Scaffold(
         appBar: AppBar(centerTitle: true, title: const Text("Percentis")),
         body: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.all(5.5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,15 +348,13 @@ class PercentileState extends State<PercentilesWidget> {
                                     .textTheme
                                     .headline5
                                     ?.merge(TextStyle(color: color)))),
-                    Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(resultStr,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.clip,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5
-                                ?.merge(TextStyle(color: color))))
+                    Text(resultStr,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.clip,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5
+                            ?.merge(TextStyle(color: color)))
                   ]))
             ])));
   }
@@ -390,6 +389,7 @@ class PercentileState extends State<PercentilesWidget> {
 
     return Column(children: [
       ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.only(bottom: 10.0),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,

@@ -147,13 +147,7 @@ class MyApp extends StatelessWidget {
         listTileTheme: const ListTileThemeData());
 
     return GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
+        onTap: () => FocusScope.of(context).unfocus(),
         child: MaterialApp(
           navigatorObservers: [observer],
           debugShowCheckedModeBanner: false,

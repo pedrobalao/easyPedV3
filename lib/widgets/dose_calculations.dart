@@ -84,8 +84,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
   Widget numberVariableWidget(context, Variables variable) {
     return TextFormField(
-      keyboardType:
-          const TextInputType.numberWithOptions(signed: true, decimal: true),
+      keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly
       ],
@@ -194,8 +193,8 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
     return Column(children: [
       ListView.builder(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        scrollDirection: Axis.vertical,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(2.0),
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return resultWidgets[index];
