@@ -51,22 +51,6 @@ void main() async {
         debugConfig: debugOptions,
         releaseConfig: releaseOptions);
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
-
-  // ErrorWidget.builder = (FlutterErrorDetails details) {
-  //   // If we're in debug mode, use the normal error widget which shows the error
-  //   // message:
-  //   // if (kDebugMode) {
-  //   //   return ErrorWidget(details.exception);
-  //   // }
-  //   // In release builds, show a yellow-on-blue message instead:
-  //   return CErrorScreen(details: details);
-  // };
-
-  // final talker = Talker(
-  //   loggerSettings: TalkerLoggerSettings(
-  //     enableColors: !Platform.isIOS,
-  //   ),
-  // );
 }
 
 class MyApp extends StatelessWidget {
@@ -80,37 +64,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // _networkConnectivity.initialise();
-    // _networkConnectivity.myStream.listen((source) {
-    //   _source = source;
-    //   print('source $_source');
-    //   bool online = false;
-
-    //   switch (_source.keys.toList()[0]) {
-    //     case ConnectivityResult.mobile:
-    //       online = _source.values.toList()[0] ? true : false;
-    //       string =
-    //           _source.values.toList()[0] ? 'Mobile: Online' : 'Mobile: Offline';
-    //       break;
-    //     case ConnectivityResult.wifi:
-    //       online = _source.values.toList()[0] ? true : false;
-    //       string =
-    //           _source.values.toList()[0] ? 'WiFi: Online' : 'WiFi: Offline';
-    //       break;
-    //     case ConnectivityResult.none:
-    //     default:
-    //       string = 'Offline';
-    //       online = false;
-    //   }
-
-    //   print('connectionStatus: $string');
-    //   if (!online) {
-    //     Navigator.pushNamed(context, "/connection-error");
-    //   }
-
-    //   // 1.
-    // });
-
     const primaryColor = const Color(0xFF2963C8);
     const secondaryColor = const Color(0xFF218838);
 

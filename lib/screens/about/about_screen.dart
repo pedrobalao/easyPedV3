@@ -1,6 +1,7 @@
 import 'package:easypedv3/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/base_page_layout.dart';
 
@@ -48,6 +49,12 @@ class AboutScreen extends StatelessWidget {
         separatorBuilder: (BuildContext context, int index) => const Divider());
   }
 
+  Future<void> _launchUrl(url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +62,22 @@ class AboutScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            ListTile(
+              tileColor: const Color(0xFF28a745),
+              title: Text("Redes Sociais",
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.clip,
+                  style: Theme.of(context).textTheme.headline4),
+            ),
+            const Gap(5),
+            Center(
+                child: IconButton(
+              icon: const Icon(Icons.facebook),
+              onPressed: () {
+                _launchUrl(Uri.parse('https://facebook.com/easyped'));
+              },
+            )),
+            const Gap(5),
             ListTile(
               tileColor: const Color(0xFF28a745),
               title: Text("Autores",
@@ -74,7 +97,7 @@ class AboutScreen extends StatelessWidget {
                 padding: const EdgeInsetsDirectional.all(5),
                 child: Column(children: [
                   Text(
-                      "Esta aplicação é dirigida a profissionais de saúde. Pretende ser um auxilio à prática da medicina pediátrica. Todos os dados foram inseridos e validados por médicos do corpo clínico do Centro Materno Infantil do Norte e Centro Hospitalar São João. Embora envidemos todos os esforços razoáveis para garantir que as informações contidas na easyPed sejam corretas, esteja ciente de que as informações podem estar incompletas, imprecisas ou desatualizadas e não podem ser garantidas. Assim, está excluída a garantia ou responsabilidade de qualquer tipo. Os autores declinam qualquer responsabilidade na utilização da mesma, devendo qualquer dose ou indicação ser confirmada em documentos de referencia atualizados aquando da prescrição. Qualquer erro relativo aos fármacos pode e deve ser reportado no espaço próprio de cada fármaco. Qualquer sugestão de adição de fármacos ou outra sugestão é bem-vinda e pode ser reportada do mesmo modo que os fármacos.",
+                      "Esta aplicação é dirigida a profissionais de saúde. Pretende ser um auxilio à prática da medicina pediátrica. Todos os dados foram inseridos e validados por médicos do corpo clínico do Centro Materno Infantil do Norte e Centro Hospitalar São João. Embora envidemos todos os esforços razoáveis para garantir que as informações contidas na easyPed sejam corretas, esteja ciente de que as informações podem estar incompletas, imprecisas ou desatualizadas e não podem ser garantidas. Assim, está excluída a garantia ou responsabilidade de qualquer tipo. Os autores declinam qualquer responsabilidade na utilização da mesma, devendo qualquer dose ou indicação ser confirmada em documentos de referencia atualizados aquando da prescrição. Qualquer erro detectado pode e deve ser reportado através dos nossos canais de comunicação. Qualquer sugestão de adição de informação ou outra sugestão é bem-vinda.",
                       style: Styles.normalText),
                   const Gap(1),
                 ])),

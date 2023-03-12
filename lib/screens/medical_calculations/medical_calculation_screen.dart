@@ -258,9 +258,10 @@ class CalculationState extends State<CalculationWidget> {
         ]));
     resultWidgets.add(widg);
 
-    return Row(
-      children: resultWidgets,
-    );
+    return widg;
+    // return column(
+    //   children: resultWidgets,
+    // );
   }
 
   @override
