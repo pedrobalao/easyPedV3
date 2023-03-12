@@ -64,7 +64,7 @@ class AboutScreen extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             ListTile(
               tileColor: const Color(0xFF28a745),
-              title: Text("Redes Sociais",
+              title: Text("Segue-nos nas redes sociais",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.headline4),
@@ -72,7 +72,9 @@ class AboutScreen extends StatelessWidget {
             const Gap(5),
             Center(
                 child: IconButton(
-              icon: const Icon(Icons.facebook),
+              iconSize: 50,
+              icon: const Icon(Icons.facebook,
+                  color: Color(0xFF3b5998), size: 50),
               onPressed: () {
                 _launchUrl(Uri.parse('https://facebook.com/easyped'));
               },
