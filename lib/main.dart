@@ -11,7 +11,7 @@ import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'RouterNavigator.dart';
+import 'router_navigator.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
   // Map _source = {ConnectivityResult.none: false};
   // final NetworkConnectivity _networkConnectivity = NetworkConnectivity.instance;
   String string = '';
-  final FirebaseAnalyticsObserver observer =
+  FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
 
   @override

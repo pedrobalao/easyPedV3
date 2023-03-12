@@ -229,34 +229,33 @@ class CalculationState extends State<CalculationWidget> {
 
     List<Widget> resultWidgets = [];
 
-    var widg = Flexible(
-        child: Card(
-            elevation: 4,
-            clipBehavior: Clip.antiAlias,
-            child: Column(children: [
-              ListTile(
-                tileColor: const Color(0xFF28a745),
-                title: Text("Resultado",
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.clip,
-                    style: Theme.of(context).textTheme.headline4),
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Column(children: [
-                    Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                            "${_calculationOutput!.result} ${_calculationOutput!.resultIdUnit!}",
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.clip,
-                            style: Theme.of(context).textTheme.headline5)),
-                    Text(_calculationOutput!.resultDescription ?? "",
+    var widg = Card(
+        elevation: 4,
+        clipBehavior: Clip.antiAlias,
+        child: Column(children: [
+          ListTile(
+            tileColor: const Color(0xFF28a745),
+            title: Text("Resultado",
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.clip,
+                style: Theme.of(context).textTheme.headline4),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Column(children: [
+                Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                        "${_calculationOutput!.result} ${_calculationOutput!.resultIdUnit!}",
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.caption)
-                  ])),
-            ])));
+                        style: Theme.of(context).textTheme.headline5)),
+                Text(_calculationOutput!.resultDescription ?? "",
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.clip,
+                    style: Theme.of(context).textTheme.caption)
+              ])),
+        ]));
     resultWidgets.add(widg);
 
     return Row(

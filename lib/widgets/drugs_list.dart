@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/drug.dart';
 
 class DrugsList extends StatelessWidget {
-  DrugsList({Key? key, required this.drugSubCategory, required this.drugs})
+  const DrugsList(
+      {Key? key, required this.drugSubCategory, required this.drugs})
       : super(key: key);
 
   final DrugSubCategory drugSubCategory;

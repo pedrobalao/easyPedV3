@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/drug.dart';
 
 class DrugsFavouritesList extends StatelessWidget {
-  DrugsFavouritesList({Key? key, required this.drugs}) : super(key: key);
+  const DrugsFavouritesList({Key? key, required this.drugs}) : super(key: key);
 
   final List<Drug> drugs;
 

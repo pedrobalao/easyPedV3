@@ -160,34 +160,32 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
     List<Widget> resultWidgets = [];
     for (var result in _doseCalculationsResults) {
-      var widg = Flexible(
-          child: Card(
-              elevation: 4,
-              clipBehavior: Clip.antiAlias,
-              child: Column(children: [
-                ListTile(
-                  tileColor: const Color(0xFF28a745),
-                  title: Text(result.description ?? "",
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.headline4),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Column(children: [
-                      Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                              "${result.result} ${result.resultIdUnit!}",
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.clip,
-                              style: Theme.of(context).textTheme.headline5)),
-                      Text(result.resultDescription ?? "",
+      var widg = Card(
+          elevation: 4,
+          clipBehavior: Clip.antiAlias,
+          child: Column(children: [
+            ListTile(
+              tileColor: const Color(0xFF28a745),
+              title: Text(result.description ?? "",
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.clip,
+                  style: Theme.of(context).textTheme.headline4),
+            ),
+            Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Column(children: [
+                  Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("${result.result} ${result.resultIdUnit!}",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.clip,
-                          style: Theme.of(context).textTheme.caption)
-                    ])),
-              ])));
+                          style: Theme.of(context).textTheme.headline5)),
+                  Text(result.resultDescription ?? "",
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.clip,
+                      style: Theme.of(context).textTheme.caption)
+                ])),
+          ]));
       resultWidgets.add(widg);
     }
 

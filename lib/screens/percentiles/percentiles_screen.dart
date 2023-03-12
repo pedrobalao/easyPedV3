@@ -271,29 +271,28 @@ class PercentileState extends State<PercentilesWidget> {
   }
 
   Widget percentileResult(context, String type, PercentileOutput output) {
-    return Flexible(
-        child: Card(
-            elevation: 4,
-            clipBehavior: Clip.antiAlias,
-            child: Column(children: [
-              ListTile(
-                tileColor: const Color(0xFF28a745),
-                title: Text("Percentil $type",
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.clip,
-                    style: Theme.of(context).textTheme.headline4),
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Column(children: [
-                    Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(output.percentile.toString(),
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.clip,
-                            style: Theme.of(context).textTheme.headline5)),
-                  ])),
-            ])));
+    return Card(
+        elevation: 4,
+        clipBehavior: Clip.antiAlias,
+        child: Column(children: [
+          ListTile(
+            tileColor: const Color(0xFF28a745),
+            title: Text("Percentil $type",
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.clip,
+                style: Theme.of(context).textTheme.headline4),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Column(children: [
+                Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(output.percentile.toString(),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.clip,
+                        style: Theme.of(context).textTheme.headline5)),
+              ])),
+        ]));
   }
 
   Widget bmiResult(context, BMIOutput output) {
@@ -322,41 +321,40 @@ class PercentileState extends State<PercentilesWidget> {
         break;
     }
 
-    return Flexible(
-        child: Card(
-            elevation: 4,
-            clipBehavior: Clip.antiAlias,
-            child: Column(children: [
-              ListTile(
-                tileColor: const Color(0xFF28a745),
-                title: Text("IMC",
+    return Card(
+        elevation: 4,
+        clipBehavior: Clip.antiAlias,
+        child: Column(children: [
+          ListTile(
+            tileColor: const Color(0xFF28a745),
+            title: Text("IMC",
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.clip,
+                style: Theme.of(context).textTheme.headline4),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Column(children: [
+                Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child:
+                        //
+                        Text(output.percentile.toString(),
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.clip,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline5
+                                ?.merge(TextStyle(color: color)))),
+                Text(resultStr,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.clip,
-                    style: Theme.of(context).textTheme.headline4),
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Column(children: [
-                    Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child:
-                            //
-                            Text(output.percentile.toString(),
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.clip,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline5
-                                    ?.merge(TextStyle(color: color)))),
-                    Text(resultStr,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.clip,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline5
-                            ?.merge(TextStyle(color: color)))
-                  ]))
-            ])));
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline5
+                        ?.merge(TextStyle(color: color)))
+              ]))
+        ]));
   }
 
   Widget calculationResultsWidget(context) {
@@ -387,17 +385,15 @@ class PercentileState extends State<PercentilesWidget> {
       resultWidgets.add(bmiResult(context, _bmiPercentileResult!));
     }
 
-    return Column(children: [
-      ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(bottom: 10.0),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return resultWidgets[index];
-        },
-        itemCount: resultWidgets.length,
-      )
-    ]);
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(bottom: 10.0),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return resultWidgets[index];
+      },
+      itemCount: resultWidgets.length,
+    );
   }
 }

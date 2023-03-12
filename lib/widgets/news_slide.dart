@@ -1,13 +1,9 @@
-import 'package:easypedv3/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/news.dart';
-import '../services/drugs_service.dart';
 import '../utils/app_layout.dart';
 import '../utils/app_styles.dart';
-import 'loading.dart';
 
 class NewsSlide extends StatelessWidget {
   const NewsSlide({Key? key, required this.news}) : super(key: key);

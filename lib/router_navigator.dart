@@ -2,7 +2,6 @@ import 'package:easypedv3/auth_gate.dart';
 import 'package:easypedv3/screens/about/about_screen.dart';
 import 'package:easypedv3/screens/diseases/disease_screen.dart';
 import 'package:easypedv3/screens/medical_calculations/medical_calculation_screen.dart';
-import 'package:easypedv3/widgets/cerror_screen.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

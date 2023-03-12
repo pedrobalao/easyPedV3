@@ -1,9 +1,7 @@
-import 'package:easypedv3/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 import '../models/drug.dart';
 import '../screens/drugs/subcategories_screen.dart';
-import '../services/drugs_service.dart';
 
 class DrugsCategoriesList extends StatelessWidget {
   DrugsCategoriesList({Key? key, required this.categories}) : super(key: key);
