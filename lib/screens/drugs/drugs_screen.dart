@@ -137,8 +137,6 @@ class DrugSearchDelegate extends SearchDelegate<Drug> {
                     snapshot.data![index].subcategoryDescription ?? "",
                     style: Theme.of(context).textTheme.bodyText2),
                 onTap: () {
-                  //close(context, snapshot.data![index]);
-
                   Navigator.push(
                       context,
                       MaterialPageRoute(

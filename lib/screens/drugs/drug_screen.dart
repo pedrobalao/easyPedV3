@@ -148,12 +148,13 @@ class DrugWidget extends StatelessWidget {
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               children: [
                 doseLineWidget(context, "Via", element.idVia),
-                doseLineWidget(
-                    context, "Dose Pediátrica", element.pediatricDose),
-                doseLineWidget(context, "Dose Adulto", element.adultDose),
+                doseLineWidget(context, "Dose Pediátrica",
+                    "${element.pediatricDose} ${element.idUnityPediatricDose}"),
+                doseLineWidget(context, "Dose Adulto",
+                    "${element.adultDose} ${element.idUnityAdultDose}"),
                 doseLineWidget(context, "Tomas", element.takesPerDay),
-                doseLineWidget(
-                    context, "Max. Dose Diária", element.maxDosePerDay),
+                doseLineWidget(context, "Max. Dose Diária",
+                    "${element.maxDosePerDay} ${element.idUnityMaxDosePerDay}"),
                 doseLineWidget(context, "Observações", element.obs)
               ]),
           const EpDivider()
