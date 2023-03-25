@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -25,7 +27,9 @@ class SignIn extends StatelessWidget {
                     "330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com"),
           ),
           const Gap(10),
-          OAuthProviderButton(provider: AppleProvider())
+          Platform.isIOS
+              ? OAuthProviderButton(provider: AppleProvider())
+              : Container()
         ]));
   }
 }

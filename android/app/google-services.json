@@ -23,41 +23,13 @@
           }
         },
         {
-          "client_id": "330541011565-uppv3adt8s17h7u3ulj8lv96673j61n2.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCIlNbQme_B7nNkat2QEDG6pQxoIlByqTY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "330541011565-53e1k3i1ss6cf900ca15knb2sr3njjdv.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "330541011565-lboc2bd92egf0te1dplhdvbvamhteuhd.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.easypedv3"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:330541011565:android:da1ff2c2561c2d9ae0e564",
-        "android_client_info": {
-          "package_name": "com.example.easypedv3"
-        }
-      },
-      "oauth_client": [
+          "client_id": "330541011565-29csbhr550cjlfs71utug0jao47q0g40.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easymedicine.easymedicine",
+            "certificate_hash": "4a8025c8aebc383f60766d937651fdad00e5eea9"
+          }
+        },
         {
           "client_id": "330541011565-uppv3adt8s17h7u3ulj8lv96673j61n2.apps.googleusercontent.com",
           "client_type": 3

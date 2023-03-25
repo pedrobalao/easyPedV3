@@ -13,8 +13,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
     }
-
-    apply plugin: 'com.google.firebase.crashlytics'
 }
 
 allprojects {
