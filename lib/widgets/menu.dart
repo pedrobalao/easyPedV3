@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
 class _Menu {
@@ -45,26 +46,48 @@ class Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var user = FirebaseAuth.instance.currentUser;
+    User? user = FirebaseAuth.instance.currentUser;
+    print(user);
+
+    var email = "your@email.com";
+    var name = "user";
+    var photoUrl = "";
+
+    try {
+      if (user!.providerData.isNotEmpty) {
+        email = user.providerData[0].email!;
+        name = user.providerData[0].displayName!;
+        photoUrl = user.providerData[0].photoURL!;
+      } else {
+        email = user.email!;
+        name = user.displayName!;
+        photoUrl = user.photoURL!;
+      }
+    } catch (exc) {}
+
+    if (user == null) {
+      return Container();
+    }
     var header = UserAccountsDrawerHeader(
       // <-- SEE HERE
 
       decoration: const BoxDecoration(color: Color(0xFF218838)),
       accountName: Text(
-        user!.displayName!,
+        name, //user.displayName!,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
       accountEmail: Text(
-        user.email!,
+        email,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
+
       currentAccountPicture: CircleAvatar(
         radius: 30.0,
-        backgroundImage: NetworkImage(user.photoURL!),
+        backgroundImage: NetworkImage(photoUrl),
         backgroundColor: Colors.transparent,
       ),
     );
@@ -80,6 +103,13 @@ class Menu extends StatelessWidget {
         },
       ));
     }
+
+    widgets.add(ListTile(
+        leading: const Icon(Icons.logout),
+        title: const Text("Sair"),
+        onTap: () {
+          FirebaseUIAuth.signOut(context: context);
+        }));
 
     return Drawer(
       child: ListView(

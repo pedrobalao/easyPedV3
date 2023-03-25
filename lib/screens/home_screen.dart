@@ -11,6 +11,7 @@ import '../widgets/connection_error.dart';
 import '../widgets/loading.dart';
 import '../widgets/menu.dart';
 import '../widgets/news_slide.dart';
+import 'drugs/drugs_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -47,17 +48,13 @@ class HomeScreen extends StatelessWidget {
             return Scaffold(
                 appBar: AppBar(title: const Text("easyPed"), actions: <Widget>[
                   IconButton(
-                    icon: const Icon(Icons.logout),
-                    tooltip: 'Sair',
-                    onPressed: () {
-                      FirebaseUIAuth.signOut(context: context);
-
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AuthGate()));
-                    },
-                  ),
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        showSearch(
+                          context: context,
+                          delegate: DrugSearchDelegate(),
+                        );
+                      })
                 ]),
                 drawer: const Menu(),
                 body: SingleChildScrollView(
