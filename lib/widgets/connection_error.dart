@@ -28,7 +28,8 @@ class ConnectionError extends StatelessWidget {
               GestureDetector(
                 child: Text(
                   "Voltar ao início",
-                  style: Styles.noteStyle,
+                  style: Styles.noteStyle
+                      .merge(TextStyle(color: Styles.textColor)),
                 ),
                 onTap: () {
                   Navigator.popAndPushNamed(context, "/");

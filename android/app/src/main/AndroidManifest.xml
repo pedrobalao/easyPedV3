@@ -1,9 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.easypedv3">
     <uses-permission android:name="android.permission.INTERNET" />
     <application android:label="easypedv3" android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+    >
+
         <activity android:name=".MainActivity" android:exported="true"
-            android:launchMode="singleTop" android:theme="@style/LaunchTheme"
+            android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
@@ -24,7 +27,12 @@
              This is used by the Flutter tool to
         generate GeneratedPluginRegistrant.java -->
         <meta-data android:name="flutterEmbedding" android:value="2" />
+
     </application>
+    <!-- <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+        <background android:drawable="@color/ic_launcher_background" />
+        <foreground android:drawable="@mipmap/ic_launcher_foreground" />
+    </adaptive-icon> -->
     <queries>
         <!-- If your app checks for SMS support -->
         <intent>

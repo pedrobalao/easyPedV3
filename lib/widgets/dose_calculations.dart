@@ -86,7 +86,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
     return TextFormField(
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.digitsOnly
+        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
       ],
       decoration: InputDecoration(
         border: const OutlineInputBorder(),

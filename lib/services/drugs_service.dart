@@ -449,10 +449,11 @@ class DrugService {
       'Authorization': authToken
     };
 
+    var body = json.encode(data);
     final response = await http.post(
         Uri.parse('$apiBaseUrl/percentiles/weight'),
         headers: requestHeaders,
-        body: json.encode(data));
+        body: body);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,

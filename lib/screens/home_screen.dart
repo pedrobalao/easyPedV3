@@ -1,3 +1,4 @@
+import 'package:easypedv3/utils/local_state.dart';
 import 'package:easypedv3/widgets/congresses_slide.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -37,8 +38,43 @@ class HomeScreen extends StatelessWidget {
     return result;
   }
 
+  Future<void> _showMyDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Atenção'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text(
+                    'A informação presente no easyPed pode conter erros. Não nos responsabilizamos por qualquer consequência do uso da mesma. Toda a informação deve ser validada pelo médico.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Li e Concordo'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    var localState = LocalState();
+
+    if (!localState.showedDisclaimerMessage) {
+      Future.delayed(Duration.zero, () => _showMyDialog(context));
+      localState.showedDisclaimerMessage = true;
+    }
+
     return FutureBuilder<Map<String, dynamic>>(
         future: fetchData(),
         builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {

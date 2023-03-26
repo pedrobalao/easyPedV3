@@ -89,7 +89,7 @@ class PercentileState extends State<PercentilesWidget> {
           if (weight != null) {
             var wInput = PercentileInput(
                 gender: stdGender,
-                birthdate: birthdate.toIso8601String(),
+                birthdate: birthdate.toUtc().toIso8601String(),
                 value: weight);
             req.add(_drugService
                 .executeWeightPercentile(wInput, authToken)
@@ -99,7 +99,7 @@ class PercentileState extends State<PercentilesWidget> {
           if (length != null) {
             var lInput = PercentileInput(
                 gender: stdGender,
-                birthdate: birthdate.toIso8601String(),
+                birthdate: birthdate.toUtc().toIso8601String(),
                 value: length);
             req.add(_drugService
                 .executeLengthPercentile(lInput, authToken)
@@ -109,7 +109,7 @@ class PercentileState extends State<PercentilesWidget> {
           if (weight != null && length != null) {
             var bmiInput = BMIInput(
                 gender: stdGender,
-                birthdate: birthdate.toIso8601String(),
+                birthdate: birthdate.toUtc().toIso8601String(),
                 length: length,
                 weight: weight);
             req.add(_drugService
@@ -205,7 +205,8 @@ class PercentileState extends State<PercentilesWidget> {
                     child: TextFormField(
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d{0,3}')),
                         ],
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -235,7 +236,8 @@ class PercentileState extends State<PercentilesWidget> {
                     child: TextFormField(
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d{0,3}')),
                         ],
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
