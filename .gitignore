@@ -48,3 +48,4 @@ app.*.map.json
 
 .env
 ios/GoogleService-Info.plist
+android/key.properties
