@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
             child: ListBody(
               children: const <Widget>[
                 Text(
-                    'A informação presente no easyPed pode conter erros. Não nos responsabilizamos por qualquer consequência do uso da mesma. Toda a informação deve ser validada pelo médico.'),
+                    'A informação presente no easyPed pode conter erros e destina-se exclusivamente para fins educacionais. Não nos responsabilizamos por qualquer consequência do uso da mesma. Toda a informação deve ser validada pelo médico.'),
               ],
             ),
           ),
