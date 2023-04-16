@@ -55,6 +55,7 @@ class SurgeriesReferralListScreen extends StatelessWidget {
                   title: const Text("Referenciação Cirúrgica")),
               body: BasePageLayout(children: [
                 ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {

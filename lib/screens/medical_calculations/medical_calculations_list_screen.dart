@@ -53,6 +53,7 @@ class MedicalCalculationsListScreen extends StatelessWidget {
                   centerTitle: true, title: const Text("Cálculos Médicos")),
               body: BasePageLayout(children: [
                 ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
