@@ -3,6 +3,8 @@ import 'package:easypedv3/widgets/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../services/app_info_service.dart';
+
 class EPSignScreen extends StatelessWidget {
   const EPSignScreen({super.key});
 
@@ -66,6 +68,11 @@ class EPSignScreen extends StatelessWidget {
                         style: Styles.noteStyle,
                       )),
                     ),
+                    const Gap(10),
+                    Center(
+                        child: Text(
+                            "v${AppInfoService.packageInfo!.version} build ${AppInfoService.packageInfo!.buildNumber}",
+                            style: Styles.normalText)),
                   ],
                 )
               ],

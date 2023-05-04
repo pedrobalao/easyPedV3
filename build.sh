@@ -21,4 +21,6 @@ sed -i "" "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" $PUBSPEC_PATH
 # Print the new version number
 echo "Version updated to: $NEW_VERSION"
 
-flutter build ipa
+#flutter build ipa
+
+flutter build appbundle

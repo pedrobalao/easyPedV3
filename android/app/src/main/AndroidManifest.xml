@@ -1,6 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.easypedv3">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.easymedicine.easymedicine">
     <uses-permission android:name="android.permission.INTERNET" />
-    <application android:label="easypedv3" android:name="${applicationName}"
+    <application android:label="easyPed" android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
     >

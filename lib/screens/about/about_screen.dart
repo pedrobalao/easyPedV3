@@ -1,12 +1,47 @@
 import 'package:easypedv3/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/base_page_layout.dart';
 
-class AboutScreen extends StatelessWidget {
-  AboutScreen({Key? key}) : super(key: key);
+class AboutScreen extends StatefulWidget {
+  const AboutScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen> {
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+    buildSignature: 'Unknown',
+    installerStore: 'Unknown',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _initPackageInfo();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+  }
+
+  Widget _infoTile(String title, String subtitle) {
+    return ListTile(
+      title: Text(title),
+      subtitle: Text(subtitle.isEmpty ? 'Not set' : subtitle),
+    );
+  }
 
   final List<String> authors = <String>[
     "Dr. Ruben Rocha - Pediatra",
@@ -111,6 +146,12 @@ class AboutScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline4),
             ),
             Padding(padding: const EdgeInsets.all(5), child: biblioWdgt()),
+            const Gap(5),
+            Center(
+                child: Text(
+                    "v${_packageInfo.version} build ${_packageInfo.buildNumber}",
+                    style: Styles.normalText)),
+            const Gap(5),
           ]),
         ));
   }
