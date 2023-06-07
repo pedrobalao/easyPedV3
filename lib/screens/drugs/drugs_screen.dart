@@ -2,10 +2,8 @@ import 'package:easypedv3/services/auth_service.dart';
 import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 import '../../models/drug.dart';
-import '../../widgets/base_page_layout.dart';
 import '../../widgets/connection_error.dart';
 import '../../widgets/drug_categories_list.dart';
 import '../../widgets/drugs_favourites_list.dart';

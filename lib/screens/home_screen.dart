@@ -1,11 +1,8 @@
 import 'package:easypedv3/utils/local_state.dart';
 import 'package:easypedv3/widgets/congresses_slide.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../auth_gate.dart';
 import '../services/auth_service.dart';
 import '../services/drugs_service.dart';
 import '../widgets/connection_error.dart';

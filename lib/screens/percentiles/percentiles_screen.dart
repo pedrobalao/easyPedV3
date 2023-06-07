@@ -1,16 +1,18 @@
 import 'dart:async';
 
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:easypedv3/models/percentile.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import '../../services/drugs_service.dart';
 import '../../services/auth_service.dart';
 import '../../utils/string_utils.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 
 import '../../widgets/connection_error.dart';
+import '../../widgets/date_picker_widget.dart';
 
 class PercentilesScreen extends StatefulWidget {
   const PercentilesScreen({Key? key}) : super(key: key);
@@ -151,28 +153,44 @@ class PercentileState extends State<PercentilesWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: DateTimePicker(
-                      dateMask: 'yyyy-MM-dd',
-                      initialValue: birthdate.toString(),
-                      firstDate:
-                          DateTime.now().subtract(const Duration(days: 6574)),
-                      lastDate: DateTime.now(),
-                      dateLabelText: 'Data de Nascimento',
-                      onChanged: (String val) {
-                        setState(() {
-                          birthdate = DateTime.parse(val);
-                          _onVariablesValueChange();
-                        });
-                      },
-                      validator: (val) {
-                        if (val == null) {
-                          return "Campo obrigatório";
-                        }
-                        return null;
-                      },
-                      onSaved: (val) => {},
-                    )),
+                    padding: EdgeInsets.all(10.0),
+                    child: DatePickerWidget(
+                        label: "Data de Nascimento",
+                        initialDate: DateTime.now(),
+                        minDate:
+                            DateTime.now().subtract(const Duration(days: 6570)),
+                        maxDate: DateTime.now(),
+                        onDateSelected: (date) {
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(birthdate);
+                          print("Birthdate:" + formattedDate);
+                          setState(() {
+                            birthdate = date;
+                            _onVariablesValueChange();
+                          });
+                        })),
+                //     DateTimePicker(
+                //       dateMask: 'yyyy-MM-dd',
+                //       initialValue: birthdate.toString(),
+                //       firstDate:
+                //           DateTime.now().subtract(const Duration(days: 6574)),
+                //       lastDate: DateTime.now(),
+                //       dateLabelText: 'Data de Nascimento',
+                //       onChanged: (String val) {
+                //         setState(() {
+                //           birthdate = DateTime.parse(val);
+                //           _onVariablesValueChange();
+                //         });
+                //       },
+                //       validator: (val) {
+                //         if (val == null) {
+                //           return "Campo obrigatório";
+                //         }
+                //         return null;
+                //       },
+                //       onSaved: (val) => {},
+                //     )
+                //     ),
                 Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: DropdownButtonFormField<String>(

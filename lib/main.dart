@@ -1,17 +1,11 @@
 // ignore_for_file: unnecessary_const
 
 import 'dart:async';
-
-import 'package:catcher/catcher.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'router_navigator.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -26,36 +20,49 @@ void main() async {
 
     await AppInfoService.initiateAppInfoService();
 
+    // if (Platform.isIOS) {
+    //   await Firebase.initializeApp(
+    //       options: DefaultFirebaseOptions.currentPlatform);
+    // } else {
+    //   await Firebase.initializeApp();
+    // }
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    // String googleClientId =
+    //     "330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com";
 
-    FirebaseUIAuth.configureProviders([
-      //EmailAuthProvide(),
-      GoogleProvider(
-          clientId:
-              "330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com"),
-      AppleProvider()
-    ]);
+    // if (Platform.isAndroid) {
+    //   googleClientId =
+    //       "330541011565-0ekek1brvq39m6c34i8en2tl2jtqj99a.apps.googleusercontent.com";
+    // }
+
+    // FirebaseUIAuth.configureProviders([
+    //   //EmailAuthProvide(),
+    //   GoogleProvider(clientId: googleClientId),
+    //   AppleProvider()
+    // ]);
 
     FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     // The following lines are the same as previously explained in "Handling uncaught errors"
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-    CatcherOptions debugOptions =
-        CatcherOptions(DialogReportMode(), [ConsoleHandler(), ToastHandler()]);
+    runApp(MyApp());
 
-    /// Release configuration. Same as above, but once user accepts dialog, user will be prompted to send email with crash to support.
-    CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
-      EmailManualHandler(["pedrocha@gmail.com"]),
-      ToastHandler()
-    ]);
+    // CatcherOptions debugOptions =
+    //     CatcherOptions(DialogReportMode(), [ConsoleHandler(), ToastHandler()]);
 
-    /// STEP 2. Pass your root widget (MyApp) along with Catcher configuration:
-    Catcher(
-        rootWidget: MyApp(),
-        debugConfig: debugOptions,
-        releaseConfig: releaseOptions);
+    // /// Release configuration. Same as above, but once user accepts dialog, user will be prompted to send email with crash to support.
+    // CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
+    //   EmailManualHandler(["pedrocha@gmail.com"]),
+    //   ToastHandler()
+    // ]);
+
+    // /// STEP 2. Pass your root widget (MyApp) along with Catcher configuration:
+    // Catcher(
+    //     rootWidget: MyApp(),
+    //     debugConfig: debugOptions,
+    //     releaseConfig: releaseOptions);
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 }
 

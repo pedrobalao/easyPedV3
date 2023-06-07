@@ -23,7 +23,15 @@
           }
         },
         {
-          "client_id": "330541011565-29csbhr550cjlfs71utug0jao47q0g40.apps.googleusercontent.com",
+          "client_id": "330541011565-o3mqr2n2idgic7t6adb0itlr6grkquup.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easymedicine.easymedicine",
+            "certificate_hash": "4a187331d3b2cbb8f8819211ebf21994e54540a9"
+          }
+        },
+        {
+          "client_id": "330541011565-qjbf5p75929qd4rtik4sdrs2f8cbm9gm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.easymedicine.easymedicine",
@@ -48,10 +56,11 @@
               "client_type": 3
             },
             {
-              "client_id": "330541011565-lboc2bd92egf0te1dplhdvbvamhteuhd.apps.googleusercontent.com",
+              "client_id": "330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.easypedv3"
+                "bundle_id": "com.easymedicine",
+                "app_store_id": "1158594702"
               }
             }
           ]
