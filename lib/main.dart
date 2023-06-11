@@ -3,6 +3,9 @@
 import 'dart:async';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,28 +23,14 @@ void main() async {
 
     await AppInfoService.initiateAppInfoService();
 
-    // if (Platform.isIOS) {
-    //   await Firebase.initializeApp(
-    //       options: DefaultFirebaseOptions.currentPlatform);
-    // } else {
-    //   await Firebase.initializeApp();
-    // }
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    // String googleClientId =
-    //     "330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com";
 
-    // if (Platform.isAndroid) {
-    //   googleClientId =
-    //       "330541011565-0ekek1brvq39m6c34i8en2tl2jtqj99a.apps.googleusercontent.com";
-    // }
-
-    // FirebaseUIAuth.configureProviders([
-    //   //EmailAuthProvide(),
-    //   GoogleProvider(clientId: googleClientId),
-    //   AppleProvider()
-    // ]);
+    FirebaseUIAuth.configureProviders([
+      GoogleProvider(clientId: dotenv.env['GOOGLE_CLIENT_ID']!),
+      AppleProvider()
+    ]);
 
     FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     // The following lines are the same as previously explained in "Handling uncaught errors"

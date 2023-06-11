@@ -52,10 +52,10 @@ class EPSignScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Gap(150),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
-                        children: const [SignIn()],
+                        children: [SignIn()],
                       ),
                     ),
                     const SizedBox(height: 100),
@@ -83,22 +83,3 @@ class EPSignScreen extends StatelessWidget {
     );
   }
 }
-// Widget build(BuildContext context) {
-//   return Scaffold(
-//     backgroundColor: Styles.primaryColor,
-//     body: Container(
-//         alignment: Alignment.center,
-//         child: Column(
-//           //fit: StackFit.expand,
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: [
-//             Text(
-//               "easyPed",
-//               style: Styles.title,
-//             ),
-//             const SignIn()
-//           ],
-//         )),
-//   );
-// }

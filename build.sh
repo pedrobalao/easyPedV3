@@ -23,4 +23,5 @@ echo "Version updated to: $NEW_VERSION"
 
 #flutter build ipa
 
-flutter build appbundle --dart-define="ENV_R=PROD"
+flutter build appbundle
+#flutter build apk --release
