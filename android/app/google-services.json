@@ -23,19 +23,19 @@
           }
         },
         {
-          "client_id": "330541011565-o3mqr2n2idgic7t6adb0itlr6grkquup.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.easymedicine.easymedicine",
-            "certificate_hash": "4a187331d3b2cbb8f8819211ebf21994e54540a9"
-          }
-        },
-        {
-          "client_id": "330541011565-qjbf5p75929qd4rtik4sdrs2f8cbm9gm.apps.googleusercontent.com",
+          "client_id": "330541011565-4emmpq6tuji8dlitiau805q42pk57k30.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.easymedicine.easymedicine",
             "certificate_hash": "4a8025c8aebc383f60766d937651fdad00e5eea9"
+          }
+        },
+        {
+          "client_id": "330541011565-554vprm70bs0rua4q11bml8t7io4u0q4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easymedicine.easymedicine",
+            "certificate_hash": "4a187331d3b2cbb8f8819211ebf21994e54540a9"
           }
         },
         {
