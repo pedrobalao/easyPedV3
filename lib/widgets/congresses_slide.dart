@@ -1,4 +1,5 @@
 import 'package:easypedv3/services/auth_service.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
@@ -34,16 +35,22 @@ class CongressScreen extends StatelessWidget {
     final DateFormat formatter = DateFormat('yMMMMd');
     //DateFormat('pt_PT');
 
-    Future<void> _launchUrl(url) async {
-      if (!await launchUrl(url)) {
-        throw Exception('Could not launch $url');
+    Future<void> _launchUrl(Congress congress) async {
+      FirebaseAnalytics.instance.logSelectItem(items: [
+        AnalyticsEventItem(
+            itemCategory: "congress_open",
+            itemId: congress.id.toString(),
+            itemName: congress.title)
+      ]);
+      if (!await launchUrl(Uri.parse(congress.url!))) {
+        throw Exception('Could not launch $congress.url');
       }
     }
 
     return GestureDetector(
         onTap: () {
           print("Container was tapped");
-          _launchUrl(Uri.parse(congress.url!));
+          _launchUrl(congress);
         },
         child: Container(
           width: 300,
