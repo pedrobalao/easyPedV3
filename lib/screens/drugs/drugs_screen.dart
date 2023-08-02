@@ -127,6 +127,8 @@ class DrugSearchDelegate extends SearchDelegate<Drug> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(snapshot.data![index].name ?? "",

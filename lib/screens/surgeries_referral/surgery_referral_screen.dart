@@ -41,6 +41,7 @@ class SurgeryReferralScreen extends StatelessWidget {
                         (surgeryReferral.referral!.isNotEmpty
                             ? ListView.builder(
                                 primary: false,
+                                physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: surgeryReferral.referral!.length,
                                 itemBuilder: (BuildContext context, int index) {
@@ -70,6 +71,7 @@ class SurgeryReferralScreen extends StatelessWidget {
                         (surgeryReferral.observations!.isNotEmpty
                             ? ListView.builder(
                                 primary: false,
+                                physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: surgeryReferral.observations!.length,
                                 itemBuilder: (BuildContext context, int index) {

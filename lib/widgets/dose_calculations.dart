@@ -6,6 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import '../models/drug.dart';
 import '../services/drugs_service.dart';
@@ -38,12 +39,16 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
   static const nullNumberVal = -99923143898;
 
-  _onVariablesValueChange() {
+  _invalidateResult() {
     if (_doseCalculationsResults.isNotEmpty) {
       setState(() {
         _doseCalculationsResults = [];
       });
     }
+  }
+
+  _onVariablesValueChange() {
+    _invalidateResult();
 
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
@@ -84,18 +89,21 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
   Widget numberVariableWidget(context, Variables variable) {
     return TextFormField(
-      keyboardType: TextInputType.number,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
-      ],
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      // inputFormatters: <TextInputFormatter>[
+      //   FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+      // ],
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         fillColor: const Color(0xFF2963C8),
         labelText: "${variable.description!} (${variable.idUnit!})",
       ),
       onChanged: (String? value) {
-        mapOfVariables[variable.id] =
-            (value == null || value == "" ? null : double.parse(value));
+        mapOfVariables[variable.id] = (value == null ||
+                value == "" ||
+                !StringUtils.isNumeric(value.replaceAll(',', '.'))
+            ? null
+            : double.parse(value.replaceAll(',', '.'))); // );
         if (kDebugMode) {
           print("Value: $mapOfVariables[variable.id]");
         }
@@ -108,11 +116,12 @@ class DoseCalculationsState extends State<DoseCalculations> {
         // This optional block of code can be used to run
         // code when the user saves the form.
       },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? value) {
         if (value == null) {
           return "Campo obrigatório";
         }
-        if (!StringUtils.isNumeric(value)) {
+        if (!StringUtils.isNumeric(value.replaceAll(',', '.'))) {
           return "O campo deve ser numérico";
         }
         return null;

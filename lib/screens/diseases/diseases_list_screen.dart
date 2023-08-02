@@ -52,6 +52,8 @@ class _DiseasesListScreenState extends State<DiseasesListScreen> {
                   ]),
               body: BasePageLayout(children: [
                 ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(2.0),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
@@ -108,6 +110,8 @@ class DiseasesSearchDelegate extends SearchDelegate<Disease> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(snapshot.data![index].description ?? "",
