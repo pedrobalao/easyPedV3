@@ -151,18 +151,18 @@ class CalculationState extends State<CalculationWidget> {
 
   Widget numberVariableWidget(context, Variable variable) {
     return TextFormField(
-      keyboardType: TextInputType.number,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
-      ],
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         fillColor: const Color(0xFF2963C8),
         labelText: "${variable.description!} (${variable.idUnit!})",
       ),
       onChanged: (String? value) {
-        mapOfVariables[variable.variableId!] =
-            (value == null || value == "" ? null : double.parse(value));
+        mapOfVariables[variable.variableId!] = (value == null ||
+                value == "" ||
+                !StringUtils.isNumeric(value.replaceAll(',', '.'))
+            ? null
+            : double.parse(value.replaceAll(',', '.')));
         _onVariablesValueChange();
         // listVariables[listVariables
         //     .indexWhere((item) => item['id'] == variable.id)]['value'] = value;
@@ -171,11 +171,12 @@ class CalculationState extends State<CalculationWidget> {
         // This optional block of code can be used to run
         // code when the user saves the form.
       },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? value) {
         if (value == null) {
           return "Campo obrigatório";
         }
-        if (!StringUtils.isNumeric(value)) {
+        if (!StringUtils.isNumeric(value.replaceAll(',', '.'))) {
           return "O campo deve ser numérico";
         }
         return null;
