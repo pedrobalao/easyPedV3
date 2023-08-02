@@ -219,28 +219,33 @@ class PercentileState extends State<PercentilesWidget> {
                 Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d{0,3}')),
-                        ],
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           fillColor: Color(0xFF2963C8),
                           labelText: "Peso (kg)",
                         ),
                         onChanged: (String? value) {
-                          weight = (value == null || value == ""
+                          weight = (value == null ||
+                                  value == "" ||
+                                  !StringUtils.isNumeric(
+                                      value.replaceAll(',', '.'))
                               ? null
-                              : double.parse(value));
+                              : double.parse(value.replaceAll(',', '.')));
                           _onVariablesValueChange();
                         },
                         onSaved: (String? value) {
                           // This optional block of code can be used to run
                           // code when the user saves the form.
                         },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (String? value) {
-                          if (!StringUtils.isNumeric(value)) {
+                          if (value == null) {
+                            return null;
+                          }
+                          if (!StringUtils.isNumeric(
+                              value.replaceAll(',', '.'))) {
                             return "O campo deve ser numérico";
                           }
                           return null;
