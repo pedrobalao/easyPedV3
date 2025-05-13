@@ -164,8 +164,9 @@ class DrugService {
 
     List<CalculationInput> calInput = [];
 
-    data.forEach((key, value) =>
-        {calInput.add(CalculationInput(variable: key, value: value))});
+    data.forEach((key, value) {
+      calInput.add(CalculationInput(variable: key, value: value));
+    });
 
     final response = await http.post(
         Uri.parse('$apiBaseUrl/drugs/$drugId/calculations'),

@@ -75,7 +75,6 @@ class MyApp extends StatelessWidget {
         // Define the default brightness and colors.
         brightness: Brightness.light,
         primaryColor: primaryColor,
-        errorColor: negativeColor,
 
         // Define the default font family.
         fontFamily: 'Montserrat',
@@ -83,23 +82,30 @@ class MyApp extends StatelessWidget {
         // Define the default `TextTheme`. Use this to specify the default
         // text styling for headlines, titles, bodies of text, and more.
         textTheme: TextTheme(
-          headline1: GoogleFonts.openSans(fontSize: 42.0),
-          headline2: GoogleFonts.openSans(fontSize: 42.0, color: primaryColor),
-          headline3: GoogleFonts.openSans(fontSize: 18.0, color: primaryColor),
-          headline6: GoogleFonts.openSans(fontSize: 22.0, color: primaryColor),
-          headline4: GoogleFonts.openSans(
+          displayLarge: GoogleFonts.openSans(fontSize: 42.0),
+          displayMedium:
+              GoogleFonts.openSans(fontSize: 42.0, color: primaryColor),
+          displaySmall:
+              GoogleFonts.openSans(fontSize: 18.0, color: primaryColor),
+          titleLarge: GoogleFonts.openSans(fontSize: 22.0, color: primaryColor),
+          headlineMedium: GoogleFonts.openSans(
               fontSize: 18.0,
               color: Colors.white,
               backgroundColor: const Color(0xFF28a745)),
-          headline5:
+          headlineSmall:
               GoogleFonts.openSans(fontSize: 32.0, color: secondaryColor),
-          bodyText1: GoogleFonts.openSans(fontSize: 14.0),
-          bodyText2:
+          bodyLarge: GoogleFonts.openSans(fontSize: 14.0),
+          bodyMedium:
               GoogleFonts.openSans(fontSize: 12.0, color: secondaryColor),
-          caption: GoogleFonts.openSans(fontSize: 14.0, color: primaryColor),
+          bodySmall: GoogleFonts.openSans(fontSize: 14.0, color: primaryColor),
         ),
         cardTheme: const CardTheme(clipBehavior: Clip.none),
-        listTileTheme: const ListTileThemeData());
+        listTileTheme: const ListTileThemeData(),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryColor,
+          // ···
+          error: negativeColor,
+        )); //ColorScheme(error: negativeColor));
 
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),

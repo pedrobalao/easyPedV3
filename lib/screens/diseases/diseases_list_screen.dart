@@ -33,7 +33,7 @@ class _DiseasesListScreenState extends State<DiseasesListScreen> {
       future: fetchDiseases(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ConnectionError();
+          return const ConnectionError();
         }
         if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
@@ -60,7 +60,7 @@ class _DiseasesListScreenState extends State<DiseasesListScreen> {
                     return Card(
                         child: ListTile(
                       title: Text(snapshot.data![index].description ?? "",
-                          style: Theme.of(context).textTheme.headline3),
+                          style: Theme.of(context).textTheme.displaySmall),
                       onTap: () {
                         var id = snapshot.data![index].id;
                         Navigator.pushNamed(context, "/diseases/$id");
@@ -115,7 +115,7 @@ class DiseasesSearchDelegate extends SearchDelegate<Disease> {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(snapshot.data![index].description ?? "",
-                    style: Theme.of(context).textTheme.headline3),
+                    style: Theme.of(context).textTheme.displaySmall),
                 onTap: () {
                   var id = snapshot.data![index].id;
                   Navigator.pushNamed(context, "/diseases/$id");

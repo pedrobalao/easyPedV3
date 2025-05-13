@@ -45,7 +45,7 @@ class DrugWidget extends StatelessWidget {
         future: fetchDrug(id),
         builder: (context, AsyncSnapshot<Drug> snapshot) {
           if (snapshot.hasError) {
-            return ConnectionError();
+            return const ConnectionError();
           } else if (snapshot.hasData) {
             FirebaseAnalytics.instance.logViewItem(items: [
               AnalyticsEventItem(
@@ -88,7 +88,7 @@ class DrugWidget extends StatelessWidget {
                             child: Text("Indicações",
                                 textAlign: TextAlign.left,
                                 overflow: TextOverflow.clip,
-                                style: Theme.of(context).textTheme.headline6)),
+                                style: Theme.of(context).textTheme.titleLarge)),
                         indicationsWidget(context, snapshot.data?.indications)
                       ],
                     )));
@@ -112,7 +112,7 @@ class DrugWidget extends StatelessWidget {
             Text("Cálculo de Doses",
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.clip,
-                style: Theme.of(context).textTheme.headline6),
+                style: Theme.of(context).textTheme.titleLarge),
             DoseCalculations(drug: drug),
           ],
         ));
@@ -125,11 +125,11 @@ class DrugWidget extends StatelessWidget {
           child: Text(title,
               textAlign: TextAlign.left,
               overflow: TextOverflow.clip,
-              style: Theme.of(context).textTheme.headline3)),
+              style: Theme.of(context).textTheme.displaySmall)),
       Text(value ?? "Sem informação",
           textAlign: TextAlign.left,
           overflow: TextOverflow.clip,
-          style: Theme.of(context).textTheme.bodyText1),
+          style: Theme.of(context).textTheme.bodyLarge),
     ]);
   }
 
@@ -140,7 +140,7 @@ class DrugWidget extends StatelessWidget {
       for (var element in doses) {
         widgets.add(Column(children: [
           Table(
-              border: TableBorder.symmetric(),
+              border: const TableBorder.symmetric(),
               columnWidths: const <int, TableColumnWidth>{
                 0: FixedColumnWidth(200),
                 1: FlexColumnWidth(),
@@ -187,7 +187,7 @@ class DrugWidget extends StatelessWidget {
             title: Text(indication.indicationText ?? "",
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.clip,
-                style: Theme.of(context).textTheme.headline4),
+                style: Theme.of(context).textTheme.headlineMedium),
           ),
           Padding(
             padding: const EdgeInsets.all(5.0),

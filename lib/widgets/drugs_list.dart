@@ -19,7 +19,7 @@ class DrugsList extends StatelessWidget {
         return Card(
             child: ListTile(
                 title: Text(drugs[index].name ?? "",
-                    style: Theme.of(context).textTheme.headline3),
+                    style: Theme.of(context).textTheme.displaySmall),
                 onTap: () {
                   var id = drugs[index].id;
                   Navigator.pushNamed(context, "/drugs/$id");

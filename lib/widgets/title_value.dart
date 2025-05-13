@@ -18,12 +18,12 @@ class TitleValue extends StatelessWidget {
               Text(title,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline6),
+                  style: Theme.of(context).textTheme.titleLarge),
               value != null
                   ? Text(value!,
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.bodyText1)
+                      style: Theme.of(context).textTheme.bodyLarge)
                   : Container(),
             ]));
   }
@@ -47,12 +47,12 @@ class SubTitleValue extends StatelessWidget {
               Text(title,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline3),
+                  style: Theme.of(context).textTheme.displaySmall),
               value != null
                   ? Text(value!,
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.bodyText1)
+                      style: Theme.of(context).textTheme.bodyLarge)
                   : Container(),
             ]));
   }

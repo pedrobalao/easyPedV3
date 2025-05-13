@@ -28,7 +28,7 @@ class DrugsSubCategoriesScreen extends StatelessWidget {
         future: fetchSubCategories(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return ConnectionError();
+            return const ConnectionError();
           } else if (snapshot.hasData) {
             return Scaffold(
                 appBar: AppBar(

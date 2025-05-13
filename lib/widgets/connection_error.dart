@@ -5,7 +5,7 @@ import 'package:lottie/lottie.dart';
 import '../utils/app_styles.dart';
 
 class ConnectionError extends StatelessWidget {
-  ConnectionError({Key? key}) : super(key: key);
+  const ConnectionError({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class ConnectionError extends StatelessWidget {
                 "Ups...algo correu mal. Verifique que tem internet e volte a tentar mais tarde. Obrigado.",
                 style: Styles.headLineStyle1.copyWith(color: Styles.errorColor),
               ),
-              Gap(20),
+              const Gap(20),
               GestureDetector(
                 child: Text(
                   "Voltar ao início",

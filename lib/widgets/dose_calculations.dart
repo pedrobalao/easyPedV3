@@ -5,8 +5,6 @@ import 'package:easypedv3/widgets/loading.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 import '../models/drug.dart';
 import '../services/drugs_service.dart';
@@ -72,7 +70,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
         FirebaseAnalytics.instance.logEvent(
           name: "drug_dose_calculation",
-          parameters: {"drug_id": widget.drug.id},
+          parameters: {"drug_id": widget.drug.id!},
         );
 
         setState(() {
@@ -178,7 +176,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
               title: Text(result.description ?? "",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline4),
+                  style: Theme.of(context).textTheme.headlineMedium),
             ),
             Padding(
                 padding: const EdgeInsets.all(2.0),
@@ -188,11 +186,11 @@ class DoseCalculationsState extends State<DoseCalculations> {
                       child: Text("${result.result} ${result.resultIdUnit!}",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.clip,
-                          style: Theme.of(context).textTheme.headline5)),
+                          style: Theme.of(context).textTheme.headlineSmall)),
                   Text(result.resultDescription ?? "",
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.caption)
+                      style: Theme.of(context).textTheme.bodySmall)
                 ])),
           ]));
       resultWidgets.add(widg);

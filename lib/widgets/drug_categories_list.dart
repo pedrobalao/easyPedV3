@@ -4,7 +4,8 @@ import '../models/drug.dart';
 import '../screens/drugs/subcategories_screen.dart';
 
 class DrugsCategoriesList extends StatelessWidget {
-  DrugsCategoriesList({Key? key, required this.categories}) : super(key: key);
+  const DrugsCategoriesList({Key? key, required this.categories})
+      : super(key: key);
 
   final List<DrugCategory> categories;
 
@@ -18,7 +19,7 @@ class DrugsCategoriesList extends StatelessWidget {
         return Card(
             child: ListTile(
           title: Text(categories[index].description ?? "",
-              style: Theme.of(context).textTheme.headline3),
+              style: Theme.of(context).textTheme.displaySmall),
           onTap: () {
             Navigator.push(
                 context,

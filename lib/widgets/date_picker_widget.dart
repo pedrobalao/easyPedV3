@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-typedef DatePickerValueSelectedCallback(DateTime date);
+typedef DatePickerValueSelectedCallback = Function(DateTime date);
 
 class DatePickerWidget extends StatefulWidget {
   const DatePickerWidget(

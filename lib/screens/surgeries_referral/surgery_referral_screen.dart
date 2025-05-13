@@ -37,7 +37,7 @@ class SurgeryReferralScreen extends StatelessWidget {
                         Text("Referenciação",
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.clip,
-                            style: Theme.of(context).textTheme.headline6),
+                            style: Theme.of(context).textTheme.titleLarge),
                         (surgeryReferral.referral!.isNotEmpty
                             ? ListView.builder(
                                 primary: false,
@@ -51,12 +51,12 @@ class SurgeryReferralScreen extends StatelessWidget {
                                       overflow: TextOverflow.clip,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1);
+                                          .bodyLarge);
                                 })
                             : Text("Sem informação",
                                 textAlign: TextAlign.left,
                                 overflow: TextOverflow.clip,
-                                style: Theme.of(context).textTheme.bodyText1))
+                                style: Theme.of(context).textTheme.bodyLarge))
                       ])),
               Container(
                   padding: const EdgeInsets.all(5.5),
@@ -67,7 +67,7 @@ class SurgeryReferralScreen extends StatelessWidget {
                         Text("Observações",
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.clip,
-                            style: Theme.of(context).textTheme.headline6),
+                            style: Theme.of(context).textTheme.titleLarge),
                         (surgeryReferral.observations!.isNotEmpty
                             ? ListView.builder(
                                 primary: false,
@@ -81,12 +81,12 @@ class SurgeryReferralScreen extends StatelessWidget {
                                       overflow: TextOverflow.clip,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1);
+                                          .bodyLarge);
                                 })
                             : Text("Sem informação",
                                 textAlign: TextAlign.left,
                                 overflow: TextOverflow.clip,
-                                style: Theme.of(context).textTheme.bodyText1))
+                                style: Theme.of(context).textTheme.bodyLarge))
                       ])),
             ],
           ))

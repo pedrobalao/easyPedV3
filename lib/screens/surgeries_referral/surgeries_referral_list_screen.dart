@@ -47,7 +47,7 @@ class SurgeriesReferralListScreen extends StatelessWidget {
       future: fetchSurgeriesReferral(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ConnectionError();
+          return const ConnectionError();
         } else if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
               appBar: AppBar(
@@ -62,7 +62,7 @@ class SurgeriesReferralListScreen extends StatelessWidget {
                     return Card(
                         child: ListTile(
                       title: Text(snapshot.data![index].scope ?? "",
-                          style: Theme.of(context).textTheme.headline3),
+                          style: Theme.of(context).textTheme.displaySmall),
                       onTap: () {
                         Navigator.push(
                             context,

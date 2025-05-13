@@ -86,10 +86,10 @@ class RouterNavigator {
             builder: (context) => SurgeriesReferralListScreen());
       } else if (settings.name == '/about') {
         return MaterialPageRoute<AboutScreen>(
-            settings: settings, builder: (context) => AboutScreen());
+            settings: settings, builder: (context) => const AboutScreen());
       } else if (settings.name == '/connection-error') {
         return MaterialPageRoute<ConnectionError>(
-            settings: settings, builder: (context) => ConnectionError());
+            settings: settings, builder: (context) => const ConnectionError());
       } else {
         return MaterialPageRoute<Error404Screen>(
             settings: settings, builder: (context) => const Error404Screen());

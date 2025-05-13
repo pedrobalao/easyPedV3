@@ -1,0 +1,2 @@
+/Users/pedrocha/Projects/easyped/easyPedV3/android/app/.cxx/RelWithDebInfo/413u5m4r/x86_64/CMakeFiles/edit_cache.dir
+/Users/pedrocha/Projects/easyped/easyPedV3/android/app/.cxx/RelWithDebInfo/413u5m4r/x86_64/CMakeFiles/rebuild_cache.dir

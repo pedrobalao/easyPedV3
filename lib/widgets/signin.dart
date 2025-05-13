@@ -55,6 +55,7 @@ class SignIn extends StatelessWidget {
           } else if (state is AuthFailed) {
             _showMyDialog(context, "Falhou a autenticação");
           }
+          return null;
         },
         child: Column(children: [
           const Gap(10),

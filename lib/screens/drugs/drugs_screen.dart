@@ -46,7 +46,7 @@ class _DrugsScreenState extends State<DrugsScreen> {
         future: fetchData(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return ConnectionError();
+            return const ConnectionError();
           } else if (snapshot.hasData) {
             return Scaffold(
               appBar: AppBar(
@@ -73,7 +73,8 @@ class _DrugsScreenState extends State<DrugsScreen> {
                           title: Text("Os teus favoritos",
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.clip,
-                              style: Theme.of(context).textTheme.headline4),
+                              style:
+                                  Theme.of(context).textTheme.headlineMedium),
                         ),
                         Padding(
                             padding: const EdgeInsets.all(2.0),
@@ -84,7 +85,8 @@ class _DrugsScreenState extends State<DrugsScreen> {
                           title: Text("Explora",
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.clip,
-                              style: Theme.of(context).textTheme.headline4),
+                              style:
+                                  Theme.of(context).textTheme.headlineMedium),
                         ),
                         Padding(
                             padding: const EdgeInsets.all(2.0),
@@ -132,10 +134,10 @@ class DrugSearchDelegate extends SearchDelegate<Drug> {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(snapshot.data![index].name ?? "",
-                    style: Theme.of(context).textTheme.headline3),
+                    style: Theme.of(context).textTheme.displaySmall),
                 subtitle: Text(
                     snapshot.data![index].subcategoryDescription ?? "",
-                    style: Theme.of(context).textTheme.bodyText2),
+                    style: Theme.of(context).textTheme.bodyMedium),
                 onTap: () {
                   Navigator.push(
                       context,

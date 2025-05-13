@@ -74,9 +74,7 @@ class PercentileState extends State<PercentilesWidget> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       // do something with query
-      if (birthdate != null &&
-          gender != "" &&
-          (weight != null || length != null)) {
+      if (gender != "" && (weight != null || length != null)) {
         setState(() {
           _loading = true;
         });
@@ -140,7 +138,7 @@ class PercentileState extends State<PercentilesWidget> {
 
   @override
   Widget build(context) {
-    if (_onError) return ConnectionError();
+    if (_onError) return const ConnectionError();
 
     return Scaffold(
         appBar: AppBar(centerTitle: true, title: const Text("Percentis")),
@@ -151,7 +149,7 @@ class PercentileState extends State<PercentilesWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: DatePickerWidget(
                         label: "Data de Nascimento",
                         initialDate: DateTime.now(),
@@ -161,7 +159,7 @@ class PercentileState extends State<PercentilesWidget> {
                         onDateSelected: (date) {
                           String formattedDate =
                               DateFormat('yyyy-MM-dd').format(birthdate);
-                          print("Birthdate:" + formattedDate);
+                          print("Birthdate:$formattedDate");
                           setState(() {
                             birthdate = date;
                             _onVariablesValueChange();
@@ -303,7 +301,7 @@ class PercentileState extends State<PercentilesWidget> {
             title: Text("Percentil $type",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
-                style: Theme.of(context).textTheme.headline4),
+                style: Theme.of(context).textTheme.headlineMedium),
           ),
           Padding(
               padding: const EdgeInsets.all(2.0),
@@ -313,7 +311,7 @@ class PercentileState extends State<PercentilesWidget> {
                     child: Text(output.percentile.toString(),
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.headline5)),
+                        style: Theme.of(context).textTheme.headlineSmall)),
               ])),
         ]));
   }
@@ -353,7 +351,7 @@ class PercentileState extends State<PercentilesWidget> {
             title: Text("IMC",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
-                style: Theme.of(context).textTheme.headline4),
+                style: Theme.of(context).textTheme.headlineMedium),
           ),
           Padding(
               padding: const EdgeInsets.all(2.0),
@@ -367,14 +365,14 @@ class PercentileState extends State<PercentilesWidget> {
                             overflow: TextOverflow.clip,
                             style: Theme.of(context)
                                 .textTheme
-                                .headline5
+                                .headlineSmall
                                 ?.merge(TextStyle(color: color)))),
                 Text(resultStr,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.clip,
                     style: Theme.of(context)
                         .textTheme
-                        .headline5
+                        .headlineSmall
                         ?.merge(TextStyle(color: color)))
               ]))
         ]));

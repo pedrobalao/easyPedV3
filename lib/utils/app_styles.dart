@@ -30,7 +30,7 @@ class Styles {
   static TextStyle headLineStyle4 =
       const TextStyle(fontSize: 14, fontWeight: FontWeight.w500);
   static TextStyle headLineStyle5 =
-      TextStyle(fontSize: 12, fontWeight: FontWeight.w500);
+      const TextStyle(fontSize: 12, fontWeight: FontWeight.w500);
 
   static TextStyle normalText =
       TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: textColor);

@@ -46,7 +46,7 @@ class MedicalCalculationsListScreen extends StatelessWidget {
       future: fetchList(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return ConnectionError();
+          return const ConnectionError();
         } else if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
               appBar: AppBar(
@@ -60,7 +60,7 @@ class MedicalCalculationsListScreen extends StatelessWidget {
                     return Card(
                         child: ListTile(
                       title: Text(snapshot.data![index].description ?? "",
-                          style: Theme.of(context).textTheme.headline3),
+                          style: Theme.of(context).textTheme.displaySmall),
                       onTap: () {
                         var id = snapshot.data![index].id;
                         Navigator.pushNamed(

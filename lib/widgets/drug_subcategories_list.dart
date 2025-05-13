@@ -19,7 +19,7 @@ class DrugsSubCategoriesList extends StatelessWidget {
         return Card(
             child: ListTile(
           title: Text(subCategories[index].description ?? "",
-              style: Theme.of(context).textTheme.headline3),
+              style: Theme.of(context).textTheme.displaySmall),
           onTap: () {
             //close(context, subCategories[index]);
             Navigator.push(

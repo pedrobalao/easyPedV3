@@ -4,8 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../widgets/base_page_layout.dart';
-
 class AboutScreen extends StatefulWidget {
   const AboutScreen({Key? key}) : super(key: key);
 
@@ -102,7 +100,7 @@ class _AboutScreenState extends State<AboutScreen> {
               title: Text("Segue-nos nas redes sociais",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline4),
+                  style: Theme.of(context).textTheme.headlineMedium),
             ),
             const Gap(5),
             Center(
@@ -120,7 +118,7 @@ class _AboutScreenState extends State<AboutScreen> {
               title: Text("Autores",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline4),
+                  style: Theme.of(context).textTheme.headlineMedium),
             ),
             Padding(padding: const EdgeInsets.all(5), child: authorsWdgt()),
             ListTile(
@@ -128,7 +126,7 @@ class _AboutScreenState extends State<AboutScreen> {
               title: Text("Isenção de Responsabilidade",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline4),
+                  style: Theme.of(context).textTheme.headlineMedium),
             ),
             Padding(
                 padding: const EdgeInsetsDirectional.all(5),
@@ -143,7 +141,7 @@ class _AboutScreenState extends State<AboutScreen> {
               title: Text("Bibliografia essencial consultada",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline4),
+                  style: Theme.of(context).textTheme.headlineMedium),
             ),
             Padding(padding: const EdgeInsets.all(5), child: biblioWdgt()),
             const Gap(5),

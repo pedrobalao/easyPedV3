@@ -42,7 +42,7 @@ class DiseaseWidget extends StatelessWidget {
         future: fetchDisease(diseaseId),
         builder: (context, AsyncSnapshot<Disease> snapshot) {
           if (snapshot.hasError) {
-            return ConnectionError();
+            return const ConnectionError();
           } else if (snapshot.hasData) {
             FirebaseAnalytics.instance.logViewItem(items: [
               AnalyticsEventItem(
@@ -116,7 +116,7 @@ class DiseaseWidget extends StatelessWidget {
         title: Text(condition.condition ?? "",
             textAlign: TextAlign.left,
             overflow: TextOverflow.clip,
-            style: Theme.of(context).textTheme.headline4),
+            style: Theme.of(context).textTheme.headlineMedium),
       ));
       if (condition.firstline != null) {
         wgs.add(

@@ -42,9 +42,9 @@ class HomeScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Atenção'),
-          content: SingleChildScrollView(
+          content: const SingleChildScrollView(
             child: ListBody(
-              children: const <Widget>[
+              children: <Widget>[
                 Text(
                     'A informação presente no easyPed pode conter erros e destina-se exclusivamente para fins educacionais. Não nos responsabilizamos por qualquer consequência do uso da mesma. Toda a informação deve ser validada pelo médico.'),
               ],
@@ -76,7 +76,7 @@ class HomeScreen extends StatelessWidget {
         future: fetchData(),
         builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
           if (snapshot.hasError) {
-            return ConnectionError();
+            return const ConnectionError();
           } else if (snapshot.hasData) {
             return Scaffold(
                 appBar: AppBar(title: const Text("easyPed"), actions: <Widget>[
@@ -97,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                       title: Text("Congressos",
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.clip,
-                          style: Theme.of(context).textTheme.headline4),
+                          style: Theme.of(context).textTheme.headlineMedium),
                     ),
                     const Gap(5),
                     CongressesSlide(congresses: snapshot.data!['congresses']),
@@ -107,7 +107,7 @@ class HomeScreen extends StatelessWidget {
                       title: Text("Novidades",
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.clip,
-                          style: Theme.of(context).textTheme.headline4),
+                          style: Theme.of(context).textTheme.headlineMedium),
                     ),
                     const Gap(5),
                     NewsSlide(news: snapshot.data!['news']),

@@ -4,7 +4,6 @@ import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/models/medical_calculation.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../services/drugs_service.dart';
 import '../../services/auth_service.dart';
@@ -50,7 +49,7 @@ class MedicalCalculationWidget extends StatelessWidget {
         future: fetchItem(medicalCalculationId),
         builder: (context, AsyncSnapshot<MedicalCalculation> snapshot) {
           if (snapshot.hasError) {
-            return ConnectionError();
+            return const ConnectionError();
           } else if (snapshot.hasData) {
             FirebaseAnalytics.instance.logViewItem(items: [
               AnalyticsEventItem(
@@ -139,7 +138,7 @@ class CalculationState extends State<CalculationWidget> {
 
         FirebaseAnalytics.instance.logEvent(
           name: "medical_calculation",
-          parameters: {"medical_calculation_id": widget.medicalCalculation.id},
+          parameters: {"medical_calculation_id": widget.medicalCalculation.id!},
         );
         setState(() {
           _loading = false;
@@ -239,7 +238,7 @@ class CalculationState extends State<CalculationWidget> {
             title: Text("Resultado",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
-                style: Theme.of(context).textTheme.headline4),
+                style: Theme.of(context).textTheme.headlineMedium),
           ),
           Padding(
               padding: const EdgeInsets.all(2.0),
@@ -250,11 +249,11 @@ class CalculationState extends State<CalculationWidget> {
                         "${_calculationOutput!.result} ${_calculationOutput!.resultIdUnit!}",
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.headline5)),
+                        style: Theme.of(context).textTheme.headlineSmall)),
                 Text(_calculationOutput!.resultDescription ?? "",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.clip,
-                    style: Theme.of(context).textTheme.caption)
+                    style: Theme.of(context).textTheme.bodySmall)
               ])),
         ]));
     resultWidgets.add(widg);
