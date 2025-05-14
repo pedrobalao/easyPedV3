@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../models/congress.dart';
 import '../utils/app_layout.dart';
 import '../utils/app_styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CongressesSlide extends StatelessWidget {
   const CongressesSlide({Key? key, required this.congresses}) : super(key: key);
@@ -33,22 +34,22 @@ class CongressScreen extends StatelessWidget {
     final DateFormat formatter = DateFormat('yMMMMd');
     //DateFormat('pt_PT');
 
-    Future<void> launchUrl(Congress congress) async {
+    Future<void> _launchUrl(Congress congress) async {
       FirebaseAnalytics.instance.logSelectItem(items: [
         AnalyticsEventItem(
             itemCategory: "congress_open",
             itemId: congress.id.toString(),
             itemName: congress.title)
       ]);
-      // if (!await launchUrl(Uri.parse(congress.url!))) {
-      //   throw Exception('Could not launch $congress.url');
-      // }
+      if (!await launchUrl(Uri.parse(congress.url!))) {
+        throw Exception('Could not launch $congress.url');
+      }
     }
 
     return GestureDetector(
         onTap: () {
           print("Container was tapped");
-          launchUrl(congress);
+          _launchUrl(congress);
         },
         child: Container(
           width: 300,

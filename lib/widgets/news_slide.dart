@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import '../models/news.dart';
 import '../utils/app_layout.dart';
 import '../utils/app_styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsSlide extends StatelessWidget {
   const NewsSlide({Key? key, required this.news}) : super(key: key);
@@ -26,21 +27,21 @@ class NewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> launchUrl(News news) async {
+    Future<void> _launchUrl(News news) async {
       FirebaseAnalytics.instance.logSelectItem(items: [
         AnalyticsEventItem(
             itemCategory: "news_open",
             itemId: news.id.toString(),
             itemName: news.title)
       ]);
-      // if (!await launchUrl(Uri.parse(news.url!))) {
-      //   throw Exception('Could not launch $news.url');
-      // }
+      if (!await launchUrl(Uri.parse(news.url!))) {
+        throw Exception('Could not launch $news.url');
+      }
     }
 
     return GestureDetector(
         onTap: () {
-          launchUrl(news);
+          _launchUrl(news);
         },
         child: Container(
           width: 300,

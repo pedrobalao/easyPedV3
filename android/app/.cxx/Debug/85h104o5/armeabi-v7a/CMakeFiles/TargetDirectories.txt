@@ -1,0 +1,2 @@
+/Users/pedrocha/Projects/easyped/easyPedV3/android/app/.cxx/Debug/85h104o5/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/pedrocha/Projects/easyped/easyPedV3/android/app/.cxx/Debug/85h104o5/armeabi-v7a/CMakeFiles/rebuild_cache.dir
