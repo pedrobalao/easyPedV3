@@ -47,10 +47,11 @@ class NewsScreen extends StatelessWidget {
           width: 300,
           height: 340,
           padding: EdgeInsets.symmetric(
-              horizontal: AppLayout.getWidth(10),
-              vertical: AppLayout.getHeight(10)),
+              horizontal: AppLayout.getWidth(context, 10),
+              vertical: AppLayout.getHeight(context, 10)),
           margin: EdgeInsets.only(
-              right: AppLayout.getWidth(17), top: AppLayout.getHeight(5)),
+              right: AppLayout.getWidth(context, 17),
+              top: AppLayout.getHeight(context, 5)),
           decoration: BoxDecoration(
               color: Styles.primaryColor,
               borderRadius: BorderRadius.circular(15),
@@ -64,7 +65,7 @@ class NewsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: AppLayout.getHeight(180),
+                height: AppLayout.getHeight(context, 180),
                 decoration: BoxDecoration(
                     color: Styles.primaryColor,
                     borderRadius: BorderRadius.circular(12),

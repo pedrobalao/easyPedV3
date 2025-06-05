@@ -72,40 +72,45 @@ class MyApp extends StatelessWidget {
     const negativeColor = const Color(0xFF651F06);
 
     ThemeData themeData = ThemeData(
-        // Define the default brightness and colors.
-        brightness: Brightness.light,
-        primaryColor: primaryColor,
+      // Define the default brightness and colors.
+      brightness: Brightness.light,
+      primaryColor: primaryColor,
 
-        // Define the default font family.
-        fontFamily: 'Montserrat',
+      // Define the default font family.
+      fontFamily: 'Montserrat',
 
-        // Define the default `TextTheme`. Use this to specify the default
-        // text styling for headlines, titles, bodies of text, and more.
-        textTheme: TextTheme(
-          displayLarge: GoogleFonts.openSans(fontSize: 42.0),
-          displayMedium:
-              GoogleFonts.openSans(fontSize: 42.0, color: primaryColor),
-          displaySmall:
-              GoogleFonts.openSans(fontSize: 18.0, color: primaryColor),
-          titleLarge: GoogleFonts.openSans(fontSize: 22.0, color: primaryColor),
-          headlineMedium: GoogleFonts.openSans(
-              fontSize: 18.0,
-              color: Colors.white,
-              backgroundColor: const Color(0xFF28a745)),
-          headlineSmall:
-              GoogleFonts.openSans(fontSize: 32.0, color: secondaryColor),
-          bodyLarge: GoogleFonts.openSans(fontSize: 14.0),
-          bodyMedium:
-              GoogleFonts.openSans(fontSize: 12.0, color: secondaryColor),
-          bodySmall: GoogleFonts.openSans(fontSize: 14.0, color: primaryColor),
-        ),
-        cardTheme: const CardTheme(clipBehavior: Clip.none),
-        listTileTheme: const ListTileThemeData(),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: primaryColor,
-          // ···
-          error: negativeColor,
-        )); //ColorScheme(error: negativeColor));
+      // Define the default `TextTheme`. Use this to specify the default
+      // text styling for headlines, titles, bodies of text, and more.
+      textTheme: TextTheme(
+        displayLarge: GoogleFonts.openSans(fontSize: 42.0),
+        displayMedium:
+            GoogleFonts.openSans(fontSize: 42.0, color: primaryColor),
+        displaySmall: GoogleFonts.openSans(fontSize: 18.0, color: primaryColor),
+        titleLarge: GoogleFonts.openSans(fontSize: 22.0, color: primaryColor),
+        headlineMedium: GoogleFonts.openSans(
+            fontSize: 18.0,
+            color: Colors.white,
+            backgroundColor: const Color(0xFF28a745)),
+        headlineSmall:
+            GoogleFonts.openSans(fontSize: 32.0, color: secondaryColor),
+        bodyLarge: GoogleFonts.openSans(fontSize: 14.0),
+        bodyMedium: GoogleFonts.openSans(fontSize: 12.0, color: secondaryColor),
+        bodySmall: GoogleFonts.openSans(fontSize: 14.0, color: primaryColor),
+      ),
+      cardTheme: const CardTheme(clipBehavior: Clip.none),
+      listTileTheme: const ListTileThemeData(),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primaryColor,
+        // ···
+        error: negativeColor,
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
+        titleTextStyle:
+            GoogleFonts.openSans(fontSize: 20.0, color: Colors.white),
+      ),
+    ); //ColorScheme(error: negativeColor));
 
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),

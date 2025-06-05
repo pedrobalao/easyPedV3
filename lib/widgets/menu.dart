@@ -55,9 +55,18 @@ class Menu extends StatelessWidget {
 
     try {
       if (user!.providerData.isNotEmpty) {
-        email = user.providerData[0].email!;
-        name = user.providerData[0].displayName!;
-        photoUrl = user.providerData[0].photoURL!;
+        for (var provider in user.providerData) {
+          if (provider.displayName != null &&
+              provider.displayName!.isNotEmpty) {
+            name = provider.displayName!;
+          }
+          if (provider.photoURL != null && provider.photoURL!.isNotEmpty) {
+            photoUrl = provider.photoURL!;
+          }
+          if (provider.email != null && provider.email!.isNotEmpty) {
+            email = provider.email!;
+          }
+        }
       } else {
         email = user.email!;
         name = user.displayName!;

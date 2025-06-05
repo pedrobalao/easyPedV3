@@ -98,7 +98,7 @@ class CalculationOutput {
   String? description;
   String? resultDescription;
   String? resultIdUnit;
-  num? result;
+  String? result;
 
   CalculationOutput(
       {this.id,
@@ -112,7 +112,8 @@ class CalculationOutput {
     description = json['description'];
     resultDescription = json['resultDescription'];
     resultIdUnit = json['resultIdUnit'];
-    result = json['result'];
+    final rawResult = json['result'];
+    result = rawResult?.toString();
   }
 
   Map<String, dynamic> toJson() {
