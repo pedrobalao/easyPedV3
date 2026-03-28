@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class _Menu {
   _Menu({required this.title, required this.icon, required this.route});
@@ -110,7 +111,8 @@ class Menu extends StatelessWidget {
         leading: item.icon,
         title: Text(item.title),
         onTap: () {
-          Navigator.pushNamed(context, item.route);
+          Navigator.pop(context); // Close drawer first
+          context.go(item.route);
         },
       ));
     }

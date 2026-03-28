@@ -1,3 +1,5 @@
+/// Deprecated: Use [showedDisclaimerProvider] from providers.dart instead.
+/// Kept for backward compatibility during migration.
 class LocalState {
 
   factory LocalState() {

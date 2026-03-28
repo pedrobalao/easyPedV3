@@ -3,9 +3,8 @@
 import 'dart:async';
 
 import 'package:easypedv3/firebase_options.dart';
-import 'package:easypedv3/router_navigator.dart';
+import 'package:easypedv3/router.dart';
 import 'package:easypedv3/services/app_info_service.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -13,13 +12,19 @@ import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   await dotenv.load();
 
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    // Initialize Hive for local caching
+    await Hive.initFlutter();
+    await Hive.openBox('cache_timestamps');
 
     await AppInfoService.initiateAppInfoService();
 
@@ -32,23 +37,18 @@ void main() async {
       AppleProvider()
     ]);
 
-    final analytics = FirebaseAnalytics.instance;
     // The following lines are the same as previously explained in "Handling uncaught errors"
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-    runApp(MyApp());
+    runApp(const ProviderScope(child: MyApp()));
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  String string = '';
-  FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const primaryColor = const Color(0xFF2963C8);
     const secondaryColor = const Color(0xFF218838);
 
@@ -91,17 +91,16 @@ class MyApp extends StatelessWidget {
         foregroundColor: Colors.white,
         titleTextStyle: GoogleFonts.openSans(fontSize: 20, color: Colors.white),
       ),
-    ); //ColorScheme(error: negativeColor));
+    );
+
+    final router = ref.watch(routerProvider);
 
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: MaterialApp(
-          navigatorObservers: [observer],
+        child: MaterialApp.router(
+          routerConfig: router,
           debugShowCheckedModeBanner: false,
           theme: themeData,
-          //home: const AuthGate(),
-          initialRoute: '/',
-          onGenerateRoute: RouterNavigator.generateRoute,
         ));
   }
 }

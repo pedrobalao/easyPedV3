@@ -1,5 +1,6 @@
 import 'package:easypedv3/models/drug.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class DrugsFavouritesList extends StatelessWidget {
   const DrugsFavouritesList({required this.drugs, super.key});
@@ -21,7 +22,7 @@ class DrugsFavouritesList extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium),
           onTap: () {
             final id = drugs[index].id;
-            Navigator.pushNamed(context, '/drugs/$id');
+            context.push('/drugs/$id');
           },
         ));
       },
@@ -29,7 +30,4 @@ class DrugsFavouritesList extends StatelessWidget {
     );
   }
 }
-
-// Create a corresponding State class.
-// This class holds data related to the form.
 

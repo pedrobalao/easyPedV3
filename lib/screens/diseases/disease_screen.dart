@@ -1,94 +1,69 @@
 import 'package:easypedv3/models/disease.dart';
-import 'package:easypedv3/services/auth_service.dart';
-import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:easypedv3/widgets/title_value.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DiseaseScreen extends StatefulWidget {
+class DiseaseScreen extends ConsumerWidget {
   const DiseaseScreen({required this.diseaseId, super.key});
 
   final int diseaseId;
-  @override
-  _DiseaseScreenState createState() => _DiseaseScreenState();
-}
 
-class _DiseaseScreenState extends State<DiseaseScreen> {
-  Icon actionIcon = const Icon(Icons.favorite);
   @override
-  Widget build(BuildContext context) {
-    return DiseaseWidget(
-      diseaseId: widget.diseaseId,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final diseaseAsync = ref.watch(diseaseDetailProvider(diseaseId));
+
+    return diseaseAsync.when(
+      loading: () => const ScreenLoading(),
+      error: (_, __) => const ConnectionError(),
+      data: (disease) {
+        FirebaseAnalytics.instance.logViewItem(items: [
+          AnalyticsEventItem(
+              itemCategory: 'disease',
+              itemId: disease.id.toString(),
+              itemName: disease.description)
+        ]);
+        return Scaffold(
+            appBar: AppBar(
+                centerTitle: true,
+                title: Text(disease.description ?? '')),
+            body: SingleChildScrollView(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TitleValue(
+                    title: 'Doença',
+                    value: disease.description ?? ''),
+                TitleValue(
+                    title: 'Autor',
+                    value: disease.author ?? 'Sem informação'),
+                TitleValue(
+                    title: 'Indicação',
+                    value: disease.indication ?? 'Sem informação'),
+                _treatmentWidget(context, disease),
+                TitleValue(
+                    title: 'Follow-up',
+                    value: disease.followup ?? 'Sem informação'),
+                TitleValue(
+                    title: 'Bibliografia',
+                    value: disease.bibliography ?? 'Sem informação'),
+              ],
+            )));
+      },
     );
   }
-}
 
-class DiseaseWidget extends StatelessWidget {
-  DiseaseWidget({required this.diseaseId, super.key});
-
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authService = AuthenticationService();
-  final int diseaseId;
-
-  Future<Disease> fetchDisease(id) async =>
-      _drugService.fetchDisease(id, await _authService.getUserToken());
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Disease>(
-        future: fetchDisease(diseaseId),
-        builder: (context, AsyncSnapshot<Disease> snapshot) {
-          if (snapshot.hasError) {
-            return const ConnectionError();
-          } else if (snapshot.hasData) {
-            FirebaseAnalytics.instance.logViewItem(items: [
-              AnalyticsEventItem(
-                  itemCategory: 'disease',
-                  itemId: snapshot.data?.id.toString(),
-                  itemName: snapshot.data?.description)
-            ]);
-            return Scaffold(
-                appBar: AppBar(
-                    centerTitle: true,
-                    title: Text(snapshot.data?.description ?? '')),
-                body: SingleChildScrollView(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TitleValue(
-                        title: 'Doença',
-                        value: snapshot.data?.description ?? ''),
-                    TitleValue(
-                        title: 'Autor',
-                        value: snapshot.data?.author ?? 'Sem informação'),
-                    TitleValue(
-                        title: 'Indicação',
-                        value: snapshot.data?.indication ?? 'Sem informação'),
-                    treatmentWidget(context, snapshot.data),
-                    TitleValue(
-                        title: 'Follow-up',
-                        value: snapshot.data?.followup ?? 'Sem informação'),
-                    TitleValue(
-                        title: 'Bibliografia',
-                        value: snapshot.data?.bibliography ?? 'Sem informação'),
-                  ],
-                )));
-          } else {
-            return const ScreenLoading();
-          }
-        });
-  }
-
-  Widget treatmentWidget(context, Disease? disease) {
+  Widget _treatmentWidget(BuildContext context, Disease? disease) {
     final ret = <Widget>[];
 
     if (disease != null &&
         disease.treatment != null &&
         disease.treatment!.conditions!.isNotEmpty) {
       for (final condition in disease.treatment!.conditions!) {
-        ret.add(conditionWidget(context, condition));
+        ret.add(_conditionWidget(context, condition));
       }
     }
 
@@ -106,7 +81,7 @@ class DiseaseWidget extends StatelessWidget {
     ]);
   }
 
-  Widget conditionWidget(context, Conditions? condition) {
+  Widget _conditionWidget(BuildContext context, Conditions? condition) {
     if (condition != null) {
       final wgs = <Widget>[];
 

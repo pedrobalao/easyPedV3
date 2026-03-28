@@ -1,91 +1,68 @@
 import 'package:easypedv3/models/disease.dart';
-import 'package:easypedv3/services/auth_service.dart';
-import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/widgets/base_page_layout.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class DiseasesListScreen extends StatefulWidget {
+class DiseasesListScreen extends ConsumerWidget {
   const DiseasesListScreen({super.key});
 
   @override
-  _DiseasesListScreenState createState() => _DiseasesListScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final diseasesAsync = ref.watch(diseaseListProvider);
 
-class _DiseasesListScreenState extends State<DiseasesListScreen> {
-  Widget appBarTitle = const Text('Doenças');
-  Icon actionIcon = const Icon(Icons.search);
-
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authenticationService = AuthenticationService();
-
-  Future<List<Disease>> fetchDiseases() async {
-    final ret = await _drugService
-        .fetchDiseases(await _authenticationService.getUserToken());
-    return ret;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<Disease>>(
-      future: fetchDiseases(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const ConnectionError();
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          return Scaffold(
-              appBar: AppBar(
-                  centerTitle: true,
-                  title: appBarTitle,
-                  actions: <Widget>[
-                    IconButton(
-                        icon: actionIcon,
-                        onPressed: () {
-                          showSearch(
-                            context: context,
-                            delegate: DiseasesSearchDelegate(),
-                          );
-                        })
-                  ]),
-              body: BasePageLayout(children: [
-                ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(2),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Card(
-                        child: ListTile(
-                      title: Text(snapshot.data![index].description ?? '',
-                          style: Theme.of(context).textTheme.displaySmall),
-                      onTap: () {
-                        final id = snapshot.data![index].id;
-                        Navigator.pushNamed(context, '/diseases/$id');
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>
-                        //             DiseaseScreen(disease: snapshot.data![index])));
-                      },
-                    ));
+    return diseasesAsync.when(
+      loading: () => const ScreenLoading(title: 'Doenças'),
+      error: (_, __) => const ConnectionError(),
+      data: (diseases) => Scaffold(
+          appBar: AppBar(
+              centerTitle: true,
+              title: const Text('Doenças'),
+              actions: <Widget>[
+                IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      showSearch(
+                        context: context,
+                        delegate: DiseasesSearchDelegate(
+                          diseaseRepository:
+                              ref.read(diseaseRepositoryProvider),
+                        ),
+                      );
+                    })
+              ]),
+          body: BasePageLayout(children: [
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(2),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Card(
+                    child: ListTile(
+                  title: Text(diseases[index].description ?? '',
+                      style: Theme.of(context).textTheme.displaySmall),
+                  onTap: () {
+                    final id = diseases[index].id;
+                    context.push('/diseases/$id');
                   },
-                  itemCount: snapshot.data!.length,
-                )
-              ]));
-        } else {
-          return const ScreenLoading(
-            title: 'Doenças',
-          );
-        }
-      },
+                ));
+              },
+              itemCount: diseases.length,
+            )
+          ])),
     );
   }
 }
 
 class DiseasesSearchDelegate extends SearchDelegate<Disease> {
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authService = AuthenticationService();
+  DiseasesSearchDelegate({required this.diseaseRepository});
+
+  final DiseaseRepository diseaseRepository;
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[];
@@ -104,7 +81,7 @@ class DiseasesSearchDelegate extends SearchDelegate<Disease> {
   @override
   Widget buildResults(BuildContext context) {
     return FutureBuilder<List<Disease>>(
-      future: _search(),
+      future: diseaseRepository.searchDiseases(query),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
@@ -116,8 +93,7 @@ class DiseasesSearchDelegate extends SearchDelegate<Disease> {
                     style: Theme.of(context).textTheme.displaySmall),
                 onTap: () {
                   final id = snapshot.data![index].id;
-                  Navigator.pushNamed(context, '/diseases/$id');
-                  //close(context, snapshot.data![index]);
+                  context.push('/diseases/$id');
                 },
               );
             },
@@ -133,11 +109,5 @@ class DiseasesSearchDelegate extends SearchDelegate<Disease> {
   @override
   Widget buildSuggestions(BuildContext context) {
     return Container();
-  }
-
-  Future<List<Disease>> _search() async {
-    final result = await _drugService.searchDiseases(
-        query, await _authService.getUserToken());
-    return result;
   }
 }
