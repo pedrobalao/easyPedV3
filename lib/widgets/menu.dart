@@ -17,36 +17,6 @@ class _Menu {
 class Menu extends ConsumerWidget {
   const Menu({super.key});
 
-  List<_Menu> _menus() {
-    return [
-      _Menu(title: 'Home', icon: const Icon(Icons.home), route: '/'),
-      _Menu(
-          title: 'Medicamentos',
-          icon: const Icon(Icons.polyline_outlined),
-          route: '/drugs'),
-      _Menu(
-          title: 'Doenças',
-          icon: const Icon(Icons.coronavirus),
-          route: '/diseases'),
-      _Menu(
-          title: 'Percentis',
-          icon: const Icon(Icons.percent),
-          route: '/percentiles'),
-      _Menu(
-          title: 'Calculos Médicos',
-          icon: const Icon(Icons.calculate),
-          route: '/medical-calculations'),
-      _Menu(
-          title: 'Referenciação Cirúrgica',
-          icon: const Icon(Icons.meeting_room),
-          route: '/surgeries-referral'),
-      _Menu(
-          title: 'Sobre',
-          icon: const Icon(Icons.app_shortcut),
-          route: '/about'),
-    ];
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = FirebaseAuth.instance.currentUser;
@@ -156,9 +126,32 @@ class Menu extends ConsumerWidget {
 
     return Drawer(
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
-        children: widgets,
+        children: [
+          UserAccountsDrawerHeader(
+            decoration: const BoxDecoration(color: Color(0xFF218838)),
+            accountName: Text(
+              name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            accountEmail: Text(
+              email,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            currentAccountPicture: CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(photoUrl),
+              backgroundColor: Colors.transparent,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Sair'),
+            onTap: () {
+              FirebaseUIAuth.signOut(context: context);
+            },
+          ),
+        ],
       ),
     );
   }
