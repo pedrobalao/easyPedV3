@@ -11,14 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PercentilesScreen extends StatefulWidget {
+class PercentilesScreen extends ConsumerStatefulWidget {
   const PercentilesScreen({super.key});
 
   @override
-  _PercentilesScreenState createState() => _PercentilesScreenState();
+  ConsumerState<PercentilesScreen> createState() => _PercentilesScreenState();
 }
 
-class _PercentilesScreenState extends State<PercentilesScreen> {
+class _PercentilesScreenState extends ConsumerState<PercentilesScreen> {
   Icon actionIcon = const Icon(Icons.favorite);
   @override
   Widget build(BuildContext context) {
