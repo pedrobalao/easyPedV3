@@ -68,7 +68,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
         shrinkWrap: true,
         itemCount: authors.length,
         itemBuilder: (BuildContext context, int index) {
-          return Text(authors[index], style: Styles.normalText);
+          return Text(authors[index], style: Styles.normalText(context));
         },
         separatorBuilder: (BuildContext context, int index) => const Divider());
   }
@@ -78,7 +78,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
         shrinkWrap: true,
         itemCount: biblio.length,
         itemBuilder: (BuildContext context, int index) {
-          return Text(biblio[index], style: Styles.normalText);
+          return Text(biblio[index], style: Styles.normalText(context));
         },
         separatorBuilder: (BuildContext context, int index) => const Divider());
   }
@@ -97,7 +97,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             ListTile(
-              tileColor: Theme.of(context).colorScheme.primary,
+              tileColor: Theme.of(context).colorScheme.secondary,
               title: Text('Segue-nos nas redes sociais',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -108,14 +108,14 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                 child: IconButton(
               iconSize: 50,
               icon: const Icon(Icons.facebook,
-                  color: Color(0xFF3b5998), size: 50),
+                  color: AppColors.facebookBlue, size: 50),
               onPressed: () {
                 _launchUrl(Uri.parse('https://facebook.com/easyped'));
               },
             )),
             const Gap(5),
             ListTile(
-              tileColor: Theme.of(context).colorScheme.primary,
+              tileColor: Theme.of(context).colorScheme.secondary,
               title: Text('Autores',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -123,7 +123,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
             ),
             Padding(padding: const EdgeInsets.all(5), child: authorsWdgt()),
             ListTile(
-              tileColor: Theme.of(context).colorScheme.primary,
+              tileColor: Theme.of(context).colorScheme.secondary,
               title: Text('Isenção de Responsabilidade',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -134,11 +134,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                 child: Column(children: [
                   Text(
                       'Esta aplicação é dirigida a profissionais de saúde. Pretende ser um auxilio à prática da medicina pediátrica. Todos os dados foram inseridos e validados por médicos do corpo clínico do Centro Materno Infantil do Norte e Centro Hospitalar São João. Embora envidemos todos os esforços razoáveis para garantir que as informações contidas na easyPed sejam corretas, esteja ciente de que as informações podem estar incompletas, imprecisas ou desatualizadas e não podem ser garantidas. Assim, está excluída a garantia ou responsabilidade de qualquer tipo. Os autores declinam qualquer responsabilidade na utilização da mesma, devendo qualquer dose ou indicação ser confirmada em documentos de referencia atualizados aquando da prescrição. Qualquer erro detectado pode e deve ser reportado através dos nossos canais de comunicação. Qualquer sugestão de adição de informação ou outra sugestão é bem-vinda.',
-                      style: Styles.normalText),
+                      style: Styles.normalText(context)),
                   const Gap(1),
                 ])),
             ListTile(
-              tileColor: Theme.of(context).colorScheme.primary,
+              tileColor: Theme.of(context).colorScheme.secondary,
               title: Text('Bibliografia essencial consultada',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -149,7 +149,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
             Center(
                 child: Text(
                     'v${_packageInfo.version} build ${_packageInfo.buildNumber}',
-                    style: Styles.normalText)),
+                    style: Styles.normalText(context))),
             const Gap(5),
           ]),
         ));

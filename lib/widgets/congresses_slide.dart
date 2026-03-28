@@ -61,11 +61,11 @@ class CongressScreen extends StatelessWidget {
               right: AppLayout.getWidth(context, 17),
               top: AppLayout.getHeight(context, 5)),
           decoration: BoxDecoration(
-              color: Styles.primaryColor,
+              color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.grey.shade200,
+                    color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
                     blurRadius: 20,
                     spreadRadius: 5)
               ]),
@@ -76,13 +76,13 @@ class CongressScreen extends StatelessWidget {
                 congress.beginDate == congress.endDate
                     ? formatter.format(congress.beginDate!)
                     : '${formatter.format(congress.beginDate!)} - ${formatter.format(congress.endDate!)}',
-                style: Styles.headLineStyle5.copyWith(color: Colors.white),
+                style: Styles.headLineStyle5.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
               const Gap(8),
               Container(
                 height: AppLayout.getHeight(context, 180),
                 decoration: BoxDecoration(
-                    color: Styles.primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(12),
                     image: DecorationImage(
                         fit: BoxFit.cover,
@@ -91,12 +91,12 @@ class CongressScreen extends StatelessWidget {
               const Gap(10),
               Text(
                 '${congress.city!} - ${congress.country!}',
-                style: Styles.headLineStyle4.copyWith(color: Colors.white),
+                style: Styles.headLineStyle4.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
               const Gap(5),
               Text(
                 congress.title!,
-                style: Styles.headLineStyle3.copyWith(color: Colors.white),
+                style: Styles.headLineStyle3.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
             ],
           ),

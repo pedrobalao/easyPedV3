@@ -53,11 +53,11 @@ class NewsScreen extends StatelessWidget {
               right: AppLayout.getWidth(context, 17),
               top: AppLayout.getHeight(context, 5)),
           decoration: BoxDecoration(
-              color: Styles.primaryColor,
+              color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.grey.shade200,
+                    color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
                     blurRadius: 20,
                     spreadRadius: 5)
               ]),
@@ -67,7 +67,7 @@ class NewsScreen extends StatelessWidget {
               Container(
                 height: AppLayout.getHeight(context, 180),
                 decoration: BoxDecoration(
-                    color: Styles.primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(12),
                     image: DecorationImage(
                         fit: BoxFit.cover,
@@ -76,12 +76,12 @@ class NewsScreen extends StatelessWidget {
               const Gap(10),
               Text(
                 news.title!,
-                style: Styles.headLineStyle3.copyWith(color: Colors.white),
+                style: Styles.headLineStyle3.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
               const Gap(5),
               Text(
                 news.description!,
-                style: Styles.headLineStyle4.copyWith(color: Colors.white),
+                style: Styles.headLineStyle4.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
             ],
           ),

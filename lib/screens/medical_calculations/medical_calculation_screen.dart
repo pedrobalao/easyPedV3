@@ -199,7 +199,7 @@ class CalculationState extends ConsumerState<CalculationWidget> {
         clipBehavior: Clip.antiAlias,
         child: Column(children: [
           ListTile(
-            tileColor: Theme.of(context).colorScheme.primary,
+            tileColor: Theme.of(context).colorScheme.secondary,
             title: Text('Resultado',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,

@@ -93,7 +93,7 @@ class HomeScreen extends ConsumerWidget {
             body: SingleChildScrollView(
               child: Column(children: [
                 ListTile(
-                  tileColor: Theme.of(context).colorScheme.primary,
+                  tileColor: Theme.of(context).colorScheme.secondary,
                   title: Text('Congressos',
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.clip,
@@ -103,7 +103,7 @@ class HomeScreen extends ConsumerWidget {
                 CongressesSlide(congresses: congresses),
                 const Gap(10),
                 ListTile(
-                  tileColor: Theme.of(context).colorScheme.primary,
+                  tileColor: Theme.of(context).colorScheme.secondary,
                   title: Text('Novidades',
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.clip,

@@ -162,7 +162,7 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
           clipBehavior: Clip.antiAlias,
           child: Column(children: [
             ListTile(
-              tileColor: Theme.of(context).colorScheme.primary,
+              tileColor: Theme.of(context).colorScheme.secondary,
               title: Text(result.description ?? '',
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,

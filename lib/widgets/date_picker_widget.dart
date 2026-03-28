@@ -56,7 +56,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                 textTheme: TextTheme(
                     headlineMedium: GoogleFonts.openSans(
                         fontSize: 18,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         backgroundColor: Colors.transparent)),
               ),
               child: child!,

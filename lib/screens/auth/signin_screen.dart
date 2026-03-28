@@ -12,7 +12,7 @@ class EPSignScreen extends StatelessWidget {
     const double elementsOpacity = 1;
 
     return Scaffold(
-      backgroundColor: Styles.primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         bottom: false,
@@ -34,12 +34,12 @@ class EPSignScreen extends StatelessWidget {
                         const SizedBox(height: 25),
                         Text(
                           'easyPed',
-                          style: Styles.title,
+                          style: Styles.title(context),
                         ),
                         Text(
                           '#makinghealthcareeasier',
                           style: TextStyle(
-                              color: Colors.black.withOpacity(0.7),
+                              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
                               fontSize: 20),
                         ),
                       ],
@@ -63,14 +63,14 @@ class EPSignScreen extends StatelessWidget {
                           child: Text(
                         'Made with ❤️ in Porto',
                         textAlign: TextAlign.center,
-                        style: Styles.noteStyle,
+                        style: Styles.noteStyle(context),
                       )),
                     ),
                     const Gap(10),
                     Center(
                         child: Text(
                             'v${AppInfoService.packageInfo!.version} build ${AppInfoService.packageInfo!.buildNumber}',
-                            style: Styles.normalText)),
+                            style: Styles.normalText(context))),
                   ],
                 )
               ],

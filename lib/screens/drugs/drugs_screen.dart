@@ -46,7 +46,7 @@ class DrugsScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListTile(
-                      tileColor: Theme.of(context).colorScheme.primary,
+                      tileColor: Theme.of(context).colorScheme.secondary,
                       title: Text('Os teus favoritos',
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.clip,
@@ -57,7 +57,7 @@ class DrugsScreen extends ConsumerWidget {
                         padding: const EdgeInsets.all(2),
                         child: DrugsFavouritesList(drugs: favourites)),
                     ListTile(
-                      tileColor: Theme.of(context).colorScheme.primary,
+                      tileColor: Theme.of(context).colorScheme.secondary,
                       title: Text('Explora',
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.clip,

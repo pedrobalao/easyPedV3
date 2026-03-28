@@ -158,7 +158,7 @@ class DrugScreen extends ConsumerWidget {
       return Column(
         children: [
           ListTile(
-            tileColor: Theme.of(context).colorScheme.primary,
+            tileColor: Theme.of(context).colorScheme.secondary,
             title: Text(indication.indicationText ?? '',
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.clip,

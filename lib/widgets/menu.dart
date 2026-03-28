@@ -54,7 +54,7 @@ class Menu extends ConsumerWidget {
     final header = UserAccountsDrawerHeader(
       // <-- SEE HERE
 
-      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary),
       accountName: Text(
         name, //user.displayName!,
         style: const TextStyle(
