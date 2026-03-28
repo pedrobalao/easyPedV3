@@ -66,8 +66,7 @@ class MyApp extends StatelessWidget {
       // text styling for headlines, titles, bodies of text, and more.
       textTheme: TextTheme(
         displayLarge: GoogleFonts.openSans(fontSize: 42),
-        displayMedium:
-            GoogleFonts.openSans(fontSize: 42, color: primaryColor),
+        displayMedium: GoogleFonts.openSans(fontSize: 42, color: primaryColor),
         displaySmall: GoogleFonts.openSans(fontSize: 18, color: primaryColor),
         titleLarge: GoogleFonts.openSans(fontSize: 22, color: primaryColor),
         headlineMedium: GoogleFonts.openSans(
@@ -90,8 +89,7 @@ class MyApp extends StatelessWidget {
       appBarTheme: AppBarTheme(
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
-        titleTextStyle:
-            GoogleFonts.openSans(fontSize: 20, color: Colors.white),
+        titleTextStyle: GoogleFonts.openSans(fontSize: 20, color: Colors.white),
       ),
     ); //ColorScheme(error: negativeColor));
 

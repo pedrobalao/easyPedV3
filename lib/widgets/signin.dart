@@ -63,7 +63,10 @@ class SignIn extends StatelessWidget {
             provider: GoogleProvider(clientId: googleClientId),
           ),
           const Gap(10),
-          if (Platform.isIOS) OAuthProviderButton(provider: AppleProvider()) else Container()
+          if (Platform.isIOS)
+            OAuthProviderButton(provider: AppleProvider())
+          else
+            Container()
         ]));
   }
 }

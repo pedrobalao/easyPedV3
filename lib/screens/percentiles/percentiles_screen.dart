@@ -280,7 +280,10 @@ class PercentileState extends State<PercentilesWidget> {
                           return null;
                         })),
 
-                if (_loading) const Loading() else calculationResultsWidget(context)
+                if (_loading)
+                  const Loading()
+                else
+                  calculationResultsWidget(context)
               ],
             )));
   }

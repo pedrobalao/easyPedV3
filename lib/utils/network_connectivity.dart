@@ -24,4 +24,3 @@ class NetworkConnectivity {
 
   void dispose() => _controller.close();
 }
-
