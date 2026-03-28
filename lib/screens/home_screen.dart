@@ -3,8 +3,8 @@ import 'package:easypedv3/screens/drugs/drugs_screen.dart';
 import 'package:easypedv3/widgets/congresses_slide.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/loading.dart';
-import 'package:easypedv3/widgets/menu.dart';
 import 'package:easypedv3/widgets/news_slide.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -71,9 +71,25 @@ class HomeScreen extends ConsumerWidget {
                         drugRepository: ref.read(drugRepositoryProvider),
                       ),
                     );
-                  })
+                  }),
+              PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'sign_out') {
+                    FirebaseUIAuth.signOut(context: context);
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'sign_out',
+                    child: ListTile(
+                      leading: Icon(Icons.logout),
+                      title: Text('Sair'),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                ],
+              ),
             ]),
-            drawer: const Menu(),
             body: SingleChildScrollView(
               child: Column(children: [
                 ListTile(

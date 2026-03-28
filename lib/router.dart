@@ -11,16 +11,27 @@ import 'package:easypedv3/screens/medical_calculations/medical_calculation_scree
 import 'package:easypedv3/screens/medical_calculations/medical_calculations_list_screen.dart';
 import 'package:easypedv3/screens/percentiles/percentiles_screen.dart';
 import 'package:easypedv3/screens/surgeries_referral/surgeries_referral_list_screen.dart';
+import 'package:easypedv3/screens/tools_screen.dart';
+import 'package:easypedv3/widgets/scaffold_with_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+// Navigator keys for each tab so they preserve their own navigation stack.
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
+final _drugsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'drugs');
+final _diseasesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'diseases');
+final _toolsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'tools');
+final _aboutNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'about');
 
 /// GoRouter configuration provider, integrates auth redirect.
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
 
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/',
     redirect: (BuildContext context, GoRouterState state) {
       final isAuthenticated = authState.valueOrNull != null;
@@ -38,56 +49,109 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/sign-in',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const EPSignScreen(),
       ),
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const HomeScreen(),
-      ),
-      GoRoute(
-        path: '/drugs',
-        builder: (context, state) => const DrugsScreen(),
-      ),
-      GoRoute(
-        path: '/drugs/:id',
-        builder: (context, state) {
-          final id = int.parse(state.pathParameters['id']!);
-          return DrugScreen(id: id);
-        },
-      ),
-      GoRoute(
-        path: '/diseases',
-        builder: (context, state) => const DiseasesListScreen(),
-      ),
-      GoRoute(
-        path: '/diseases/:id',
-        builder: (context, state) {
-          final id = int.parse(state.pathParameters['id']!);
-          return DiseaseScreen(diseaseId: id);
-        },
-      ),
-      GoRoute(
-        path: '/percentiles',
-        builder: (context, state) => const PercentilesScreen(),
-      ),
-      GoRoute(
-        path: '/medical-calculations',
-        builder: (context, state) => const MedicalCalculationsListScreen(),
-      ),
-      GoRoute(
-        path: '/medical-calculations/:id',
-        builder: (context, state) {
-          final id = int.parse(state.pathParameters['id']!);
-          return MedicalCalculationScreen(medicalCalculationId: id);
-        },
-      ),
-      GoRoute(
-        path: '/surgeries-referral',
-        builder: (context, state) => const SurgeriesReferralListScreen(),
-      ),
-      GoRoute(
-        path: '/about',
-        builder: (context, state) => const AboutScreen(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            ScaffoldWithNavBar(navigationShell: navigationShell),
+        branches: [
+          // ── Home tab ──────────────────────────────────────────────
+          StatefulShellBranch(
+            navigatorKey: _homeNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/',
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
+          ),
+          // ── Drugs tab ─────────────────────────────────────────────
+          StatefulShellBranch(
+            navigatorKey: _drugsNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/drugs',
+                builder: (context, state) => const DrugsScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) {
+                      final id = int.parse(state.pathParameters['id']!);
+                      return DrugScreen(id: id);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          // ── Diseases tab ──────────────────────────────────────────
+          StatefulShellBranch(
+            navigatorKey: _diseasesNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/diseases',
+                builder: (context, state) => const DiseasesListScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) {
+                      final id = int.parse(state.pathParameters['id']!);
+                      return DiseaseScreen(diseaseId: id);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          // ── Tools tab ─────────────────────────────────────────────
+          StatefulShellBranch(
+            navigatorKey: _toolsNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/tools',
+                builder: (context, state) => const ToolsScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'percentiles',
+                    builder: (context, state) => const PercentilesScreen(),
+                  ),
+                  GoRoute(
+                    path: 'medical-calculations',
+                    builder: (context, state) =>
+                        const MedicalCalculationsListScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) {
+                          final id = int.parse(state.pathParameters['id']!);
+                          return MedicalCalculationScreen(
+                            medicalCalculationId: id,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'surgeries-referral',
+                    builder: (context, state) =>
+                        const SurgeriesReferralListScreen(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          // ── About tab ─────────────────────────────────────────────
+          StatefulShellBranch(
+            navigatorKey: _aboutNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/about',
+                builder: (context, state) => const AboutScreen(),
+              ),
+            ],
+          ),
+        ],
       ),
     ],
   );
