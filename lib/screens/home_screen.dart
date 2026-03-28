@@ -45,8 +45,10 @@ class HomeScreen extends ConsumerWidget {
     final showedDisclaimer = ref.watch(showedDisclaimerProvider);
 
     if (!showedDisclaimer) {
-      Future.delayed(Duration.zero, () => _showMyDialog(context));
-      ref.read(showedDisclaimerProvider.notifier).state = true;
+      Future.delayed(Duration.zero, () {
+        ref.read(showedDisclaimerProvider.notifier).state = true;
+        _showMyDialog(context);
+      });
     }
 
     final newsAsync = ref.watch(newsProvider);
