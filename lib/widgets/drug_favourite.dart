@@ -1,8 +1,9 @@
 import 'package:easypedv3/repositories/repositories.dart';
-import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DrugFavourite extends StatefulWidget {
+class DrugFavourite extends ConsumerStatefulWidget {
   const DrugFavourite({required this.drugId, super.key});
 
   final int drugId;
@@ -12,13 +13,12 @@ class DrugFavourite extends StatefulWidget {
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class DrugFavouriteState extends State<DrugFavourite> {
-  final DrugRepository _drugRepository =
-      DrugRepository(drugService: DrugService());
+class DrugFavouriteState extends ConsumerState<DrugFavourite> {
   bool _isFavourite = false;
 
   Future<void> fetchIsFavourite() async {
-    final isFavourite = await _drugRepository.isFavourite(widget.drugId);
+    final drugRepository = ref.read(drugRepositoryProvider);
+    final isFavourite = await drugRepository.isFavourite(widget.drugId);
 
     setState(() {
       _isFavourite = isFavourite;
@@ -26,11 +26,12 @@ class DrugFavouriteState extends State<DrugFavourite> {
   }
 
   Future<void> changeFavouriteFlag() async {
+    final drugRepository = ref.read(drugRepositoryProvider);
     var execRet = false;
     if (_isFavourite) {
-      execRet = await _drugRepository.removeFavourite(widget.drugId);
+      execRet = await drugRepository.removeFavourite(widget.drugId);
     } else {
-      execRet = await _drugRepository.addFavourite(widget.drugId);
+      execRet = await drugRepository.addFavourite(widget.drugId);
     }
 
     if (execRet) {

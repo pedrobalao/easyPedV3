@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:easypedv3/models/drug.dart';
-import 'package:easypedv3/repositories/repositories.dart';
-import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/utils/string_utils.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DoseCalculations extends StatefulWidget {
+class DoseCalculations extends ConsumerStatefulWidget {
   const DoseCalculations({required this.drug, super.key});
 
   final Drug drug;
@@ -19,11 +19,9 @@ class DoseCalculations extends StatefulWidget {
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class DoseCalculationsState extends State<DoseCalculations> {
+class DoseCalculationsState extends ConsumerState<DoseCalculations> {
   final _formKey = GlobalKey<FormState>();
   Map mapOfVariables = {};
-  final DrugRepository _drugRepository =
-      DrugRepository(drugService: DrugService());
   List<DoseCalculationResult> _doseCalculationsResults = [];
   bool _loading = false;
 
@@ -56,7 +54,8 @@ class DoseCalculationsState extends State<DoseCalculations> {
         if (kDebugMode) {
           print('Variables: $mapOfVariables');
         }
-        final doseCalculationsResults = await _drugRepository.calculateDose(
+        final drugRepository = ref.read(drugRepositoryProvider);
+        final doseCalculationsResults = await drugRepository.calculateDose(
             widget.drug.id!, mapOfVariables);
 
         FirebaseAnalytics.instance.logEvent(

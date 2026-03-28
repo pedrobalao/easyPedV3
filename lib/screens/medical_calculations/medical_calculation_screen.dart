@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/models/medical_calculation.dart';
 import 'package:easypedv3/providers/providers.dart';
-import 'package:easypedv3/repositories/repositories.dart';
-import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/utils/string_utils.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/loading.dart';
@@ -58,7 +56,7 @@ class MedicalCalculationScreen extends ConsumerWidget {
   }
 }
 
-class CalculationWidget extends StatefulWidget {
+class CalculationWidget extends ConsumerStatefulWidget {
   const CalculationWidget({required this.medicalCalculation, super.key});
 
   final MedicalCalculation medicalCalculation;
@@ -68,16 +66,9 @@ class CalculationWidget extends StatefulWidget {
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class CalculationState extends State<CalculationWidget> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
+class CalculationState extends ConsumerState<CalculationWidget> {
   final _formKey = GlobalKey<FormState>();
   Map<String, dynamic> mapOfVariables = {};
-  final _calculatorRepository =
-      CalculatorRepository(drugService: DrugService());
   CalculationOutput? _calculationOutput;
   bool _loading = false;
 
@@ -105,7 +96,8 @@ class CalculationState extends State<CalculationWidget> {
           input.add(CalculationInput(variable: key, value: value));
         });
 
-        final result = await _calculatorRepository.executeMedicalCalculation(
+        final calculatorRepository = ref.read(calculatorRepositoryProvider);
+        final result = await calculatorRepository.executeMedicalCalculation(
             widget.medicalCalculation.id!,
             input);
 

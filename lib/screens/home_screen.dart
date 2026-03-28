@@ -65,7 +65,9 @@ class HomeScreen extends ConsumerWidget {
                   onPressed: () {
                     showSearch(
                       context: context,
-                      delegate: DrugSearchDelegate(),
+                      delegate: DrugSearchDelegate(
+                        drugRepository: ref.read(drugRepositoryProvider),
+                      ),
                     );
                   })
             ]),

@@ -1,7 +1,6 @@
 import 'package:easypedv3/models/congress.dart';
 import 'package:easypedv3/models/disease.dart';
 import 'package:easypedv3/models/drug.dart';
-import 'package:easypedv3/models/exceptions.dart';
 import 'package:easypedv3/models/medical_calculation.dart';
 import 'package:easypedv3/models/news.dart';
 import 'package:easypedv3/models/percentile.dart';

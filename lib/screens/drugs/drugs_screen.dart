@@ -2,7 +2,6 @@ import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/screens/drugs/drug_screen.dart';
-import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/drug_categories_list.dart';
 import 'package:easypedv3/widgets/drugs_favourites_list.dart';
@@ -34,7 +33,9 @@ class DrugsScreen extends ConsumerWidget {
                     onPressed: () {
                       showSearch(
                         context: context,
-                        delegate: DrugSearchDelegate(),
+                        delegate: DrugSearchDelegate(
+                          drugRepository: ref.read(drugRepositoryProvider),
+                        ),
                       );
                     })
               ]),
@@ -76,7 +77,9 @@ class DrugsScreen extends ConsumerWidget {
 }
 
 class DrugSearchDelegate extends SearchDelegate<Drug> {
-  final _drugRepository = DrugRepository(drugService: DrugService());
+  DrugSearchDelegate({required this.drugRepository});
+
+  final DrugRepository drugRepository;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -96,7 +99,7 @@ class DrugSearchDelegate extends SearchDelegate<Drug> {
   @override
   Widget buildResults(BuildContext context) {
     return FutureBuilder<List<Drug>>(
-      future: _drugRepository.searchDrugs(query),
+      future: drugRepository.searchDrugs(query),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
