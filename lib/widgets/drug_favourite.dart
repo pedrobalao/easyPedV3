@@ -1,10 +1,10 @@
 import 'package:easypedv3/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
-import '../services/drugs_service.dart';
+import 'package:easypedv3/services/drugs_service.dart';
 
 class DrugFavourite extends StatefulWidget {
-  const DrugFavourite({Key? key, required this.drugId}) : super(key: key);
+  const DrugFavourite({required this.drugId, super.key});
 
   final int drugId;
   @override
@@ -18,8 +18,8 @@ class DrugFavouriteState extends State<DrugFavourite> {
   final AuthenticationService _authenticationService = AuthenticationService();
   bool _isFavourite = false;
 
-  fetchIsFavourite() async {
-    var isFavourite = await _drugService.fetchIsFavourite(
+  Future<void> fetchIsFavourite() async {
+    final isFavourite = await _drugService.fetchIsFavourite(
         widget.drugId, await _authenticationService.getUserToken());
 
     setState(() {
@@ -27,8 +27,8 @@ class DrugFavouriteState extends State<DrugFavourite> {
     });
   }
 
-  changeFavouriteFlag() async {
-    bool execRet = false;
+  Future<void> changeFavouriteFlag() async {
+    var execRet = false;
     if (_isFavourite) {
       execRet = await _drugService.deleteFavourite(
           widget.drugId, await _authenticationService.getUserToken());

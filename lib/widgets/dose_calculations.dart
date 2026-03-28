@@ -1,17 +1,16 @@
 import 'dart:async';
 
+import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/utils/string_utils.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../models/drug.dart';
-import '../services/drugs_service.dart';
-import '../utils/string_utils.dart';
-
 class DoseCalculations extends StatefulWidget {
-  const DoseCalculations({Key? key, required this.drug}) : super(key: key);
+  const DoseCalculations({required this.drug, super.key});
 
   final Drug drug;
   @override
@@ -27,7 +26,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
-  var mapOfVariables = {};
+  Map mapOfVariables = {};
   final DrugService _drugService = DrugService();
   final AuthenticationService _authenticationService = AuthenticationService();
   List<DoseCalculationResult> _doseCalculationsResults = [];
@@ -35,9 +34,9 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
   Timer? _debounce;
 
-  static const nullNumberVal = -99923143898;
+  static const int nullNumberVal = -99923143898;
 
-  _invalidateResult() {
+  void _invalidateResult() {
     if (_doseCalculationsResults.isNotEmpty) {
       setState(() {
         _doseCalculationsResults = [];
@@ -45,7 +44,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
     }
   }
 
-  _onVariablesValueChange() {
+  void _onVariablesValueChange() {
     _invalidateResult();
 
     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -55,7 +54,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
         print('Running debounce $mapOfVariables');
       }
       if (!mapOfVariables.containsValue(null) &&
-          !mapOfVariables.containsValue("")) {
+          !mapOfVariables.containsValue('')) {
         setState(() {
           _loading = true;
         });
@@ -63,14 +62,14 @@ class DoseCalculationsState extends State<DoseCalculations> {
         if (kDebugMode) {
           print('Variables: $mapOfVariables');
         }
-        var doseCalculationsResults = await _drugService.doseCalculation(
+        final doseCalculationsResults = await _drugService.doseCalculation(
             widget.drug.id!,
             mapOfVariables,
             await _authenticationService.getUserToken());
 
         FirebaseAnalytics.instance.logEvent(
-          name: "drug_dose_calculation",
-          parameters: {"drug_id": widget.drug.id!},
+          name: 'drug_dose_calculation',
+          parameters: {'drug_id': widget.drug.id!},
         );
 
         setState(() {
@@ -94,16 +93,16 @@ class DoseCalculationsState extends State<DoseCalculations> {
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         fillColor: const Color(0xFF2963C8),
-        labelText: "${variable.description!} (${variable.idUnit!})",
+        labelText: '${variable.description!} (${variable.idUnit!})',
       ),
       onChanged: (String? value) {
         mapOfVariables[variable.id] = (value == null ||
-                value == "" ||
+                value == '' ||
                 !StringUtils.isNumeric(value.replaceAll(',', '.'))
             ? null
             : double.parse(value.replaceAll(',', '.'))); // );
         if (kDebugMode) {
-          print("Value: $mapOfVariables[variable.id]");
+          print('Value: $mapOfVariables[variable.id]');
         }
         _onVariablesValueChange();
 
@@ -117,10 +116,10 @@ class DoseCalculationsState extends State<DoseCalculations> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? value) {
         if (value == null) {
-          return "Campo obrigatório";
+          return 'Campo obrigatório';
         }
         if (!StringUtils.isNumeric(value.replaceAll(',', '.'))) {
-          return "O campo deve ser numérico";
+          return 'O campo deve ser numérico';
         }
         return null;
       },
@@ -128,7 +127,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
   }
 
   Widget selectVariableWidget(context, Variables variable) {
-    throw Exception("Not implemented");
+    throw Exception('Not implemented');
     // return DropdownButton<String>(
     //   value: dropdownValue,
     //   elevation: 16,
@@ -154,10 +153,10 @@ class DoseCalculationsState extends State<DoseCalculations> {
     } else if (variable.type == 'LISTVALUES') {
       wid = selectVariableWidget(context, variable);
     } else {
-      throw Exception("Invalid variable type: ${variable.type!}");
+      throw Exception('Invalid variable type: ${variable.type!}');
     }
 
-    return Padding(padding: const EdgeInsets.all(10.0), child: wid);
+    return Padding(padding: const EdgeInsets.all(10), child: wid);
   }
 
   Widget doseCalculationResultsWidget(context) {
@@ -165,29 +164,29 @@ class DoseCalculationsState extends State<DoseCalculations> {
       return Container();
     }
 
-    List<Widget> resultWidgets = [];
-    for (var result in _doseCalculationsResults) {
-      var widg = Card(
+    final resultWidgets = <Widget>[];
+    for (final result in _doseCalculationsResults) {
+      final widg = Card(
           elevation: 4,
           clipBehavior: Clip.antiAlias,
           child: Column(children: [
             ListTile(
               tileColor: const Color(0xFF28a745),
-              title: Text(result.description ?? "",
+              title: Text(result.description ?? '',
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.headlineMedium),
             ),
             Padding(
-                padding: const EdgeInsets.all(2.0),
+                padding: const EdgeInsets.all(2),
                 child: Column(children: [
                   Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text("${result.result} ${result.resultIdUnit!}",
+                      padding: const EdgeInsets.all(10),
+                      child: Text('${result.result} ${result.resultIdUnit!}',
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.clip,
                           style: Theme.of(context).textTheme.headlineSmall)),
-                  Text(result.resultDescription ?? "",
+                  Text(result.resultDescription ?? '',
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.clip,
                       style: Theme.of(context).textTheme.bodySmall)
@@ -199,7 +198,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
     return Column(children: [
       ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(2.0),
+        padding: const EdgeInsets.all(2),
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return resultWidgets[index];
@@ -223,9 +222,9 @@ class DoseCalculationsState extends State<DoseCalculations> {
       return Container();
     }
 
-    List<Widget> formFields = [];
+    final formFields = <Widget>[];
 
-    for (var variable in widget.drug.variables!) {
+    for (final variable in widget.drug.variables!) {
       formFields.add(variableWidget(context, variable));
       if (!mapOfVariables.containsKey(variable.id)) {
         mapOfVariables[variable.id] = null;
@@ -243,7 +242,7 @@ class DoseCalculationsState extends State<DoseCalculations> {
         ),
       ),
       Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: _loading
               ? const Loading()
               : doseCalculationResultsWidget(context))

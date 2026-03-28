@@ -1,5 +1,5 @@
 class ScreenArguments {
-  final String resourceId;
 
   ScreenArguments(this.resourceId);
+  final String resourceId;
 }

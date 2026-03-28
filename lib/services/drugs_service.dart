@@ -1,16 +1,15 @@
 import 'dart:convert';
 
+import 'package:easypedv3/models/congress.dart';
+import 'package:easypedv3/models/disease.dart';
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/models/medical_calculation.dart';
+import 'package:easypedv3/models/news.dart';
+import 'package:easypedv3/models/percentile.dart';
 import 'package:easypedv3/models/surgery_referral.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-
-import '../models/congress.dart';
-import '../models/disease.dart';
-import '../models/news.dart';
-import '../models/percentile.dart';
 
 class DrugService {
   List<Drug> listDrugFromJson(String str) =>
@@ -19,7 +18,7 @@ class DrugService {
   final String? apiBaseUrl = dotenv.env['API_BASE_URL'];
 
   Future<List<Drug>> fetchFavourites(String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -41,7 +40,7 @@ class DrugService {
   }
 
   Future<bool> fetchIsFavourite(int drugId, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -58,7 +57,7 @@ class DrugService {
   }
 
   Future<bool> addFavourite(int drugId, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -79,7 +78,7 @@ class DrugService {
   }
 
   Future<bool> deleteFavourite(int drugId, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -97,7 +96,7 @@ class DrugService {
   }
 
   Future<Drug> fetchDrug(int drugId, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -109,9 +108,9 @@ class DrugService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      var drug = Drug.fromJson(jsonDecode(response.body));
+      final drug = Drug.fromJson(jsonDecode(response.body));
 
-      var responseFav = await http.get(
+      final responseFav = await http.get(
           Uri.parse('$apiBaseUrl/users/me/favourite-drugs/$drugId'),
           headers: requestHeaders);
       if (responseFav.statusCode >= 200 && responseFav.statusCode < 300) {
@@ -129,7 +128,7 @@ class DrugService {
   }
 
   Future<List<Drug>> searchDrug(String searchString, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -156,13 +155,13 @@ class DrugService {
 
   Future<List<DoseCalculationResult>> doseCalculation(
       int drugId, Map<dynamic, dynamic> data, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
     };
 
-    List<CalculationInput> calInput = [];
+    final calInput = <CalculationInput>[];
 
     data.forEach((key, value) {
       calInput.add(CalculationInput(variable: key, value: value));
@@ -177,7 +176,7 @@ class DrugService {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       if (kDebugMode) {
-        for (var element in calInput) {
+        for (final element in calInput) {
           print('Variable: ${element.variable} ${element.value}');
         }
         print('response: ${response.body}');
@@ -196,7 +195,7 @@ class DrugService {
           json.decode(str).map((x) => DrugCategory.fromJson(x)));
 
   Future<List<DrugCategory>> fetchCategories(String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -222,7 +221,7 @@ class DrugService {
 
   Future<List<DrugSubCategory>> fetchSubCategories(
       int categoryId, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -245,7 +244,7 @@ class DrugService {
 
   Future<List<Drug>> fetchDrugsBySubCategory(
       int categoryId, int subCategoryId, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -272,7 +271,7 @@ class DrugService {
           json.decode(str).map((x) => SurgeryReferral.fromJson(x)));
 
   Future<List<SurgeryReferral>> fetchSurgeriesReferral(String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -296,7 +295,7 @@ class DrugService {
       List<Disease>.from(json.decode(str).map((x) => Disease.fromJson(x)));
 
   Future<List<Disease>> fetchDiseases(String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -318,7 +317,7 @@ class DrugService {
 
   Future<List<Disease>> searchDiseases(
       String searchStr, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -340,7 +339,7 @@ class DrugService {
   }
 
   Future<Disease> fetchDisease(int id, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -352,7 +351,7 @@ class DrugService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      var disease = Disease.fromJson(jsonDecode(response.body));
+      final disease = Disease.fromJson(jsonDecode(response.body));
 
       return disease;
     } else {
@@ -369,7 +368,7 @@ class DrugService {
 
   Future<MedicalCalculation> fetchMedicalCalculation(
       int id, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -382,7 +381,7 @@ class DrugService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      var ret = MedicalCalculation.fromJson(jsonDecode(response.body));
+      final ret = MedicalCalculation.fromJson(jsonDecode(response.body));
 
       return ret;
     } else {
@@ -394,7 +393,7 @@ class DrugService {
 
   Future<List<MedicalCalculation>> fetchMedicalCalculations(
       String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -417,7 +416,7 @@ class DrugService {
 
   Future<CalculationOutput> executeMedicalCalculation(
       int id, List<CalculationInput> data, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -431,7 +430,7 @@ class DrugService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      var ret = CalculationOutput.fromJson(jsonDecode(response.body));
+      final ret = CalculationOutput.fromJson(jsonDecode(response.body));
 
       return ret;
     } else {
@@ -444,13 +443,13 @@ class DrugService {
 
   Future<PercentileOutput> executeWeightPercentile(
       PercentileInput data, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
     };
 
-    var body = json.encode(data);
+    final body = json.encode(data);
     final response = await http.post(
         Uri.parse('$apiBaseUrl/percentiles/weight'),
         headers: requestHeaders,
@@ -459,7 +458,7 @@ class DrugService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      var ret = PercentileOutput.fromJson(jsonDecode(response.body));
+      final ret = PercentileOutput.fromJson(jsonDecode(response.body));
 
       return ret;
     } else {
@@ -471,7 +470,7 @@ class DrugService {
 
   Future<PercentileOutput> executeLengthPercentile(
       PercentileInput data, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -485,7 +484,7 @@ class DrugService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      var ret = PercentileOutput.fromJson(jsonDecode(response.body));
+      final ret = PercentileOutput.fromJson(jsonDecode(response.body));
 
       return ret;
     } else {
@@ -497,7 +496,7 @@ class DrugService {
 
   Future<BMIOutput> executeBMIPercentile(
       BMIInput data, String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -509,7 +508,7 @@ class DrugService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      var ret = BMIOutput.fromJson(jsonDecode(response.body));
+      final ret = BMIOutput.fromJson(jsonDecode(response.body));
 
       return ret;
     } else {
@@ -523,7 +522,7 @@ class DrugService {
       List<Congress>.from(json.decode(str).map((x) => Congress.fromJson(x)));
 
   Future<List<Congress>> fetchCongresses(String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken
@@ -547,7 +546,7 @@ class DrugService {
       List<News>.from(json.decode(str).map((x) => News.fromJson(x)));
 
   Future<List<News>> fetchNews(String authToken) async {
-    Map<String, String> requestHeaders = {
+    final requestHeaders = <String, String>{
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': authToken

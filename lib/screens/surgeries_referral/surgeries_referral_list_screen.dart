@@ -1,12 +1,11 @@
+import 'package:easypedv3/models/surgery_referral.dart';
 import 'package:easypedv3/screens/surgeries_referral/surgery_referral_screen.dart';
+import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/widgets/base_page_layout.dart';
+import 'package:easypedv3/widgets/connection_error.dart';
+import 'package:easypedv3/widgets/loading.dart';
 import 'package:flutter/material.dart';
-
-import '../../models/surgery_referral.dart';
-import '../../services/auth_service.dart';
-import '../../services/drugs_service.dart';
-import '../../widgets/base_page_layout.dart';
-import '../../widgets/connection_error.dart';
-import '../../widgets/loading.dart';
 
 // class SurgeriesReferralListScreen extends StatefulWidget {
 //   const SurgeriesReferralListScreen({Key? key}) : super(key: key);
@@ -30,13 +29,13 @@ import '../../widgets/loading.dart';
 // }
 
 class SurgeriesReferralListScreen extends StatelessWidget {
-  SurgeriesReferralListScreen({Key? key}) : super(key: key);
+  SurgeriesReferralListScreen({super.key});
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authenticationService = AuthenticationService();
 
   Future<List<SurgeryReferral>> fetchSurgeriesReferral() async {
-    var ret = await _drugService
+    final ret = await _drugService
         .fetchSurgeriesReferral(await _authenticationService.getUserToken());
     return ret;
   }
@@ -52,16 +51,15 @@ class SurgeriesReferralListScreen extends StatelessWidget {
           return Scaffold(
               appBar: AppBar(
                   centerTitle: true,
-                  title: const Text("Referenciação Cirúrgica")),
+                  title: const Text('Referenciação Cirúrgica')),
               body: BasePageLayout(children: [
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Card(
                         child: ListTile(
-                      title: Text(snapshot.data![index].scope ?? "",
+                      title: Text(snapshot.data![index].scope ?? '',
                           style: Theme.of(context).textTheme.displaySmall),
                       onTap: () {
                         Navigator.push(

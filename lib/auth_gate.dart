@@ -1,10 +1,10 @@
+import 'package:easypedv3/screens/auth/signin_screen.dart';
 import 'package:easypedv3/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'screens/auth/signin_screen.dart';
 
 class AuthGate extends StatelessWidget {
-  const AuthGate({Key? key}) : super(key: key);
+  const AuthGate({super.key});
 
   @override
   Widget build(BuildContext context) {

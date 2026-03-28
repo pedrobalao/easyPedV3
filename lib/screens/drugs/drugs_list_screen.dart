@@ -1,21 +1,21 @@
+import 'package:easypedv3/models/drug.dart';
+import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/widgets/base_page_layout.dart';
+import 'package:easypedv3/widgets/connection_error.dart';
+import 'package:easypedv3/widgets/drugs_list.dart';
+import 'package:easypedv3/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import '../../models/drug.dart';
-import '../../services/auth_service.dart';
-import '../../services/drugs_service.dart';
-import '../../widgets/base_page_layout.dart';
-import '../../widgets/connection_error.dart';
-import '../../widgets/drugs_list.dart';
-import '../../widgets/loading.dart';
 
 class DrugsListScreen extends StatelessWidget {
-  DrugsListScreen({Key? key, required this.drugSubCategory}) : super(key: key);
+  DrugsListScreen({required this.drugSubCategory, super.key});
 
   final DrugSubCategory drugSubCategory;
   final DrugService _drugService = DrugService();
   final AuthenticationService _authenticationService = AuthenticationService();
 
   Future<List<Drug>> fetchDrugs() async {
-    var ret = await _drugService.fetchDrugsBySubCategory(
+    final ret = await _drugService.fetchDrugsBySubCategory(
         drugSubCategory.categoryId!,
         drugSubCategory.id!,
         await _authenticationService.getUserToken());
@@ -33,7 +33,7 @@ class DrugsListScreen extends StatelessWidget {
             return Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
-                    title: Text(drugSubCategory.description ?? "")),
+                    title: Text(drugSubCategory.description ?? '')),
                 body: BasePageLayout(children: [
                   DrugsList(
                       drugSubCategory: drugSubCategory, drugs: snapshot.data!)

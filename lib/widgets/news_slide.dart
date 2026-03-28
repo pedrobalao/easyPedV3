@@ -1,13 +1,13 @@
+import 'package:easypedv3/models/news.dart';
+import 'package:easypedv3/utils/app_layout.dart';
+import 'package:easypedv3/utils/app_styles.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import '../models/news.dart';
-import '../utils/app_layout.dart';
-import '../utils/app_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsSlide extends StatelessWidget {
-  const NewsSlide({Key? key, required this.news}) : super(key: key);
+  const NewsSlide({required this.news, super.key});
 
   final List<News> news;
 
@@ -22,15 +22,15 @@ class NewsSlide extends StatelessWidget {
 }
 
 class NewsScreen extends StatelessWidget {
+  NewsScreen({required this.news, super.key});
   News news;
-  NewsScreen({super.key, required this.news});
 
   @override
   Widget build(BuildContext context) {
-    Future<void> _launchUrl(News news) async {
+    Future<void> openNewsUrl(News news) async {
       FirebaseAnalytics.instance.logSelectItem(items: [
         AnalyticsEventItem(
-            itemCategory: "news_open",
+            itemCategory: 'news_open',
             itemId: news.id.toString(),
             itemName: news.title)
       ]);
@@ -41,7 +41,7 @@ class NewsScreen extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          _launchUrl(news);
+          openNewsUrl(news);
         },
         child: Container(
           width: 300,

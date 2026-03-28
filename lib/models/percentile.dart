@@ -1,8 +1,4 @@
 class BMIInput {
-  String? gender;
-  String? birthdate;
-  double? weight;
-  double? length;
 
   BMIInput({this.gender, this.birthdate, this.weight, this.length});
 
@@ -12,9 +8,13 @@ class BMIInput {
     weight = json['weight'].toDouble();
     length = json['length'].toDouble();
   }
+  String? gender;
+  String? birthdate;
+  double? weight;
+  double? length;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['gender'] = gender;
     data['birthdate'] = birthdate;
     data['weight'] = weight;
@@ -24,9 +24,6 @@ class BMIInput {
 }
 
 class BMIOutput {
-  double? bmi;
-  double? percentile;
-  String? result;
 
   BMIOutput({this.bmi, this.percentile, this.result});
 
@@ -35,9 +32,12 @@ class BMIOutput {
     percentile = json['percentile'].toDouble();
     result = json['result'];
   }
+  double? bmi;
+  double? percentile;
+  String? result;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['bmi'] = bmi;
     data['percentile'] = percentile;
     data['result'] = result;
@@ -46,9 +46,6 @@ class BMIOutput {
 }
 
 class PercentileInput {
-  String? gender;
-  String? birthdate;
-  double? value;
 
   PercentileInput({this.gender, this.birthdate, this.value});
 
@@ -57,9 +54,12 @@ class PercentileInput {
     birthdate = json['birthdate'];
     value = json['value'].toDouble();
   }
+  String? gender;
+  String? birthdate;
+  double? value;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['gender'] = gender;
     data['birthdate'] = birthdate;
     data['value'] = value;
@@ -68,8 +68,6 @@ class PercentileInput {
 }
 
 class PercentileOutput {
-  double? percentile;
-  String? description;
 
   PercentileOutput({this.percentile, this.description});
 
@@ -77,9 +75,11 @@ class PercentileOutput {
     percentile = json['percentile'].toDouble();
     description = json['description'];
   }
+  double? percentile;
+  String? description;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['percentile'] = percentile;
     data['description'] = description;
     return data;

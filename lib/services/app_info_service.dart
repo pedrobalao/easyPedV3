@@ -7,7 +7,7 @@ class AppInfoService {
   // but it doesn't promise to make a new one.
   // initialization logic
 
-  static initiateAppInfoService() async {
+  static Future<void> initiateAppInfoService() async {
     final info = await PackageInfo.fromPlatform();
     packageInfo = info;
   }

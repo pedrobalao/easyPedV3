@@ -1,7 +1,4 @@
 class LocalState {
-  static final LocalState _instance = LocalState._internal();
-
-  bool showedDisclaimerMessage = false;
 
   factory LocalState() {
     return _instance;
@@ -11,4 +8,7 @@ class LocalState {
     // initialization logic
     showedDisclaimerMessage = false;
   }
+  static final LocalState _instance = LocalState._internal();
+
+  bool showedDisclaimerMessage = false;
 }

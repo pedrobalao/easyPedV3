@@ -1,11 +1,4 @@
 class MedicalCalculation {
-  int? id;
-  String? description;
-  String? resultUnitId;
-  String? observation;
-  String? resultType;
-  int? precision;
-  List<Variable>? variables;
 
   MedicalCalculation(
       {this.id,
@@ -30,9 +23,16 @@ class MedicalCalculation {
       });
     }
   }
+  int? id;
+  String? description;
+  String? resultUnitId;
+  String? observation;
+  String? resultType;
+  int? precision;
+  List<Variable>? variables;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['description'] = description;
     data['resultUnitId'] = resultUnitId;
@@ -47,14 +47,6 @@ class MedicalCalculation {
 }
 
 class Variable {
-  int? id;
-  String? variableId;
-  int? medicalCalculationId;
-  int? optional;
-  String? description;
-  String? idUnit;
-  String? type;
-  List<String>? values;
 
   Variable(
       {this.id,
@@ -78,9 +70,17 @@ class Variable {
         ? (json['values'] as List).map((item) => item as String).toList()
         : null;
   }
+  int? id;
+  String? variableId;
+  int? medicalCalculationId;
+  int? optional;
+  String? description;
+  String? idUnit;
+  String? type;
+  List<String>? values;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['variableId'] = variableId;
     data['medicalCalculationId'] = medicalCalculationId;
@@ -94,11 +94,6 @@ class Variable {
 }
 
 class CalculationOutput {
-  int? id;
-  String? description;
-  String? resultDescription;
-  String? resultIdUnit;
-  String? result;
 
   CalculationOutput(
       {this.id,
@@ -115,9 +110,14 @@ class CalculationOutput {
     final rawResult = json['result'];
     result = rawResult?.toString();
   }
+  int? id;
+  String? description;
+  String? resultDescription;
+  String? resultIdUnit;
+  String? result;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['description'] = description;
     data['resultDescription'] = resultDescription;

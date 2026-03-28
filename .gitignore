@@ -51,3 +51,4 @@ ios/GoogleService-Info.plist
 android/key.properties
 
 ios/Runner/GoogleService-Info.plist
+create_issues.sh

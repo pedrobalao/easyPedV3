@@ -1,17 +1,4 @@
 class Disease {
-  int? id;
-  String? description;
-  String? author;
-  String? indication;
-  String? followup;
-  String? example;
-  String? bibliography;
-  String? observation;
-  String? createdAt;
-  String? updatedAt;
-  String? status;
-  String? generalMeasures;
-  Treatment? treatment;
 
   Disease(
       {this.id,
@@ -45,9 +32,22 @@ class Disease {
         ? Treatment.fromJson(json['treatment'])
         : null;
   }
+  int? id;
+  String? description;
+  String? author;
+  String? indication;
+  String? followup;
+  String? example;
+  String? bibliography;
+  String? observation;
+  String? createdAt;
+  String? updatedAt;
+  String? status;
+  String? generalMeasures;
+  Treatment? treatment;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['description'] = description;
     data['author'] = author;
@@ -68,8 +68,6 @@ class Disease {
 }
 
 class Treatment {
-  List<Conditions>? conditions;
-  String? initialEvaluation;
 
   Treatment({this.conditions, this.initialEvaluation});
 
@@ -82,9 +80,11 @@ class Treatment {
     }
     initialEvaluation = json['initial_evaluation'];
   }
+  List<Conditions>? conditions;
+  String? initialEvaluation;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     if (conditions != null) {
       data['conditions'] = conditions!.map((v) => v.toJson()).toList();
     }
@@ -94,11 +94,6 @@ class Treatment {
 }
 
 class Conditions {
-  int? id;
-  String? condition;
-  String? firstline;
-  String? thirdline;
-  String? secondline;
 
   Conditions(
       {this.id,
@@ -114,9 +109,14 @@ class Conditions {
     thirdline = json['thirdline'];
     secondline = json['secondline'];
   }
+  int? id;
+  String? condition;
+  String? firstline;
+  String? thirdline;
+  String? secondline;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['condition'] = condition;
     data['firstline'] = firstline;

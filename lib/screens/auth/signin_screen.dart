@@ -1,16 +1,15 @@
+import 'package:easypedv3/services/app_info_service.dart';
 import 'package:easypedv3/utils/app_styles.dart';
 import 'package:easypedv3/widgets/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
-import '../../services/app_info_service.dart';
 
 class EPSignScreen extends StatelessWidget {
   const EPSignScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double elementsOpacity = 1;
+    const double elementsOpacity = 1;
 
     return Scaffold(
       backgroundColor: Styles.primaryColor,
@@ -18,7 +17,7 @@ class EPSignScreen extends StatelessWidget {
       body: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(horizontal: 50),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,11 +33,11 @@ class EPSignScreen extends StatelessWidget {
                       children: [
                         const SizedBox(height: 25),
                         Text(
-                          "easyPed",
+                          'easyPed',
                           style: Styles.title,
                         ),
                         Text(
-                          "#makinghealthcareeasier",
+                          '#makinghealthcareeasier',
                           style: TextStyle(
                               color: Colors.black.withOpacity(0.7),
                               fontSize: 20),
@@ -49,18 +48,17 @@ class EPSignScreen extends StatelessWidget {
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Gap(150),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
                         children: [SignIn()],
                       ),
                     ),
                     const SizedBox(height: 100),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Center(
                           child: Text(
                         'Made with ❤️ in Porto',
@@ -71,7 +69,7 @@ class EPSignScreen extends StatelessWidget {
                     const Gap(10),
                     Center(
                         child: Text(
-                            "v${AppInfoService.packageInfo!.version} build ${AppInfoService.packageInfo!.buildNumber}",
+                            'v${AppInfoService.packageInfo!.version} build ${AppInfoService.packageInfo!.buildNumber}',
                             style: Styles.normalText)),
                   ],
                 )

@@ -1,26 +1,25 @@
+import 'package:easypedv3/screens/drugs/drugs_screen.dart';
+import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/utils/local_state.dart';
 import 'package:easypedv3/widgets/congresses_slide.dart';
+import 'package:easypedv3/widgets/connection_error.dart';
+import 'package:easypedv3/widgets/loading.dart';
+import 'package:easypedv3/widgets/menu.dart';
+import 'package:easypedv3/widgets/news_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../services/auth_service.dart';
-import '../services/drugs_service.dart';
-import '../widgets/connection_error.dart';
-import '../widgets/loading.dart';
-import '../widgets/menu.dart';
-import '../widgets/news_slide.dart';
-import 'drugs/drugs_screen.dart';
-
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({super.key});
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authenticationService = AuthenticationService();
 
   Future<Map<String, dynamic>> fetchData() async {
-    var req = <Future>[];
+    final req = <Future>[];
 
-    Map<String, dynamic> result = <String, dynamic>{};
+    final result = <String, dynamic>{};
 
     req.add(_drugService
         .fetchNews(await _authenticationService.getUserToken())
@@ -65,7 +64,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var localState = LocalState();
+    final localState = LocalState();
 
     if (!localState.showedDisclaimerMessage) {
       Future.delayed(Duration.zero, () => _showMyDialog(context));
@@ -79,7 +78,7 @@ class HomeScreen extends StatelessWidget {
             return const ConnectionError();
           } else if (snapshot.hasData) {
             return Scaffold(
-                appBar: AppBar(title: const Text("easyPed"), actions: <Widget>[
+                appBar: AppBar(title: const Text('easyPed'), actions: <Widget>[
                   IconButton(
                       icon: const Icon(Icons.search),
                       onPressed: () {
@@ -94,7 +93,7 @@ class HomeScreen extends StatelessWidget {
                   child: Column(children: [
                     ListTile(
                       tileColor: const Color(0xFF28a745),
-                      title: Text("Congressos",
+                      title: Text('Congressos',
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.clip,
                           style: Theme.of(context).textTheme.headlineMedium),
@@ -104,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                     const Gap(10),
                     ListTile(
                       tileColor: const Color(0xFF28a745),
-                      title: Text("Novidades",
+                      title: Text('Novidades',
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.clip,
                           style: Theme.of(context).textTheme.headlineMedium),
@@ -115,7 +114,7 @@ class HomeScreen extends StatelessWidget {
                   ]),
                 ));
           } else {
-            return const ScreenLoading(title: "easyPed");
+            return const ScreenLoading(title: 'easyPed');
           }
         });
   }

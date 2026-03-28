@@ -1,14 +1,14 @@
+import 'package:easypedv3/models/congress.dart';
+import 'package:easypedv3/utils/app_layout.dart';
+import 'package:easypedv3/utils/app_styles.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import '../models/congress.dart';
-import '../utils/app_layout.dart';
-import '../utils/app_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CongressesSlide extends StatelessWidget {
-  const CongressesSlide({Key? key, required this.congresses}) : super(key: key);
+  const CongressesSlide({required this.congresses, super.key});
 
   final List<Congress> congresses;
 
@@ -25,19 +25,19 @@ class CongressesSlide extends StatelessWidget {
 }
 
 class CongressScreen extends StatelessWidget {
+  CongressScreen({required this.congress, super.key});
   Congress congress;
-  CongressScreen({super.key, required this.congress});
 
   @override
   Widget build(BuildContext context) {
     final size = AppLayout.getSize(context);
-    final DateFormat formatter = DateFormat('yMMMMd');
+    final formatter = DateFormat('yMMMMd');
     //DateFormat('pt_PT');
 
-    Future<void> _launchUrl(Congress congress) async {
+    Future<void> openCongressUrl(Congress congress) async {
       FirebaseAnalytics.instance.logSelectItem(items: [
         AnalyticsEventItem(
-            itemCategory: "congress_open",
+            itemCategory: 'congress_open',
             itemId: congress.id.toString(),
             itemName: congress.title)
       ]);
@@ -48,8 +48,8 @@ class CongressScreen extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          print("Container was tapped");
-          _launchUrl(congress);
+          print('Container was tapped');
+          openCongressUrl(congress);
         },
         child: Container(
           width: 300,
@@ -75,7 +75,7 @@ class CongressScreen extends StatelessWidget {
               Text(
                 congress.beginDate == congress.endDate
                     ? formatter.format(congress.beginDate!)
-                    : "${formatter.format(congress.beginDate!)} - ${formatter.format(congress.endDate!)}",
+                    : '${formatter.format(congress.beginDate!)} - ${formatter.format(congress.endDate!)}',
                 style: Styles.headLineStyle5.copyWith(color: Colors.white),
               ),
               const Gap(8),
@@ -90,7 +90,7 @@ class CongressScreen extends StatelessWidget {
               ),
               const Gap(10),
               Text(
-                "${congress.city!} - ${congress.country!}",
+                '${congress.city!} - ${congress.country!}',
                 style: Styles.headLineStyle4.copyWith(color: Colors.white),
               ),
               const Gap(5),

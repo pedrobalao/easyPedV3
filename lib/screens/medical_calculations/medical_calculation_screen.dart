@@ -2,19 +2,17 @@ import 'dart:async';
 
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/models/medical_calculation.dart';
+import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/utils/string_utils.dart';
+import 'package:easypedv3/widgets/connection_error.dart';
+import 'package:easypedv3/widgets/loading.dart';
+import 'package:easypedv3/widgets/title_value.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/drugs_service.dart';
-import '../../services/auth_service.dart';
-import '../../utils/string_utils.dart';
-import '../../widgets/connection_error.dart';
-import '../../widgets/loading.dart';
-import '../../widgets/title_value.dart';
-
 class MedicalCalculationScreen extends StatefulWidget {
-  const MedicalCalculationScreen({Key? key, required this.medicalCalculationId})
-      : super(key: key);
+  const MedicalCalculationScreen({required this.medicalCalculationId, super.key});
 
   final int medicalCalculationId;
   @override
@@ -33,8 +31,7 @@ class _MedicalCalculationScreenState extends State<MedicalCalculationScreen> {
 }
 
 class MedicalCalculationWidget extends StatelessWidget {
-  MedicalCalculationWidget({Key? key, required this.medicalCalculationId})
-      : super(key: key);
+  MedicalCalculationWidget({required this.medicalCalculationId, super.key});
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authService = AuthenticationService();
@@ -44,7 +41,7 @@ class MedicalCalculationWidget extends StatelessWidget {
       .fetchMedicalCalculation(id, await _authService.getUserToken());
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return FutureBuilder<MedicalCalculation>(
         future: fetchItem(medicalCalculationId),
         builder: (context, AsyncSnapshot<MedicalCalculation> snapshot) {
@@ -53,27 +50,27 @@ class MedicalCalculationWidget extends StatelessWidget {
           } else if (snapshot.hasData) {
             FirebaseAnalytics.instance.logViewItem(items: [
               AnalyticsEventItem(
-                  itemCategory: "medical_calculation",
+                  itemCategory: 'medical_calculation',
                   itemId: snapshot.data?.id.toString(),
                   itemName: snapshot.data?.description)
             ]);
             return Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
-                    title: Text(snapshot.data?.description ?? "")),
+                    title: Text(snapshot.data?.description ?? '')),
                 body: SingleChildScrollView(
                     padding: const EdgeInsets.all(5.5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TitleValue(
-                            title: "Cálculo",
-                            value: snapshot.data?.description ?? ""),
+                            title: 'Cálculo',
+                            value: snapshot.data?.description ?? ''),
                         CalculationWidget(medicalCalculation: snapshot.data!),
                         TitleValue(
-                            title: "Observações",
+                            title: 'Observações',
                             value:
-                                snapshot.data?.observation ?? "Sem informação"),
+                                snapshot.data?.observation ?? 'Sem informação'),
                       ],
                     )));
           } else {
@@ -84,8 +81,7 @@ class MedicalCalculationWidget extends StatelessWidget {
 }
 
 class CalculationWidget extends StatefulWidget {
-  const CalculationWidget({Key? key, required this.medicalCalculation})
-      : super(key: key);
+  const CalculationWidget({required this.medicalCalculation, super.key});
 
   final MedicalCalculation medicalCalculation;
   @override
@@ -108,9 +104,9 @@ class CalculationState extends State<CalculationWidget> {
   bool _loading = false;
 
   Timer? _debounce;
-  static const nullNumberVal = -99923143898;
+  static const int nullNumberVal = -99923143898;
 
-  _onVariablesValueChange() {
+  void _onVariablesValueChange() {
     if (_calculationOutput != null) {
       setState(() {
         _calculationOutput = null;
@@ -121,24 +117,24 @@ class CalculationState extends State<CalculationWidget> {
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       // do something with query
       if (!mapOfVariables.containsValue(null) &&
-          !mapOfVariables.containsValue("")) {
+          !mapOfVariables.containsValue('')) {
         setState(() {
           _loading = true;
         });
 
-        List<CalculationInput> input = [];
+        final input = <CalculationInput>[];
         mapOfVariables.forEach((key, value) {
           input.add(CalculationInput(variable: key, value: value));
         });
 
-        var result = await _drugService.executeMedicalCalculation(
+        final result = await _drugService.executeMedicalCalculation(
             widget.medicalCalculation.id!,
             input,
             await _authenticationService.getUserToken());
 
         FirebaseAnalytics.instance.logEvent(
-          name: "medical_calculation",
-          parameters: {"medical_calculation_id": widget.medicalCalculation.id!},
+          name: 'medical_calculation',
+          parameters: {'medical_calculation_id': widget.medicalCalculation.id!},
         );
         setState(() {
           _loading = false;
@@ -154,11 +150,11 @@ class CalculationState extends State<CalculationWidget> {
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         fillColor: const Color(0xFF2963C8),
-        labelText: "${variable.description!} (${variable.idUnit!})",
+        labelText: '${variable.description!} (${variable.idUnit!})',
       ),
       onChanged: (String? value) {
         mapOfVariables[variable.variableId!] = (value == null ||
-                value == "" ||
+                value == '' ||
                 !StringUtils.isNumeric(value.replaceAll(',', '.'))
             ? null
             : double.parse(value.replaceAll(',', '.')));
@@ -173,10 +169,10 @@ class CalculationState extends State<CalculationWidget> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? value) {
         if (value == null) {
-          return "Campo obrigatório";
+          return 'Campo obrigatório';
         }
         if (!StringUtils.isNumeric(value.replaceAll(',', '.'))) {
-          return "O campo deve ser numérico";
+          return 'O campo deve ser numérico';
         }
         return null;
       },
@@ -189,7 +185,7 @@ class CalculationState extends State<CalculationWidget> {
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         fillColor: const Color(0xFF2963C8),
-        labelText: "${variable.description!} (${variable.idUnit!})",
+        labelText: '${variable.description!} (${variable.idUnit!})',
       ),
       isExpanded: true,
       value: mapOfVariables[variable.variableId!],
@@ -216,10 +212,10 @@ class CalculationState extends State<CalculationWidget> {
     } else if (variable.type == 'LISTVALUES') {
       wid = selectVariableWidget(context, variable);
     } else {
-      throw Exception("Invalid variable type: ${variable.type!}");
+      throw Exception('Invalid variable type: ${variable.type!}');
     }
 
-    return Padding(padding: const EdgeInsets.all(10.0), child: wid);
+    return Padding(padding: const EdgeInsets.all(10), child: wid);
   }
 
   Widget calculationResultsWidget(context) {
@@ -227,30 +223,30 @@ class CalculationState extends State<CalculationWidget> {
       return Container();
     }
 
-    List<Widget> resultWidgets = [];
+    final resultWidgets = <Widget>[];
 
-    var widg = Card(
+    final widg = Card(
         elevation: 4,
         clipBehavior: Clip.antiAlias,
         child: Column(children: [
           ListTile(
             tileColor: const Color(0xFF28a745),
-            title: Text("Resultado",
+            title: Text('Resultado',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
                 style: Theme.of(context).textTheme.headlineMedium),
           ),
           Padding(
-              padding: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.all(2),
               child: Column(children: [
                 Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10),
                     child: Text(
-                        "${_calculationOutput!.result} ${_calculationOutput!.resultIdUnit!}",
+                        '${_calculationOutput!.result} ${_calculationOutput!.resultIdUnit!}',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.clip,
                         style: Theme.of(context).textTheme.headlineSmall)),
-                Text(_calculationOutput!.resultDescription ?? "",
+                Text(_calculationOutput!.resultDescription ?? '',
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.bodySmall)
@@ -277,10 +273,10 @@ class CalculationState extends State<CalculationWidget> {
       return Container();
     }
 
-    List<Widget> formFields = [];
+    final formFields = <Widget>[];
 
-    for (var variable in widget.medicalCalculation.variables!) {
-      if (mapOfVariables.containsKey(variable.variableId!)) {
+    for (final variable in widget.medicalCalculation.variables!) {
+      if (mapOfVariables.containsKey(variable.variableId)) {
       } else {
         if (variable.type == 'LISTVALUES') {
           mapOfVariables[variable.variableId!] = variable.values![0];
@@ -300,7 +296,7 @@ class CalculationState extends State<CalculationWidget> {
         ),
       ),
       Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: _loading ? const Loading() : calculationResultsWidget(context))
     ]);
   }

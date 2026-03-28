@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class Loading extends StatelessWidget {
-  const Loading({Key? key}) : super(key: key);
+  const Loading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +16,13 @@ class Loading extends StatelessWidget {
 }
 
 class ScreenLoading extends StatelessWidget {
-  const ScreenLoading({Key? key, this.title}) : super(key: key);
+  const ScreenLoading({super.key, this.title});
   final String? title;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text(title ?? "Loading...")),
+      appBar: AppBar(centerTitle: true, title: Text(title ?? 'Loading...')),
       body: Center(
         child: Lottie.asset('assets/lotties/loading.json'),
       ),

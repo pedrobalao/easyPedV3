@@ -6,13 +6,7 @@ typedef DatePickerValueSelectedCallback = Function(DateTime date);
 
 class DatePickerWidget extends StatefulWidget {
   const DatePickerWidget(
-      {Key? key,
-      required this.label,
-      required this.initialDate,
-      required this.minDate,
-      required this.maxDate,
-      required this.onDateSelected})
-      : super(key: key);
+      {required this.label, required this.initialDate, required this.minDate, required this.maxDate, required this.onDateSelected, super.key});
 
   final String label;
   final DateTime initialDate;
@@ -50,7 +44,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       ),
       readOnly: true, //set it true, so that user will not able to edit text
       onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
+        final pickedDate = await showDatePicker(
           context: context,
           initialDate: currentDate,
           firstDate: widget
@@ -61,7 +55,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               data: Theme.of(context).copyWith(
                 textTheme: TextTheme(
                     headlineMedium: GoogleFonts.openSans(
-                        fontSize: 18.0,
+                        fontSize: 18,
                         color: Colors.white,
                         backgroundColor: Colors.transparent)),
               ),
@@ -73,7 +67,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         if (pickedDate != null) {
           print(
               pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          final formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
           print(
               formattedDate); //formatted date output using intl package =>  2021-03-16
           //you can implement different kind of Date Format here according to your requirement
@@ -84,7 +78,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             //set output date to TextField value.
           });
         } else {
-          print("Date is not selected");
+          print('Date is not selected');
         }
       },
     ));

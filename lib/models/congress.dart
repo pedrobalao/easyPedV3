@@ -1,16 +1,4 @@
 class Congress {
-  int? id;
-  String? title;
-  String? description;
-  String? congressType;
-  String? url;
-  String? expiringDate;
-  String? organizer;
-  DateTime? beginDate;
-  DateTime? endDate;
-  String? city;
-  String? country;
-  String? coverUrl;
 
   Congress(
       {this.id,
@@ -40,9 +28,21 @@ class Congress {
     country = json['country'];
     coverUrl = json['coverUrl'];
   }
+  int? id;
+  String? title;
+  String? description;
+  String? congressType;
+  String? url;
+  String? expiringDate;
+  String? organizer;
+  DateTime? beginDate;
+  DateTime? endDate;
+  String? city;
+  String? country;
+  String? coverUrl;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['title'] = title;
     data['description'] = description;

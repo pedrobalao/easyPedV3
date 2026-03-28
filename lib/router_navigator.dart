@@ -1,18 +1,17 @@
 import 'package:easypedv3/auth_gate.dart';
 import 'package:easypedv3/screens/about/about_screen.dart';
 import 'package:easypedv3/screens/diseases/disease_screen.dart';
+import 'package:easypedv3/screens/diseases/diseases_list_screen.dart';
+import 'package:easypedv3/screens/drugs/drug_screen.dart';
+import 'package:easypedv3/screens/drugs/drugs_screen.dart';
+import 'package:easypedv3/screens/errors/error404_screen.dart';
 import 'package:easypedv3/screens/medical_calculations/medical_calculation_screen.dart';
+import 'package:easypedv3/screens/medical_calculations/medical_calculations_list_screen.dart';
+import 'package:easypedv3/screens/percentiles/percentiles_screen.dart';
+import 'package:easypedv3/screens/surgeries_referral/surgeries_referral_list_screen.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'screens/diseases/diseases_list_screen.dart';
-import 'screens/drugs/drug_screen.dart';
-import 'screens/drugs/drugs_screen.dart';
-import 'screens/errors/error404_screen.dart';
-import 'screens/medical_calculations/medical_calculations_list_screen.dart';
-import 'screens/percentiles/percentiles_screen.dart';
-import 'screens/surgeries_referral/surgeries_referral_list_screen.dart';
 
 class RouterNavigator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -40,9 +39,9 @@ class RouterNavigator {
       } else if (settings.name == '/drugs' ||
           settings.name!.startsWith('/drugs/')) {
         // Handle '/details/:id'
-        var uri = Uri.parse(settings.name!);
+        final uri = Uri.parse(settings.name!);
         if (uri.pathSegments.length == 2) {
-          var id = int.parse(uri.pathSegments[1]);
+          final id = int.parse(uri.pathSegments[1]);
           return MaterialPageRoute<DrugScreen>(
               settings: settings, builder: (context) => DrugScreen(id: id));
         } else {
@@ -51,9 +50,9 @@ class RouterNavigator {
         }
       } else if (settings.name == '/diseases' ||
           settings.name!.startsWith('/diseases/')) {
-        var uri = Uri.parse(settings.name!);
+        final uri = Uri.parse(settings.name!);
         if (uri.pathSegments.length == 2) {
-          var id = int.parse(uri.pathSegments[1]);
+          final id = int.parse(uri.pathSegments[1]);
           return MaterialPageRoute<DiseaseScreen>(
               settings: settings,
               builder: (context) => DiseaseScreen(diseaseId: id));
@@ -68,9 +67,9 @@ class RouterNavigator {
             builder: (context) => const PercentilesScreen());
       } else if (settings.name == '/medical-calculations' ||
           settings.name!.startsWith('/medical-calculations/')) {
-        var uri = Uri.parse(settings.name!);
+        final uri = Uri.parse(settings.name!);
         if (uri.pathSegments.length == 2) {
-          var id = int.parse(uri.pathSegments[1]);
+          final id = int.parse(uri.pathSegments[1]);
           return MaterialPageRoute<MedicalCalculationScreen>(
               settings: settings,
               builder: (context) =>

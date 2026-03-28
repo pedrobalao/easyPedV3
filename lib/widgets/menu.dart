@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,50 +13,49 @@ class _Menu {
 }
 
 class Menu extends StatelessWidget {
-  const Menu({Key? key}) : super(key: key);
+  const Menu({super.key});
 
   List<_Menu> _menus() {
     return [
-      _Menu(title: "Home", icon: const Icon(Icons.home), route: "/"),
+      _Menu(title: 'Home', icon: const Icon(Icons.home), route: '/'),
       _Menu(
-          title: "Medicamentos",
+          title: 'Medicamentos',
           icon: const Icon(Icons.polyline_outlined),
-          route: "/drugs"),
+          route: '/drugs'),
       _Menu(
-          title: "Doenças",
+          title: 'Doenças',
           icon: const Icon(Icons.coronavirus),
-          route: "/diseases"),
+          route: '/diseases'),
       _Menu(
-          title: "Percentis",
+          title: 'Percentis',
           icon: const Icon(Icons.percent),
-          route: "/percentiles"),
+          route: '/percentiles'),
       _Menu(
-          title: "Calculos Médicos",
+          title: 'Calculos Médicos',
           icon: const Icon(Icons.calculate),
-          route: "/medical-calculations"),
+          route: '/medical-calculations'),
       _Menu(
-          title: "Referenciação Cirúrgica",
+          title: 'Referenciação Cirúrgica',
           icon: const Icon(Icons.meeting_room),
-          route: "/surgeries-referral"),
+          route: '/surgeries-referral'),
       _Menu(
-          title: "Sobre",
+          title: 'Sobre',
           icon: const Icon(Icons.app_shortcut),
-          route: "/about"),
+          route: '/about'),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-    print(user);
+    final user = FirebaseAuth.instance.currentUser;
 
-    var email = "your@email.com";
-    var name = "user";
-    var photoUrl = "";
+    var email = 'your@email.com';
+    var name = 'user';
+    var photoUrl = '';
 
     try {
       if (user!.providerData.isNotEmpty) {
-        for (var provider in user.providerData) {
+        for (final provider in user.providerData) {
           if (provider.displayName != null &&
               provider.displayName!.isNotEmpty) {
             name = provider.displayName!;
@@ -72,12 +72,14 @@ class Menu extends StatelessWidget {
         name = user.displayName!;
         photoUrl = user.photoURL!;
       }
-    } catch (exc) {}
+    } catch (exc) {
+      log('Failed to load user profile data: $exc');
+    }
 
     if (user == null) {
       return Container();
     }
-    var header = UserAccountsDrawerHeader(
+    final header = UserAccountsDrawerHeader(
       // <-- SEE HERE
 
       decoration: const BoxDecoration(color: Color(0xFF218838)),
@@ -95,15 +97,15 @@ class Menu extends StatelessWidget {
       ),
 
       currentAccountPicture: CircleAvatar(
-        radius: 30.0,
+        radius: 30,
         backgroundImage: NetworkImage(photoUrl),
         backgroundColor: Colors.transparent,
       ),
     );
-    var widgets = <Widget>[];
+    final widgets = <Widget>[];
     widgets.add(header);
 
-    for (var item in _menus()) {
+    for (final item in _menus()) {
       widgets.add(ListTile(
         leading: item.icon,
         title: Text(item.title),
@@ -115,7 +117,7 @@ class Menu extends StatelessWidget {
 
     widgets.add(ListTile(
         leading: const Icon(Icons.logout),
-        title: const Text("Sair"),
+        title: const Text('Sair'),
         onTap: () {
           FirebaseUIAuth.signOut(context: context);
         }));

@@ -9,9 +9,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 
 class SignIn extends StatelessWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({super.key});
 
-  _showMyDialog(BuildContext context, String message) {
+  Future<void> _showMyDialog(BuildContext context, String message) {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -40,8 +40,8 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String googleClientId =
-        "330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com";
+    var googleClientId =
+        '330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com';
 
     if (Platform.isAndroid) {
       googleClientId = dotenv.env['GOOGLE_CLIENT_ID']!;
@@ -53,7 +53,7 @@ class SignIn extends StatelessWidget {
             FirebaseAnalytics.instance.logLogin();
             Navigator.of(context).pushReplacementNamed('/');
           } else if (state is AuthFailed) {
-            _showMyDialog(context, "Falhou a autenticação");
+            _showMyDialog(context, 'Falhou a autenticação');
           }
           return null;
         },
@@ -63,9 +63,7 @@ class SignIn extends StatelessWidget {
             provider: GoogleProvider(clientId: googleClientId),
           ),
           const Gap(10),
-          Platform.isIOS
-              ? OAuthProviderButton(provider: AppleProvider())
-              : Container()
+          if (Platform.isIOS) OAuthProviderButton(provider: AppleProvider()) else Container()
         ]));
   }
 }

@@ -1,11 +1,9 @@
+import 'package:easypedv3/models/drug.dart';
+import 'package:easypedv3/screens/drugs/subcategories_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../models/drug.dart';
-import '../screens/drugs/subcategories_screen.dart';
-
 class DrugsCategoriesList extends StatelessWidget {
-  const DrugsCategoriesList({Key? key, required this.categories})
-      : super(key: key);
+  const DrugsCategoriesList({required this.categories, super.key});
 
   final List<DrugCategory> categories;
 
@@ -13,12 +11,12 @@ class DrugsCategoriesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.all(2),
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return Card(
             child: ListTile(
-          title: Text(categories[index].description ?? "",
+          title: Text(categories[index].description ?? '',
               style: Theme.of(context).textTheme.displaySmall),
           onTap: () {
             Navigator.push(

@@ -1,19 +1,19 @@
 import 'dart:async';
+
 import 'package:easypedv3/models/percentile.dart';
+import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/utils/string_utils.dart';
+import 'package:easypedv3/widgets/connection_error.dart';
+import 'package:easypedv3/widgets/date_picker_widget.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import '../../services/drugs_service.dart';
-import '../../services/auth_service.dart';
-import '../../utils/string_utils.dart';
-
-import '../../widgets/connection_error.dart';
-import '../../widgets/date_picker_widget.dart';
 
 class PercentilesScreen extends StatefulWidget {
-  const PercentilesScreen({Key? key}) : super(key: key);
+  const PercentilesScreen({super.key});
 
   @override
   _PercentilesScreenState createState() => _PercentilesScreenState();
@@ -25,7 +25,7 @@ class _PercentilesScreenState extends State<PercentilesScreen> {
   Widget build(BuildContext context) {
     FirebaseAnalytics.instance.logViewItem(items: [
       AnalyticsEventItem(
-          itemCategory: "percentiles", itemId: '1', itemName: 'percentiles')
+          itemCategory: 'percentiles', itemId: '1', itemName: 'percentiles')
     ]);
 
     return const PercentilesWidget();
@@ -33,7 +33,7 @@ class _PercentilesScreenState extends State<PercentilesScreen> {
 }
 
 class PercentilesWidget extends StatefulWidget {
-  const PercentilesWidget({Key? key}) : super(key: key);
+  const PercentilesWidget({super.key});
 
   @override
   PercentileState createState() => PercentileState();
@@ -45,17 +45,17 @@ class PercentileState extends State<PercentilesWidget> {
   final _formKey = GlobalKey<FormState>();
 
   Timer? _debounce;
-  static const nullNumberVal = -99923143898;
+  static const int nullNumberVal = -99923143898;
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authenticationService = AuthenticationService();
 
   DateTime birthdate = DateTime.now();
-  String gender = "Feminino";
+  String gender = 'Feminino';
   double? weight;
   double? length;
 
-  var genderOptions = ["Feminino", "Masculino"];
+  List<String> genderOptions = ['Feminino', 'Masculino'];
 
   PercentileOutput? _weightPercentileResult;
   PercentileOutput? _lengthPercentileResult;
@@ -64,7 +64,7 @@ class PercentileState extends State<PercentilesWidget> {
   bool _loading = false;
   bool _onError = false;
 
-  _onVariablesValueChange() {
+  void _onVariablesValueChange() {
     setState(() {
       _weightPercentileResult = null;
       _lengthPercentileResult = null;
@@ -74,18 +74,18 @@ class PercentileState extends State<PercentilesWidget> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       // do something with query
-      if (gender != "" && (weight != null || length != null)) {
+      if (gender != '' && (weight != null || length != null)) {
         setState(() {
           _loading = true;
         });
         try {
-          var authToken = await _authenticationService.getUserToken();
-          var req = <Future>[];
+          final authToken = await _authenticationService.getUserToken();
+          final req = <Future>[];
 
-          var stdGender = gender == "Masculino" ? "male" : "female";
+          final stdGender = gender == 'Masculino' ? 'male' : 'female';
 
           if (weight != null) {
-            var wInput = PercentileInput(
+            final wInput = PercentileInput(
                 gender: stdGender,
                 birthdate: birthdate.toUtc().toIso8601String(),
                 value: weight);
@@ -95,7 +95,7 @@ class PercentileState extends State<PercentilesWidget> {
           }
 
           if (length != null) {
-            var lInput = PercentileInput(
+            final lInput = PercentileInput(
                 gender: stdGender,
                 birthdate: birthdate.toUtc().toIso8601String(),
                 value: length);
@@ -105,7 +105,7 @@ class PercentileState extends State<PercentilesWidget> {
           }
 
           if (weight != null && length != null) {
-            var bmiInput = BMIInput(
+            final bmiInput = BMIInput(
                 gender: stdGender,
                 birthdate: birthdate.toUtc().toIso8601String(),
                 length: length,
@@ -118,8 +118,8 @@ class PercentileState extends State<PercentilesWidget> {
           await Future.wait(req);
 
           FirebaseAnalytics.instance.logEvent(
-            name: "percentiles_calculation",
-            parameters: {"gender": stdGender},
+            name: 'percentiles_calculation',
+            parameters: {'gender': stdGender},
           );
 
           setState(() {
@@ -137,11 +137,11 @@ class PercentileState extends State<PercentilesWidget> {
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     if (_onError) return const ConnectionError();
 
     return Scaffold(
-        appBar: AppBar(centerTitle: true, title: const Text("Percentis")),
+        appBar: AppBar(centerTitle: true, title: const Text('Percentis')),
         body: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.all(5.5),
@@ -149,17 +149,17 @@ class PercentileState extends State<PercentilesWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10),
                     child: DatePickerWidget(
-                        label: "Data de Nascimento",
+                        label: 'Data de Nascimento',
                         initialDate: DateTime.now(),
                         minDate:
                             DateTime.now().subtract(const Duration(days: 6570)),
                         maxDate: DateTime.now(),
                         onDateSelected: (date) {
-                          String formattedDate =
+                          final formattedDate =
                               DateFormat('yyyy-MM-dd').format(birthdate);
-                          print("Birthdate:$formattedDate");
+                          print('Birthdate:$formattedDate');
                           setState(() {
                             birthdate = date;
                             _onVariablesValueChange();
@@ -188,19 +188,19 @@ class PercentileState extends State<PercentilesWidget> {
                 //     )
                 //     ),
                 Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10),
                     child: DropdownButtonFormField<String>(
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         fillColor: Color(0xFF2963C8),
-                        labelText: "Sexo",
+                        labelText: 'Sexo',
                       ),
                       isExpanded: true,
                       value: gender,
                       elevation: 16,
                       onChanged: (String? newValue) {
                         setState(() {
-                          gender = newValue ?? "Feminino";
+                          gender = newValue ?? 'Feminino';
                           _onVariablesValueChange();
                         });
                       },
@@ -215,18 +215,18 @@ class PercentileState extends State<PercentilesWidget> {
 
                 //PESO
                 Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10),
                     child: TextFormField(
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           fillColor: Color(0xFF2963C8),
-                          labelText: "Peso (kg)",
+                          labelText: 'Peso (kg)',
                         ),
                         onChanged: (String? value) {
                           weight = (value == null ||
-                                  value == "" ||
+                                  value == '' ||
                                   !StringUtils.isNumeric(
                                       value.replaceAll(',', '.'))
                               ? null
@@ -244,14 +244,14 @@ class PercentileState extends State<PercentilesWidget> {
                           }
                           if (!StringUtils.isNumeric(
                               value.replaceAll(',', '.'))) {
-                            return "O campo deve ser numérico";
+                            return 'O campo deve ser numérico';
                           }
                           return null;
                         })),
 
                 //ALTURA
                 Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10),
                     child: TextFormField(
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
@@ -261,10 +261,10 @@ class PercentileState extends State<PercentilesWidget> {
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           fillColor: Color(0xFF2963C8),
-                          labelText: "Altura (cm)",
+                          labelText: 'Altura (cm)',
                         ),
                         onChanged: (String? value) {
-                          length = (value == null || value == ""
+                          length = (value == null || value == ''
                               ? null
                               : double.parse(value));
                           _onVariablesValueChange();
@@ -275,12 +275,12 @@ class PercentileState extends State<PercentilesWidget> {
                         },
                         validator: (String? value) {
                           if (!StringUtils.isNumeric(value)) {
-                            return "O campo deve ser numérico";
+                            return 'O campo deve ser numérico';
                           }
                           return null;
                         })),
 
-                _loading ? const Loading() : calculationResultsWidget(context)
+                if (_loading) const Loading() else calculationResultsWidget(context)
               ],
             )));
   }
@@ -298,16 +298,16 @@ class PercentileState extends State<PercentilesWidget> {
         child: Column(children: [
           ListTile(
             tileColor: const Color(0xFF28a745),
-            title: Text("Percentil $type",
+            title: Text('Percentil $type',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
                 style: Theme.of(context).textTheme.headlineMedium),
           ),
           Padding(
-              padding: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.all(2),
               child: Column(children: [
                 Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10),
                     child: Text(output.percentile.toString(),
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.clip,
@@ -320,26 +320,21 @@ class PercentileState extends State<PercentilesWidget> {
     Color color;
     String resultStr;
     switch (output.result) {
-      case "underweight":
+      case 'underweight':
         color = const Color(0xFFffc107);
-        resultStr = "Abaixo do peso";
-        break;
-      case "healthy weight":
+        resultStr = 'Abaixo do peso';
+      case 'healthy weight':
         color = const Color(0xFF28a745);
-        resultStr = "Peso saudável";
-        break;
-      case "overweight":
+        resultStr = 'Peso saudável';
+      case 'overweight':
         color = const Color(0xFFffc107);
-        resultStr = "Acima do peso";
-        break;
-      case "obesity":
+        resultStr = 'Acima do peso';
+      case 'obesity':
         color = const Color(0xFF651F06);
-        resultStr = "Obesidade";
-        break;
+        resultStr = 'Obesidade';
       default:
         color = const Color(0xFF28a745);
-        resultStr = "Indefinido";
-        break;
+        resultStr = 'Indefinido';
     }
 
     return Card(
@@ -348,16 +343,16 @@ class PercentileState extends State<PercentilesWidget> {
         child: Column(children: [
           ListTile(
             tileColor: const Color(0xFF28a745),
-            title: Text("IMC",
+            title: Text('IMC',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
                 style: Theme.of(context).textTheme.headlineMedium),
           ),
           Padding(
-              padding: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.all(2),
               child: Column(children: [
                 Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10),
                     child:
                         //
                         Text(output.percentile.toString(),
@@ -385,31 +380,30 @@ class PercentileState extends State<PercentilesWidget> {
       return Container();
     }
 
-    List<Widget> resultWidgets = [];
+    final resultWidgets = <Widget>[];
 
     if (_weightPercentileResult != null) {
       resultWidgets
-          .add(percentileResult(context, "Peso", _weightPercentileResult!));
+          .add(percentileResult(context, 'Peso', _weightPercentileResult!));
     }
 
     if (_lengthPercentileResult != null) {
       resultWidgets
-          .add(percentileResult(context, "Altura", _lengthPercentileResult!));
+          .add(percentileResult(context, 'Altura', _lengthPercentileResult!));
     }
 
     if (_bmiPercentileResult != null) {
       resultWidgets.add(percentileResult(
           context,
-          "IMC",
+          'IMC',
           PercentileOutput(
-              percentile: _bmiPercentileResult?.percentile, description: "")));
+              percentile: _bmiPercentileResult?.percentile, description: '')));
       resultWidgets.add(bmiResult(context, _bmiPercentileResult!));
     }
 
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: 10.0),
-      scrollDirection: Axis.vertical,
+      padding: const EdgeInsets.only(bottom: 10),
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return resultWidgets[index];

@@ -13,16 +13,16 @@ class Styles {
   static Color kakiColor = const Color(0xFFD2BDB6);
 
   static TextStyle title = GoogleFonts.openSans(
-      fontSize: 42.0, color: bgColor, fontWeight: FontWeight.w500);
+      fontSize: 42, color: bgColor, fontWeight: FontWeight.w500);
 
   static TextStyle textStyle =
       TextStyle(fontSize: 16, color: textColor, fontWeight: FontWeight.w500);
 
   static TextStyle noteStyle = GoogleFonts.openSans(
-      fontSize: 12.0, color: bgColor, fontWeight: FontWeight.w500);
+      fontSize: 12, color: bgColor, fontWeight: FontWeight.w500);
 
   static TextStyle headLineStyle1 =
-      GoogleFonts.openSans(fontSize: 18.0, color: Colors.white);
+      GoogleFonts.openSans(fontSize: 18, color: Colors.white);
   static TextStyle headLineStyle2 =
       TextStyle(fontSize: 21, color: textColor, fontWeight: FontWeight.bold);
   static TextStyle headLineStyle3 =

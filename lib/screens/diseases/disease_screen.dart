@@ -1,15 +1,14 @@
+import 'package:easypedv3/models/disease.dart';
+import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/widgets/connection_error.dart';
+import 'package:easypedv3/widgets/loading.dart';
+import 'package:easypedv3/widgets/title_value.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/drugs_service.dart';
-import '../../models/disease.dart';
-import '../../services/auth_service.dart';
-import '../../widgets/connection_error.dart';
-import '../../widgets/loading.dart';
-import '../../widgets/title_value.dart';
-
 class DiseaseScreen extends StatefulWidget {
-  const DiseaseScreen({Key? key, required this.diseaseId}) : super(key: key);
+  const DiseaseScreen({required this.diseaseId, super.key});
 
   final int diseaseId;
   @override
@@ -27,7 +26,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
 }
 
 class DiseaseWidget extends StatelessWidget {
-  DiseaseWidget({Key? key, required this.diseaseId}) : super(key: key);
+  DiseaseWidget({required this.diseaseId, super.key});
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authService = AuthenticationService();
@@ -37,7 +36,7 @@ class DiseaseWidget extends StatelessWidget {
       _drugService.fetchDisease(id, await _authService.getUserToken());
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return FutureBuilder<Disease>(
         future: fetchDisease(diseaseId),
         builder: (context, AsyncSnapshot<Disease> snapshot) {
@@ -46,34 +45,34 @@ class DiseaseWidget extends StatelessWidget {
           } else if (snapshot.hasData) {
             FirebaseAnalytics.instance.logViewItem(items: [
               AnalyticsEventItem(
-                  itemCategory: "disease",
+                  itemCategory: 'disease',
                   itemId: snapshot.data?.id.toString(),
                   itemName: snapshot.data?.description)
             ]);
             return Scaffold(
                 appBar: AppBar(
                     centerTitle: true,
-                    title: Text(snapshot.data?.description ?? "")),
+                    title: Text(snapshot.data?.description ?? '')),
                 body: SingleChildScrollView(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TitleValue(
-                        title: "Doença",
-                        value: snapshot.data?.description ?? ""),
+                        title: 'Doença',
+                        value: snapshot.data?.description ?? ''),
                     TitleValue(
-                        title: "Autor",
-                        value: snapshot.data?.author ?? "Sem informação"),
+                        title: 'Autor',
+                        value: snapshot.data?.author ?? 'Sem informação'),
                     TitleValue(
-                        title: "Indicação",
-                        value: snapshot.data?.indication ?? "Sem informação"),
+                        title: 'Indicação',
+                        value: snapshot.data?.indication ?? 'Sem informação'),
                     treatmentWidget(context, snapshot.data),
                     TitleValue(
-                        title: "Follow-up",
-                        value: snapshot.data?.followup ?? "Sem informação"),
+                        title: 'Follow-up',
+                        value: snapshot.data?.followup ?? 'Sem informação'),
                     TitleValue(
-                        title: "Bibliografia",
-                        value: snapshot.data?.bibliography ?? "Sem informação"),
+                        title: 'Bibliografia',
+                        value: snapshot.data?.bibliography ?? 'Sem informação'),
                   ],
                 )));
           } else {
@@ -83,22 +82,22 @@ class DiseaseWidget extends StatelessWidget {
   }
 
   Widget treatmentWidget(context, Disease? disease) {
-    List<Widget> ret = [];
+    final ret = <Widget>[];
 
     if (disease != null &&
         disease.treatment != null &&
         disease.treatment!.conditions!.isNotEmpty) {
-      for (var condition in disease.treatment!.conditions!) {
+      for (final condition in disease.treatment!.conditions!) {
         ret.add(conditionWidget(context, condition));
       }
     }
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const TitleValue(title: "Tratamento"),
+      const TitleValue(title: 'Tratamento'),
       (disease?.generalMeasures != null
           ? SubTitleValue(
-              title: "Medidas Gerais",
-              value: disease?.generalMeasures ?? "Sem informação")
+              title: 'Medidas Gerais',
+              value: disease?.generalMeasures ?? 'Sem informação')
           : Container()),
       Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,26 +108,26 @@ class DiseaseWidget extends StatelessWidget {
 
   Widget conditionWidget(context, Conditions? condition) {
     if (condition != null) {
-      List<Widget> wgs = [];
+      final wgs = <Widget>[];
 
       wgs.add(ListTile(
         tileColor: const Color(0xFF28a745),
-        title: Text(condition.condition ?? "",
+        title: Text(condition.condition ?? '',
             textAlign: TextAlign.left,
             overflow: TextOverflow.clip,
             style: Theme.of(context).textTheme.headlineMedium),
       ));
       if (condition.firstline != null) {
         wgs.add(
-            SubTitleValue(title: "1ª Linha", value: condition.firstline ?? ""));
+            SubTitleValue(title: '1ª Linha', value: condition.firstline ?? ''));
       }
       if (condition.secondline != null) {
         wgs.add(SubTitleValue(
-            title: "2ª Linha", value: condition.secondline ?? ""));
+            title: '2ª Linha', value: condition.secondline ?? ''));
       }
       if (condition.thirdline != null) {
         wgs.add(
-            SubTitleValue(title: "3ª Linha", value: condition.thirdline ?? ""));
+            SubTitleValue(title: '3ª Linha', value: condition.thirdline ?? ''));
       }
 
       return Column(

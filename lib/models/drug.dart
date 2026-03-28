@@ -1,18 +1,4 @@
 class Drug {
-  int? id;
-  String? name;
-  String? conterIndications;
-  String? secondaryEffects;
-  String? comercialBrands;
-  String? obs;
-  String? presentation;
-  String? subcategoryDescription;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  List<Indications>? indications;
-  List<Variables>? variables;
-  List<Calculations>? calculations;
-  bool? isFavourite;
 
   Drug(
       {this.id,
@@ -58,9 +44,23 @@ class Drug {
     }
     isFavourite = json['isFavourite'] ?? false;
   }
+  int? id;
+  String? name;
+  String? conterIndications;
+  String? secondaryEffects;
+  String? comercialBrands;
+  String? obs;
+  String? presentation;
+  String? subcategoryDescription;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  List<Indications>? indications;
+  List<Variables>? variables;
+  List<Calculations>? calculations;
+  bool? isFavourite;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     data['conterIndications'] = conterIndications;
@@ -85,12 +85,6 @@ class Drug {
 }
 
 class Indications {
-  int? id;
-  int? drugId;
-  String? indicationText;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  List<Doses>? doses;
 
   Indications({this.id, this.drugId, this.indicationText, this.doses});
 
@@ -106,9 +100,15 @@ class Indications {
       });
     }
   }
+  int? id;
+  int? drugId;
+  String? indicationText;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  List<Doses>? doses;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['drugId'] = drugId;
     data['indicationText'] = indicationText;
@@ -121,17 +121,6 @@ class Indications {
 }
 
 class Doses {
-  int? id;
-  int? indicationId;
-  String? idVia;
-  String? pediatricDose;
-  String? idUnityPediatricDose;
-  String? adultDose;
-  String? idUnityAdultDose;
-  String? takesPerDay;
-  String? maxDosePerDay;
-  String? idUnityMaxDosePerDay;
-  String? obs;
 
   Doses(
       {this.id,
@@ -159,9 +148,20 @@ class Doses {
     idUnityMaxDosePerDay = json['idUnityMaxDosePerDay'];
     obs = json['obs'];
   }
+  int? id;
+  int? indicationId;
+  String? idVia;
+  String? pediatricDose;
+  String? idUnityPediatricDose;
+  String? adultDose;
+  String? idUnityAdultDose;
+  String? takesPerDay;
+  String? maxDosePerDay;
+  String? idUnityMaxDosePerDay;
+  String? obs;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['indicationId'] = indicationId;
     data['idVia'] = idVia;
@@ -179,10 +179,6 @@ class Doses {
 }
 
 class Variables {
-  String? id;
-  String? description;
-  String? idUnit;
-  String? type;
 
   Variables({this.id, this.description, this.idUnit, this.type});
 
@@ -192,9 +188,13 @@ class Variables {
     idUnit = json['idUnit'];
     type = json['type'];
   }
+  String? id;
+  String? description;
+  String? idUnit;
+  String? type;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['description'] = description;
     data['idUnit'] = idUnit;
@@ -205,13 +205,6 @@ class Variables {
 }
 
 class Calculations {
-  int? id;
-  int? drugId;
-  String? type;
-  String? function;
-  String? resultDescription;
-  String? resultIdUnit;
-  String? description;
 
   Calculations({
     this.id,
@@ -232,9 +225,16 @@ class Calculations {
     resultIdUnit = json['resultIdUnit'];
     description = json['description'];
   }
+  int? id;
+  int? drugId;
+  String? type;
+  String? function;
+  String? resultDescription;
+  String? resultIdUnit;
+  String? description;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['drugId'] = drugId;
     data['type'] = type;
@@ -248,11 +248,6 @@ class Calculations {
 }
 
 class DoseCalculationResult {
-  int? id;
-  String? description;
-  String? resultDescription;
-  String? resultIdUnit;
-  num? result;
 
   DoseCalculationResult(
       {this.id,
@@ -268,9 +263,14 @@ class DoseCalculationResult {
     resultIdUnit = json['resultIdUnit'];
     result = json['result'];
   }
+  int? id;
+  String? description;
+  String? resultDescription;
+  String? resultIdUnit;
+  num? result;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['description'] = description;
     data['resultDescription'] = resultDescription;
@@ -281,8 +281,6 @@ class DoseCalculationResult {
 }
 
 class CalculationInput {
-  String? variable;
-  dynamic value;
 
   CalculationInput({this.variable, this.value});
 
@@ -290,9 +288,11 @@ class CalculationInput {
     variable = json['variable'];
     value = json['value'];
   }
+  String? variable;
+  dynamic value;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['variable'] = variable;
     data['value'] = value;
     return data;
@@ -300,8 +300,6 @@ class CalculationInput {
 }
 
 class DrugCategory {
-  int? id;
-  String? description;
 
   DrugCategory({this.id, this.description});
 
@@ -309,9 +307,11 @@ class DrugCategory {
     id = json['id'];
     description = json['description'];
   }
+  int? id;
+  String? description;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['description'] = description;
     return data;
@@ -319,9 +319,6 @@ class DrugCategory {
 }
 
 class DrugSubCategory {
-  int? id;
-  String? description;
-  int? categoryId;
 
   DrugSubCategory({this.id, this.description, this.categoryId});
 
@@ -330,9 +327,12 @@ class DrugSubCategory {
     description = json['description'];
     categoryId = json['categoryId'];
   }
+  int? id;
+  String? description;
+  int? categoryId;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['description'] = description;
     data['categoryId'] = categoryId;

@@ -1,28 +1,27 @@
+import 'package:easypedv3/models/disease.dart';
+import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/services/drugs_service.dart';
+import 'package:easypedv3/widgets/base_page_layout.dart';
+import 'package:easypedv3/widgets/connection_error.dart';
+import 'package:easypedv3/widgets/loading.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/disease.dart';
-import '../../services/auth_service.dart';
-import '../../services/drugs_service.dart';
-import '../../widgets/base_page_layout.dart';
-import '../../widgets/connection_error.dart';
-import '../../widgets/loading.dart';
-
 class DiseasesListScreen extends StatefulWidget {
-  const DiseasesListScreen({Key? key}) : super(key: key);
+  const DiseasesListScreen({super.key});
 
   @override
   _DiseasesListScreenState createState() => _DiseasesListScreenState();
 }
 
 class _DiseasesListScreenState extends State<DiseasesListScreen> {
-  Widget appBarTitle = const Text("Doenças");
+  Widget appBarTitle = const Text('Doenças');
   Icon actionIcon = const Icon(Icons.search);
 
   final DrugService _drugService = DrugService();
   final AuthenticationService _authenticationService = AuthenticationService();
 
   Future<List<Disease>> fetchDiseases() async {
-    var ret = await _drugService
+    final ret = await _drugService
         .fetchDiseases(await _authenticationService.getUserToken());
     return ret;
   }
@@ -53,17 +52,16 @@ class _DiseasesListScreenState extends State<DiseasesListScreen> {
               body: BasePageLayout(children: [
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(2.0),
-                  scrollDirection: Axis.vertical,
+                  padding: const EdgeInsets.all(2),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Card(
                         child: ListTile(
-                      title: Text(snapshot.data![index].description ?? "",
+                      title: Text(snapshot.data![index].description ?? '',
                           style: Theme.of(context).textTheme.displaySmall),
                       onTap: () {
-                        var id = snapshot.data![index].id;
-                        Navigator.pushNamed(context, "/diseases/$id");
+                        final id = snapshot.data![index].id;
+                        Navigator.pushNamed(context, '/diseases/$id');
                         // Navigator.push(
                         //     context,
                         //     MaterialPageRoute(
@@ -77,7 +75,7 @@ class _DiseasesListScreenState extends State<DiseasesListScreen> {
               ]));
         } else {
           return const ScreenLoading(
-            title: "Doenças",
+            title: 'Doenças',
           );
         }
       },
@@ -98,7 +96,7 @@ class DiseasesSearchDelegate extends SearchDelegate<Disease> {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
-        close(context, Disease(id: -1, description: ""));
+        close(context, Disease(id: -1, description: ''));
       },
     );
   }
@@ -114,11 +112,11 @@ class DiseasesSearchDelegate extends SearchDelegate<Disease> {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(snapshot.data![index].description ?? "",
+                title: Text(snapshot.data![index].description ?? '',
                     style: Theme.of(context).textTheme.displaySmall),
                 onTap: () {
-                  var id = snapshot.data![index].id;
-                  Navigator.pushNamed(context, "/diseases/$id");
+                  final id = snapshot.data![index].id;
+                  Navigator.pushNamed(context, '/diseases/$id');
                   //close(context, snapshot.data![index]);
                 },
               );
@@ -138,7 +136,7 @@ class DiseasesSearchDelegate extends SearchDelegate<Disease> {
   }
 
   Future<List<Disease>> _search() async {
-    List<Disease> result = await _drugService.searchDiseases(
+    final result = await _drugService.searchDiseases(
         query, await _authService.getUserToken());
     return result;
   }

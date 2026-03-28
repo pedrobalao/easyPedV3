@@ -1,13 +1,4 @@
 class News {
-  int? id;
-  String? title;
-  String? description;
-  String? url;
-  String? expiringDate;
-  String? owner;
-  String? status;
-  String? coverUrl;
-  String? email;
 
   News(
       {this.id,
@@ -31,9 +22,18 @@ class News {
     coverUrl = json['coverUrl'];
     email = json['email'];
   }
+  int? id;
+  String? title;
+  String? description;
+  String? url;
+  String? expiringDate;
+  String? owner;
+  String? status;
+  String? coverUrl;
+  String? email;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['title'] = title;
     data['description'] = description;

@@ -12,16 +12,15 @@ class Error404Screen extends StatelessWidget {
             //fit: StackFit.expand,
             children: [
               Image.asset(
-                "assets/images/e404.png",
+                'assets/images/e404.png',
                 fit: BoxFit.none,
-                alignment: Alignment.center,
               ),
               TextButton(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/');
                 },
                 child: Text(
-                  "Voltar ao início".toUpperCase(),
+                  'Voltar ao início'.toUpperCase(),
                   style: const TextStyle(color: Color(0xFF2963C8)),
                 ),
               ),

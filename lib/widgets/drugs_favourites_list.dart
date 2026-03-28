@@ -1,8 +1,8 @@
+import 'package:easypedv3/models/drug.dart';
 import 'package:flutter/material.dart';
-import '../models/drug.dart';
 
 class DrugsFavouritesList extends StatelessWidget {
-  const DrugsFavouritesList({Key? key, required this.drugs}) : super(key: key);
+  const DrugsFavouritesList({required this.drugs, super.key});
 
   final List<Drug> drugs;
 
@@ -10,18 +10,18 @@ class DrugsFavouritesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.all(2),
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return Card(
             child: ListTile(
-          title: Text(drugs[index].name ?? "",
+          title: Text(drugs[index].name ?? '',
               style: Theme.of(context).textTheme.displaySmall),
-          subtitle: Text(drugs[index].subcategoryDescription ?? "",
+          subtitle: Text(drugs[index].subcategoryDescription ?? '',
               style: Theme.of(context).textTheme.bodyMedium),
           onTap: () {
-            var id = drugs[index].id;
-            Navigator.pushNamed(context, "/drugs/$id");
+            final id = drugs[index].id;
+            Navigator.pushNamed(context, '/drugs/$id');
           },
         ));
       },

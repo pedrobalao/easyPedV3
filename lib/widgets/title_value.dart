@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TitleValue extends StatelessWidget {
-  const TitleValue({Key? key, required this.title, this.value})
-      : super(key: key);
+  const TitleValue({required this.title, super.key, this.value});
 
   final String title;
   final String? value;
@@ -19,19 +18,16 @@ class TitleValue extends StatelessWidget {
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.titleLarge),
-              value != null
-                  ? Text(value!,
+              if (value != null) Text(value!,
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.bodyLarge)
-                  : Container(),
+                      style: Theme.of(context).textTheme.bodyLarge) else Container(),
             ]));
   }
 }
 
 class SubTitleValue extends StatelessWidget {
-  const SubTitleValue({Key? key, required this.title, this.value})
-      : super(key: key);
+  const SubTitleValue({required this.title, super.key, this.value});
 
   final String title;
   final String? value;
@@ -48,12 +44,10 @@ class SubTitleValue extends StatelessWidget {
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.displaySmall),
-              value != null
-                  ? Text(value!,
+              if (value != null) Text(value!,
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.bodyLarge)
-                  : Container(),
+                      style: Theme.of(context).textTheme.bodyLarge) else Container(),
             ]));
   }
 }
