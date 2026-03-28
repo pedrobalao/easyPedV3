@@ -107,7 +107,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
             Center(
                 child: IconButton(
               iconSize: 50,
-              icon: Icon(Icons.facebook,
+              icon: const Icon(Icons.facebook,
                   color: AppColors.facebookBlue, size: 50),
               onPressed: () {
                 _launchUrl(Uri.parse('https://facebook.com/easyped'));
