@@ -30,7 +30,7 @@ class MedicalCalculationsListScreen extends ConsumerWidget {
                       style: Theme.of(context).textTheme.displaySmall),
                   onTap: () {
                     final id = calculations[index].id;
-                    context.push('/medical-calculations/$id');
+                    context.push('/tools/medical-calculations/$id');
                   },
                 ));
               },
