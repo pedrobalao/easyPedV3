@@ -82,7 +82,7 @@ class Menu extends StatelessWidget {
     final header = UserAccountsDrawerHeader(
       // <-- SEE HERE
 
-      decoration: const BoxDecoration(color: Color(0xFF218838)),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary),
       accountName: Text(
         name, //user.displayName!,
         style: const TextStyle(

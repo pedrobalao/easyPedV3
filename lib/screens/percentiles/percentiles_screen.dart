@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easypedv3/models/percentile.dart';
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/utils/app_styles.dart';
 import 'package:easypedv3/utils/string_utils.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/date_picker_widget.dart';
@@ -161,9 +162,9 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
                 Padding(
                     padding: const EdgeInsets.all(10),
                     child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        fillColor: Color(0xFF2963C8),
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        fillColor: Theme.of(context).colorScheme.primary,
                         labelText: 'Sexo',
                       ),
                       isExpanded: true,
@@ -190,9 +191,9 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
                     child: TextFormField(
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          fillColor: Color(0xFF2963C8),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          fillColor: Theme.of(context).colorScheme.primary,
                           labelText: 'Peso (kg)',
                         ),
                         onChanged: (String? value) {
@@ -229,9 +230,9 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
                           FilteringTextInputFormatter.allow(
                               RegExp(r'^\d*\.?\d{0,3}')),
                         ],
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          fillColor: Color(0xFF2963C8),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          fillColor: Theme.of(context).colorScheme.primary,
                           labelText: 'Altura (cm)',
                         ),
                         onChanged: (String? value) {
@@ -271,7 +272,7 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
         clipBehavior: Clip.antiAlias,
         child: Column(children: [
           ListTile(
-            tileColor: const Color(0xFF28a745),
+            tileColor: Theme.of(context).colorScheme.secondary,
             title: Text('Percentil $type',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
@@ -291,12 +292,13 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
   }
 
   Widget bmiResult(context, BMIOutput output) {
+    final colorScheme = Theme.of(context).colorScheme;
     final (Color color, String resultStr) = switch (output.result) {
-      'underweight' => (const Color(0xFFffc107), 'Abaixo do peso'),
-      'healthy weight' => (const Color(0xFF28a745), 'Peso saudável'),
-      'overweight' => (const Color(0xFFffc107), 'Acima do peso'),
-      'obesity' => (const Color(0xFF651F06), 'Obesidade'),
-      _ => (const Color(0xFF28a745), 'Indefinido'),
+      'underweight' => (AppColors.warningColor, 'Abaixo do peso'),
+      'healthy weight' => (colorScheme.secondary, 'Peso saudável'),
+      'overweight' => (AppColors.warningColor, 'Acima do peso'),
+      'obesity' => (colorScheme.error, 'Obesidade'),
+      _ => (colorScheme.secondary, 'Indefinido'),
     };
 
     return Card(
@@ -304,7 +306,7 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
         clipBehavior: Clip.antiAlias,
         child: Column(children: [
           ListTile(
-            tileColor: const Color(0xFF28a745),
+            tileColor: Theme.of(context).colorScheme.secondary,
             title: Text('IMC',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,

@@ -118,7 +118,7 @@ class CalculationState extends ConsumerState<CalculationWidget> {
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        fillColor: const Color(0xFF2963C8),
+        fillColor: Theme.of(context).colorScheme.primary,
         labelText: '${variable.description!} (${variable.idUnit!})',
       ),
       onChanged: (String? value) {
@@ -153,7 +153,7 @@ class CalculationState extends ConsumerState<CalculationWidget> {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        fillColor: const Color(0xFF2963C8),
+        fillColor: Theme.of(context).colorScheme.primary,
         labelText: '${variable.description!} (${variable.idUnit!})',
       ),
       isExpanded: true,
@@ -199,7 +199,7 @@ class CalculationState extends ConsumerState<CalculationWidget> {
         clipBehavior: Clip.antiAlias,
         child: Column(children: [
           ListTile(
-            tileColor: const Color(0xFF28a745),
+            tileColor: Theme.of(context).colorScheme.secondary,
             title: Text('Resultado',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,

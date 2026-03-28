@@ -83,7 +83,7 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
       // ],
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        fillColor: const Color(0xFF2963C8),
+        fillColor: Theme.of(context).colorScheme.primary,
         labelText: '${variable.description!} (${variable.idUnit!})',
       ),
       onChanged: (String? value) {
@@ -162,7 +162,7 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
           clipBehavior: Clip.antiAlias,
           child: Column(children: [
             ListTile(
-              tileColor: const Color(0xFF28a745),
+              tileColor: Theme.of(context).colorScheme.secondary,
               title: Text(result.description ?? '',
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,

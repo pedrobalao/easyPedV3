@@ -47,47 +47,44 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const primaryColor = Color(0xFF2963C8);
-    const secondaryColor = Color(0xFF218838);
-
-    const negativeColor = Color(0xFF651F06);
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF2963C8),
+      secondary: const Color(0xFF28a745),
+      onSecondary: Colors.white,
+      error: const Color(0xFF651F06),
+    );
 
     final themeData = ThemeData(
-      // Define the default brightness and colors.
-      brightness: Brightness.light,
-      primaryColor: primaryColor,
-
-      // Define the default font family.
+      useMaterial3: true,
+      colorScheme: colorScheme,
       fontFamily: 'Montserrat',
-
-      // Define the default `TextTheme`. Use this to specify the default
-      // text styling for headlines, titles, bodies of text, and more.
       textTheme: TextTheme(
         displayLarge: GoogleFonts.openSans(fontSize: 42),
-        displayMedium: GoogleFonts.openSans(fontSize: 42, color: primaryColor),
-        displaySmall: GoogleFonts.openSans(fontSize: 18, color: primaryColor),
-        titleLarge: GoogleFonts.openSans(fontSize: 22, color: primaryColor),
+        displayMedium:
+            GoogleFonts.openSans(fontSize: 42, color: colorScheme.primary),
+        displaySmall:
+            GoogleFonts.openSans(fontSize: 18, color: colorScheme.primary),
+        titleLarge:
+            GoogleFonts.openSans(fontSize: 22, color: colorScheme.primary),
         headlineMedium: GoogleFonts.openSans(
             fontSize: 18,
-            color: Colors.white,
-            backgroundColor: const Color(0xFF28a745)),
+            color: colorScheme.onSecondary,
+            backgroundColor: colorScheme.secondary),
         headlineSmall:
-            GoogleFonts.openSans(fontSize: 32, color: secondaryColor),
+            GoogleFonts.openSans(fontSize: 32, color: colorScheme.secondary),
         bodyLarge: GoogleFonts.openSans(fontSize: 14),
-        bodyMedium: GoogleFonts.openSans(fontSize: 12, color: secondaryColor),
-        bodySmall: GoogleFonts.openSans(fontSize: 14, color: primaryColor),
+        bodyMedium:
+            GoogleFonts.openSans(fontSize: 12, color: colorScheme.secondary),
+        bodySmall:
+            GoogleFonts.openSans(fontSize: 14, color: colorScheme.primary),
       ),
       cardTheme: const CardTheme(clipBehavior: Clip.none),
       listTileTheme: const ListTileThemeData(),
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: primaryColor,
-        // ···
-        error: negativeColor,
-      ),
       appBarTheme: AppBarTheme(
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
-        titleTextStyle: GoogleFonts.openSans(fontSize: 20, color: Colors.white),
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        titleTextStyle:
+            GoogleFonts.openSans(fontSize: 20, color: colorScheme.onPrimary),
       ),
     );
 
