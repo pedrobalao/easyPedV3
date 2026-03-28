@@ -97,7 +97,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             ListTile(
-              tileColor: const Color(0xFF28a745),
+              tileColor: Theme.of(context).colorScheme.primary,
               title: Text('Segue-nos nas redes sociais',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -115,7 +115,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
             )),
             const Gap(5),
             ListTile(
-              tileColor: const Color(0xFF28a745),
+              tileColor: Theme.of(context).colorScheme.primary,
               title: Text('Autores',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -123,7 +123,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
             ),
             Padding(padding: const EdgeInsets.all(5), child: authorsWdgt()),
             ListTile(
-              tileColor: const Color(0xFF28a745),
+              tileColor: Theme.of(context).colorScheme.primary,
               title: Text('Isenção de Responsabilidade',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -138,7 +138,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                   const Gap(1),
                 ])),
             ListTile(
-              tileColor: const Color(0xFF28a745),
+              tileColor: Theme.of(context).colorScheme.primary,
               title: Text('Bibliografia essencial consultada',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,

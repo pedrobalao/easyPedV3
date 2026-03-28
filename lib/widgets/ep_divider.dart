@@ -5,8 +5,8 @@ class EpDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Divider(
-      color: Color(0xFF2963C8),
+    return Divider(
+      color: Theme.of(context).colorScheme.primary,
       thickness: 1,
       endIndent: 0,
     );

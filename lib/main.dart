@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:easypedv3/firebase_options.dart';
+import 'package:easypedv3/providers/theme_provider.dart';
 import 'package:easypedv3/router.dart';
 import 'package:easypedv3/services/app_info_service.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,9 +21,10 @@ void main() async {
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // Initialize Hive for local caching
+    // Initialize Hive for local caching and preferences
     await Hive.initFlutter();
     await Hive.openBox('cache_timestamps');
+    await Hive.openBox('theme_preferences');
 
     await AppInfoService.initiateAppInfoService();
 
@@ -52,16 +54,12 @@ class MyApp extends ConsumerWidget {
 
     const negativeColor = Color(0xFF651F06);
 
-    final themeData = ThemeData(
-      // Define the default brightness and colors.
+    const accentColor = Color(0xFF28a745);
+
+    final lightTheme = ThemeData(
       brightness: Brightness.light,
       primaryColor: primaryColor,
-
-      // Define the default font family.
       fontFamily: 'Montserrat',
-
-      // Define the default `TextTheme`. Use this to specify the default
-      // text styling for headlines, titles, bodies of text, and more.
       textTheme: TextTheme(
         displayLarge: GoogleFonts.openSans(fontSize: 42),
         displayMedium: GoogleFonts.openSans(fontSize: 42, color: primaryColor),
@@ -70,7 +68,7 @@ class MyApp extends ConsumerWidget {
         headlineMedium: GoogleFonts.openSans(
             fontSize: 18,
             color: Colors.white,
-            backgroundColor: const Color(0xFF28a745)),
+            backgroundColor: accentColor),
         headlineSmall:
             GoogleFonts.openSans(fontSize: 32, color: secondaryColor),
         bodyLarge: GoogleFonts.openSans(fontSize: 14),
@@ -81,7 +79,39 @@ class MyApp extends ConsumerWidget {
       listTileTheme: const ListTileThemeData(),
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryColor,
-        // ···
+        error: negativeColor,
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
+        titleTextStyle: GoogleFonts.openSans(fontSize: 20, color: Colors.white),
+      ),
+    );
+
+    final darkTheme = ThemeData(
+      brightness: Brightness.dark,
+      primaryColor: primaryColor,
+      fontFamily: 'Montserrat',
+      textTheme: TextTheme(
+        displayLarge: GoogleFonts.openSans(fontSize: 42),
+        displayMedium: GoogleFonts.openSans(fontSize: 42, color: primaryColor),
+        displaySmall: GoogleFonts.openSans(fontSize: 18, color: primaryColor),
+        titleLarge: GoogleFonts.openSans(fontSize: 22, color: primaryColor),
+        headlineMedium: GoogleFonts.openSans(
+            fontSize: 18,
+            color: Colors.white,
+            backgroundColor: accentColor),
+        headlineSmall:
+            GoogleFonts.openSans(fontSize: 32, color: secondaryColor),
+        bodyLarge: GoogleFonts.openSans(fontSize: 14),
+        bodyMedium: GoogleFonts.openSans(fontSize: 12, color: secondaryColor),
+        bodySmall: GoogleFonts.openSans(fontSize: 14, color: primaryColor),
+      ),
+      cardTheme: const CardTheme(clipBehavior: Clip.none),
+      listTileTheme: const ListTileThemeData(),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primaryColor,
+        brightness: Brightness.dark,
         error: negativeColor,
       ),
       appBarTheme: AppBarTheme(
@@ -92,13 +122,16 @@ class MyApp extends ConsumerWidget {
     );
 
     final router = ref.watch(routerProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: MaterialApp.router(
           routerConfig: router,
           debugShowCheckedModeBanner: false,
-          theme: themeData,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: themeMode,
         ));
   }
 }
