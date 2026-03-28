@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easypedv3/models/percentile.dart';
-import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/utils/string_utils.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
@@ -47,8 +47,8 @@ class PercentileState extends State<PercentilesWidget> {
   Timer? _debounce;
   static const int nullNumberVal = -99923143898;
 
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authenticationService = AuthenticationService();
+  final PercentileRepository _percentileRepository =
+      PercentileRepository(drugService: DrugService());
 
   DateTime birthdate = DateTime.now();
   String gender = 'Feminino';
@@ -79,7 +79,6 @@ class PercentileState extends State<PercentilesWidget> {
           _loading = true;
         });
         try {
-          final authToken = await _authenticationService.getUserToken();
           final req = <Future>[];
 
           final stdGender = gender == 'Masculino' ? 'male' : 'female';
@@ -89,8 +88,8 @@ class PercentileState extends State<PercentilesWidget> {
                 gender: stdGender,
                 birthdate: birthdate.toUtc().toIso8601String(),
                 value: weight);
-            req.add(_drugService
-                .executeWeightPercentile(wInput, authToken)
+            req.add(_percentileRepository
+                .calculateWeightPercentile(wInput)
                 .then((value) => _weightPercentileResult = value));
           }
 
@@ -99,8 +98,8 @@ class PercentileState extends State<PercentilesWidget> {
                 gender: stdGender,
                 birthdate: birthdate.toUtc().toIso8601String(),
                 value: length);
-            req.add(_drugService
-                .executeLengthPercentile(lInput, authToken)
+            req.add(_percentileRepository
+                .calculateLengthPercentile(lInput)
                 .then((value) => _lengthPercentileResult = value));
           }
 
@@ -110,8 +109,8 @@ class PercentileState extends State<PercentilesWidget> {
                 birthdate: birthdate.toUtc().toIso8601String(),
                 length: length,
                 weight: weight);
-            req.add(_drugService
-                .executeBMIPercentile(bmiInput, authToken)
+            req.add(_percentileRepository
+                .calculateBMIPercentile(bmiInput)
                 .then((value) => _bmiPercentileResult = value));
           }
 

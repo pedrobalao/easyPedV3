@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Error404Screen extends StatelessWidget {
   const Error404Screen({super.key});
@@ -17,7 +18,7 @@ class Error404Screen extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/');
+                  context.go('/');
                 },
                 child: Text(
                   'Voltar ao início'.toUpperCase(),

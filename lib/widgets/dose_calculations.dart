@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easypedv3/models/drug.dart';
-import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/utils/string_utils.dart';
 import 'package:easypedv3/widgets/loading.dart';
@@ -20,15 +20,10 @@ class DoseCalculations extends StatefulWidget {
 // Create a corresponding State class.
 // This class holds data related to the form.
 class DoseCalculationsState extends State<DoseCalculations> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
   Map mapOfVariables = {};
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authenticationService = AuthenticationService();
+  final DrugRepository _drugRepository =
+      DrugRepository(drugService: DrugService());
   List<DoseCalculationResult> _doseCalculationsResults = [];
   bool _loading = false;
 
@@ -49,7 +44,6 @@ class DoseCalculationsState extends State<DoseCalculations> {
 
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      // do something with query
       if (kDebugMode) {
         print('Running debounce $mapOfVariables');
       }
@@ -62,10 +56,8 @@ class DoseCalculationsState extends State<DoseCalculations> {
         if (kDebugMode) {
           print('Variables: $mapOfVariables');
         }
-        final doseCalculationsResults = await _drugService.doseCalculation(
-            widget.drug.id!,
-            mapOfVariables,
-            await _authenticationService.getUserToken());
+        final doseCalculationsResults = await _drugRepository.calculateDose(
+            widget.drug.id!, mapOfVariables);
 
         FirebaseAnalytics.instance.logEvent(
           name: 'drug_dose_calculation',

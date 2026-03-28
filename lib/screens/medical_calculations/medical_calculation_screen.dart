@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/models/medical_calculation.dart';
-import 'package:easypedv3/services/auth_service.dart';
+import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/utils/string_utils.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
@@ -10,74 +11,50 @@ import 'package:easypedv3/widgets/loading.dart';
 import 'package:easypedv3/widgets/title_value.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MedicalCalculationScreen extends StatefulWidget {
+class MedicalCalculationScreen extends ConsumerWidget {
   const MedicalCalculationScreen(
       {required this.medicalCalculationId, super.key});
 
   final int medicalCalculationId;
-  @override
-  _MedicalCalculationScreenState createState() =>
-      _MedicalCalculationScreenState();
-}
 
-class _MedicalCalculationScreenState extends State<MedicalCalculationScreen> {
-  Icon actionIcon = const Icon(Icons.favorite);
   @override
-  Widget build(BuildContext context) {
-    return MedicalCalculationWidget(
-      medicalCalculationId: widget.medicalCalculationId,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final calcAsync = ref.watch(calculatorDetailProvider(medicalCalculationId));
+
+    return calcAsync.when(
+      loading: () => const ScreenLoading(),
+      error: (_, __) => const ConnectionError(),
+      data: (medicalCalculation) {
+        FirebaseAnalytics.instance.logViewItem(items: [
+          AnalyticsEventItem(
+              itemCategory: 'medical_calculation',
+              itemId: medicalCalculation.id.toString(),
+              itemName: medicalCalculation.description)
+        ]);
+        return Scaffold(
+            appBar: AppBar(
+                centerTitle: true,
+                title: Text(medicalCalculation.description ?? '')),
+            body: SingleChildScrollView(
+                padding: const EdgeInsets.all(5.5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TitleValue(
+                        title: 'Cálculo',
+                        value: medicalCalculation.description ?? ''),
+                    CalculationWidget(
+                        medicalCalculation: medicalCalculation),
+                    TitleValue(
+                        title: 'Observações',
+                        value: medicalCalculation.observation ??
+                            'Sem informação'),
+                  ],
+                )));
+      },
     );
-  }
-}
-
-class MedicalCalculationWidget extends StatelessWidget {
-  MedicalCalculationWidget({required this.medicalCalculationId, super.key});
-
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authService = AuthenticationService();
-  final int medicalCalculationId;
-
-  Future<MedicalCalculation> fetchItem(id) async => _drugService
-      .fetchMedicalCalculation(id, await _authService.getUserToken());
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<MedicalCalculation>(
-        future: fetchItem(medicalCalculationId),
-        builder: (context, AsyncSnapshot<MedicalCalculation> snapshot) {
-          if (snapshot.hasError) {
-            return const ConnectionError();
-          } else if (snapshot.hasData) {
-            FirebaseAnalytics.instance.logViewItem(items: [
-              AnalyticsEventItem(
-                  itemCategory: 'medical_calculation',
-                  itemId: snapshot.data?.id.toString(),
-                  itemName: snapshot.data?.description)
-            ]);
-            return Scaffold(
-                appBar: AppBar(
-                    centerTitle: true,
-                    title: Text(snapshot.data?.description ?? '')),
-                body: SingleChildScrollView(
-                    padding: const EdgeInsets.all(5.5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TitleValue(
-                            title: 'Cálculo',
-                            value: snapshot.data?.description ?? ''),
-                        CalculationWidget(medicalCalculation: snapshot.data!),
-                        TitleValue(
-                            title: 'Observações',
-                            value:
-                                snapshot.data?.observation ?? 'Sem informação'),
-                      ],
-                    )));
-          } else {
-            return const ScreenLoading();
-          }
-        });
   }
 }
 
@@ -99,8 +76,8 @@ class CalculationState extends State<CalculationWidget> {
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
   Map<String, dynamic> mapOfVariables = {};
-  final DrugService _drugService = DrugService();
-  final AuthenticationService _authenticationService = AuthenticationService();
+  final _calculatorRepository =
+      CalculatorRepository(drugService: DrugService());
   CalculationOutput? _calculationOutput;
   bool _loading = false;
 
@@ -128,10 +105,9 @@ class CalculationState extends State<CalculationWidget> {
           input.add(CalculationInput(variable: key, value: value));
         });
 
-        final result = await _drugService.executeMedicalCalculation(
+        final result = await _calculatorRepository.executeMedicalCalculation(
             widget.medicalCalculation.id!,
-            input,
-            await _authenticationService.getUserToken());
+            input);
 
         FirebaseAnalytics.instance.logEvent(
           name: 'medical_calculation',

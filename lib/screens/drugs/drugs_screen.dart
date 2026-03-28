@@ -1,6 +1,8 @@
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/screens/drugs/drug_screen.dart';
+import 'package:easypedv3/services/drugs_service.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/drug_categories_list.dart';
 import 'package:easypedv3/widgets/drugs_favourites_list.dart';
