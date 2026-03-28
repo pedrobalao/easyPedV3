@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:easypedv3/models/congress.dart';
 import 'package:easypedv3/models/disease.dart';
 import 'package:easypedv3/models/drug.dart';
@@ -7,562 +8,349 @@ import 'package:easypedv3/models/medical_calculation.dart';
 import 'package:easypedv3/models/news.dart';
 import 'package:easypedv3/models/percentile.dart';
 import 'package:easypedv3/models/surgery_referral.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:easypedv3/services/api_client.dart';
 
 class DrugService {
-  List<Drug> listDrugFromJson(String str) =>
-      List<Drug>.from(json.decode(str).map((x) => Drug.fromJson(x)));
+  DrugService({Dio? dio}) : _dio = dio ?? createApiClient();
 
-  final String? apiBaseUrl = dotenv.env['API_BASE_URL'];
+  final Dio _dio;
 
-  Future<List<Drug>> fetchFavourites(String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
+  // ── Drug helpers ──────────────────────────────────────────────────
 
-    final response = await http.get(
-        Uri.parse('$apiBaseUrl/users/me/favourite-drugs'),
-        headers: requestHeaders);
+  List<Drug> _listDrugFromJson(dynamic data) {
+    final list = data is String ? json.decode(data) as List : data as List;
+    return list.map((x) => Drug.fromJson(x as Map<String, dynamic>)).toList();
+  }
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listDrugFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to search Drug');
+  // ── Favourites ────────────────────────────────────────────────────
+
+  Future<List<Drug>> fetchFavourites() async {
+    try {
+      final response = await _dio.get('/users/me/favourite-drugs');
+      return _listDrugFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  Future<bool> fetchIsFavourite(int drugId, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final responseFav = await http.get(
-        Uri.parse('$apiBaseUrl/users/me/favourite-drugs/$drugId'),
-        headers: requestHeaders);
-    if (responseFav.statusCode >= 200 && responseFav.statusCode < 300) {
-      return true;
-    } else {
+  Future<bool> fetchIsFavourite(int drugId) async {
+    try {
+      final response =
+          await _dio.get('/users/me/favourite-drugs/$drugId');
+      return response.statusCode! >= 200 && response.statusCode! < 300;
+    } on DioException {
       return false;
     }
   }
 
-  Future<bool> addFavourite(int drugId, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final responseFav =
-        await http.post(Uri.parse('$apiBaseUrl/users/me/favourite-drugs'),
-            headers: requestHeaders,
-            body: jsonEncode(<String, int>{
-              'drugId': drugId,
-            }));
-
-    if (responseFav.statusCode >= 200 && responseFav.statusCode < 300) {
-      return true;
-    } else {
+  Future<bool> addFavourite(int drugId) async {
+    try {
+      final response = await _dio.post(
+        '/users/me/favourite-drugs',
+        data: {'drugId': drugId},
+      );
+      return response.statusCode! >= 200 && response.statusCode! < 300;
+    } on DioException {
       return false;
     }
   }
 
-  Future<bool> deleteFavourite(int drugId, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final responseFav = await http.delete(
-        Uri.parse('$apiBaseUrl/users/me/favourite-drugs/$drugId'),
-        headers: requestHeaders);
-
-    if (responseFav.statusCode >= 200 && responseFav.statusCode < 300) {
-      return true;
-    } else {
+  Future<bool> deleteFavourite(int drugId) async {
+    try {
+      final response =
+          await _dio.delete('/users/me/favourite-drugs/$drugId');
+      return response.statusCode! >= 200 && response.statusCode! < 300;
+    } on DioException {
       return false;
     }
   }
 
-  Future<Drug> fetchDrug(int drugId, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
+  // ── Drugs ─────────────────────────────────────────────────────────
 
-    final response = await http.get(Uri.parse('$apiBaseUrl/drugs/$drugId'),
-        headers: requestHeaders);
+  Future<Drug> fetchDrug(int drugId) async {
+    try {
+      final response = await _dio.get('/drugs/$drugId');
+      final drug = Drug.fromJson(response.data as Map<String, dynamic>);
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      final drug = Drug.fromJson(jsonDecode(response.body));
-
-      final responseFav = await http.get(
-          Uri.parse('$apiBaseUrl/users/me/favourite-drugs/$drugId'),
-          headers: requestHeaders);
-      if (responseFav.statusCode >= 200 && responseFav.statusCode < 300) {
-        drug.isFavourite = true;
-      } else {
-        drug.isFavourite = false;
-      }
+      // Check favourite status
+      drug.isFavourite = await fetchIsFavourite(drugId);
 
       return drug;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to search Drug');
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  Future<List<Drug>> searchDrug(String searchString, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final response = await http.get(
-        Uri.parse('$apiBaseUrl/drugs?searchtoken=$searchString'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listDrugFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to search Drug');
+  Future<List<Drug>> searchDrug(String searchString) async {
+    try {
+      final response = await _dio.get(
+        '/drugs',
+        queryParameters: {'searchtoken': searchString},
+      );
+      return _listDrugFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  List<DoseCalculationResult> listDoseCalculationResultFromJson(String str) =>
-      List<DoseCalculationResult>.from(
-          json.decode(str).map((x) => DoseCalculationResult.fromJson(x)));
+  // ── Dose calculation ──────────────────────────────────────────────
+
+  List<DoseCalculationResult> _listDoseCalcFromJson(dynamic data) {
+    final list = data is String ? json.decode(data) as List : data as List;
+    return list
+        .map((x) => DoseCalculationResult.fromJson(x as Map<String, dynamic>))
+        .toList();
+  }
 
   Future<List<DoseCalculationResult>> doseCalculation(
-      int drugId, Map<dynamic, dynamic> data, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
+    int drugId,
+    Map<dynamic, dynamic> data,
+  ) async {
     final calInput = <CalculationInput>[];
-
     data.forEach((key, value) {
-      calInput.add(CalculationInput(variable: key, value: value));
+      calInput.add(CalculationInput(variable: key as String?, value: value));
     });
 
-    final response = await http.post(
-        Uri.parse('$apiBaseUrl/drugs/$drugId/calculations'),
-        headers: requestHeaders,
-        body: jsonEncode(calInput));
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      if (kDebugMode) {
-        for (final element in calInput) {
-          print('Variable: ${element.variable} ${element.value}');
-        }
-        print('response: ${response.body}');
-      }
-
-      return listDoseCalculationResultFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to search Drug');
+    try {
+      final response = await _dio.post(
+        '/drugs/$drugId/calculations',
+        data: calInput.map((e) => e.toJson()).toList(),
+      );
+      return _listDoseCalcFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  List<DrugCategory> listCatorgoriesFromJson(String str) =>
-      List<DrugCategory>.from(
-          json.decode(str).map((x) => DrugCategory.fromJson(x)));
+  // ── Categories ────────────────────────────────────────────────────
 
-  Future<List<DrugCategory>> fetchCategories(String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
+  List<DrugCategory> _listCategoriesFromJson(dynamic data) {
+    final list = data is String ? json.decode(data) as List : data as List;
+    return list
+        .map((x) => DrugCategory.fromJson(x as Map<String, dynamic>))
+        .toList();
+  }
 
-    final response = await http.get(Uri.parse('$apiBaseUrl/categories'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listCatorgoriesFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to fetchCategories');
+  Future<List<DrugCategory>> fetchCategories() async {
+    try {
+      final response = await _dio.get('/categories');
+      return _listCategoriesFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  List<DrugSubCategory> listDrugSubCategoryFromJson(String str) =>
-      List<DrugSubCategory>.from(
-          json.decode(str).map((x) => DrugSubCategory.fromJson(x)));
+  // ── Sub-Categories ────────────────────────────────────────────────
 
-  Future<List<DrugSubCategory>> fetchSubCategories(
-      int categoryId, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
+  List<DrugSubCategory> _listSubCategoriesFromJson(dynamic data) {
+    final list = data is String ? json.decode(data) as List : data as List;
+    return list
+        .map((x) => DrugSubCategory.fromJson(x as Map<String, dynamic>))
+        .toList();
+  }
 
-    final response = await http.get(
-        Uri.parse('$apiBaseUrl/categories/$categoryId/sub-categories'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listDrugSubCategoryFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to fetchCategories');
+  Future<List<DrugSubCategory>> fetchSubCategories(int categoryId) async {
+    try {
+      final response =
+          await _dio.get('/categories/$categoryId/sub-categories');
+      return _listSubCategoriesFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
   Future<List<Drug>> fetchDrugsBySubCategory(
-      int categoryId, int subCategoryId, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final response = await http.get(
-        Uri.parse(
-            '$apiBaseUrl/categories/$categoryId/sub-categories/$subCategoryId/drugs'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listDrugFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to fetchCategories');
+    int categoryId,
+    int subCategoryId,
+  ) async {
+    try {
+      final response = await _dio.get(
+        '/categories/$categoryId/sub-categories/$subCategoryId/drugs',
+      );
+      return _listDrugFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  List<SurgeryReferral> listSurgeryReferralFromJson(String str) =>
-      List<SurgeryReferral>.from(
-          json.decode(str).map((x) => SurgeryReferral.fromJson(x)));
+  // ── Surgery referral ──────────────────────────────────────────────
 
-  Future<List<SurgeryReferral>> fetchSurgeriesReferral(String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
+  List<SurgeryReferral> _listSurgeryReferralFromJson(dynamic data) {
+    final list = data is String ? json.decode(data) as List : data as List;
+    return list
+        .map((x) => SurgeryReferral.fromJson(x as Map<String, dynamic>))
+        .toList();
+  }
 
-    final response = await http.get(Uri.parse('$apiBaseUrl/surgeries-referral'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listSurgeryReferralFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to fetchSurgeriesReferral');
+  Future<List<SurgeryReferral>> fetchSurgeriesReferral() async {
+    try {
+      final response = await _dio.get('/surgeries-referral');
+      return _listSurgeryReferralFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  List<Disease> listDiseaseFromJson(String str) =>
-      List<Disease>.from(json.decode(str).map((x) => Disease.fromJson(x)));
+  // ── Diseases ──────────────────────────────────────────────────────
 
-  Future<List<Disease>> fetchDiseases(String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
+  List<Disease> _listDiseaseFromJson(dynamic data) {
+    final list = data is String ? json.decode(data) as List : data as List;
+    return list
+        .map((x) => Disease.fromJson(x as Map<String, dynamic>))
+        .toList();
+  }
 
-    final response = await http.get(Uri.parse('$apiBaseUrl/diseases'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listDiseaseFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to fetchDiseases');
+  Future<List<Disease>> fetchDiseases() async {
+    try {
+      final response = await _dio.get('/diseases');
+      return _listDiseaseFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  Future<List<Disease>> searchDiseases(
-      String searchStr, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final response = await http.get(
-        Uri.parse('$apiBaseUrl/diseases/?search=$searchStr'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listDiseaseFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to fetchDiseases');
+  Future<List<Disease>> searchDiseases(String searchStr) async {
+    try {
+      final response = await _dio.get(
+        '/diseases/',
+        queryParameters: {'search': searchStr},
+      );
+      return _listDiseaseFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  Future<Disease> fetchDisease(int id, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final response = await http.get(Uri.parse('$apiBaseUrl/diseases/$id'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      final disease = Disease.fromJson(jsonDecode(response.body));
-
-      return disease;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to search disease $id');
+  Future<Disease> fetchDisease(int id) async {
+    try {
+      final response = await _dio.get('/diseases/$id');
+      return Disease.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  //medical calculations
-  List<MedicalCalculation> listMedicalCalculationsFromJson(String str) =>
-      List<MedicalCalculation>.from(
-          json.decode(str).map((x) => MedicalCalculation.fromJson(x)));
+  // ── Medical calculations ──────────────────────────────────────────
 
-  Future<MedicalCalculation> fetchMedicalCalculation(
-      int id, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
+  List<MedicalCalculation> _listMedCalcFromJson(dynamic data) {
+    final list = data is String ? json.decode(data) as List : data as List;
+    return list
+        .map((x) => MedicalCalculation.fromJson(x as Map<String, dynamic>))
+        .toList();
+  }
 
-    final response = await http.get(
-        Uri.parse('$apiBaseUrl/medical-calculations/$id'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      final ret = MedicalCalculation.fromJson(jsonDecode(response.body));
-
-      return ret;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to search disease $id');
+  Future<MedicalCalculation> fetchMedicalCalculation(int id) async {
+    try {
+      final response = await _dio.get('/medical-calculations/$id');
+      return MedicalCalculation.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  Future<List<MedicalCalculation>> fetchMedicalCalculations(
-      String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final response = await http.get(
-        Uri.parse('$apiBaseUrl/medical-calculations'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listMedicalCalculationsFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to fetchDiseases');
+  Future<List<MedicalCalculation>> fetchMedicalCalculations() async {
+    try {
+      final response = await _dio.get('/medical-calculations');
+      return _listMedCalcFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
   Future<CalculationOutput> executeMedicalCalculation(
-      int id, List<CalculationInput> data, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final response = await http.post(
-        Uri.parse('$apiBaseUrl/medical-calculations/$id/calculations'),
-        headers: requestHeaders,
-        body: json.encode(data));
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      final ret = CalculationOutput.fromJson(jsonDecode(response.body));
-
-      return ret;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception(
-          'Failed to execute calculation of MedicalCalculation $id');
+    int id,
+    List<CalculationInput> data,
+  ) async {
+    try {
+      final response = await _dio.post(
+        '/medical-calculations/$id/calculations',
+        data: data.map((e) => e.toJson()).toList(),
+      );
+      return CalculationOutput.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
+  // ── Percentiles ───────────────────────────────────────────────────
+
   Future<PercentileOutput> executeWeightPercentile(
-      PercentileInput data, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final body = json.encode(data);
-    final response = await http.post(
-        Uri.parse('$apiBaseUrl/percentiles/weight'),
-        headers: requestHeaders,
-        body: body);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      final ret = PercentileOutput.fromJson(jsonDecode(response.body));
-
-      return ret;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to execute weight percentile');
+    PercentileInput data,
+  ) async {
+    try {
+      final response = await _dio.post(
+        '/percentiles/weight',
+        data: data.toJson(),
+      );
+      return PercentileOutput.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
   Future<PercentileOutput> executeLengthPercentile(
-      PercentileInput data, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final response = await http.post(
-        Uri.parse('$apiBaseUrl/percentiles/length'),
-        headers: requestHeaders,
-        body: json.encode(data));
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      final ret = PercentileOutput.fromJson(jsonDecode(response.body));
-
-      return ret;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to execute length percentile');
+    PercentileInput data,
+  ) async {
+    try {
+      final response = await _dio.post(
+        '/percentiles/length',
+        data: data.toJson(),
+      );
+      return PercentileOutput.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  Future<BMIOutput> executeBMIPercentile(
-      BMIInput data, String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final response = await http.post(Uri.parse('$apiBaseUrl/percentiles/bmi'),
-        headers: requestHeaders, body: json.encode(data));
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      final ret = BMIOutput.fromJson(jsonDecode(response.body));
-
-      return ret;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to execute bmi percentile');
+  Future<BMIOutput> executeBMIPercentile(BMIInput data) async {
+    try {
+      final response = await _dio.post(
+        '/percentiles/bmi',
+        data: data.toJson(),
+      );
+      return BMIOutput.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  List<Congress> listCongressesFromJson(String str) =>
-      List<Congress>.from(json.decode(str).map((x) => Congress.fromJson(x)));
+  // ── Congresses & News ─────────────────────────────────────────────
 
-  Future<List<Congress>> fetchCongresses(String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
+  List<Congress> _listCongressesFromJson(dynamic data) {
+    final list = data is String ? json.decode(data) as List : data as List;
+    return list
+        .map((x) => Congress.fromJson(x as Map<String, dynamic>))
+        .toList();
+  }
 
-    final response = await http.get(Uri.parse('$apiBaseUrl/congresses'),
-        headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listCongressesFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to fetchCongresses');
+  Future<List<Congress>> fetchCongresses() async {
+    try {
+      final response = await _dio.get('/congresses');
+      return _listCongressesFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 
-  List<News> listNewsFromJson(String str) =>
-      List<News>.from(json.decode(str).map((x) => News.fromJson(x)));
+  List<News> _listNewsFromJson(dynamic data) {
+    final list = data is String ? json.decode(data) as List : data as List;
+    return list.map((x) => News.fromJson(x as Map<String, dynamic>)).toList();
+  }
 
-  Future<List<News>> fetchNews(String authToken) async {
-    final requestHeaders = <String, String>{
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': authToken
-    };
-
-    final response =
-        await http.get(Uri.parse('$apiBaseUrl/news'), headers: requestHeaders);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return listNewsFromJson(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to fetchNews');
+  Future<List<News>> fetchNews() async {
+    try {
+      final response = await _dio.get('/news');
+      return _listNewsFromJson(response.data);
+    } on DioException catch (e) {
+      throwTypedException(e);
     }
   }
 }
