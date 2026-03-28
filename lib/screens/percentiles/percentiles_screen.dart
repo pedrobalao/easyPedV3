@@ -10,7 +10,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class PercentilesScreen extends StatefulWidget {
   const PercentilesScreen({super.key});
@@ -154,36 +153,11 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
                             DateTime.now().subtract(const Duration(days: 6570)),
                         maxDate: DateTime.now(),
                         onDateSelected: (date) {
-                          final formattedDate =
-                              DateFormat('yyyy-MM-dd').format(birthdate);
-                          print('Birthdate:$formattedDate');
                           setState(() {
                             birthdate = date;
                             _onVariablesValueChange();
                           });
                         })),
-                //     DateTimePicker(
-                //       dateMask: 'yyyy-MM-dd',
-                //       initialValue: birthdate.toString(),
-                //       firstDate:
-                //           DateTime.now().subtract(const Duration(days: 6574)),
-                //       lastDate: DateTime.now(),
-                //       dateLabelText: 'Data de Nascimento',
-                //       onChanged: (String val) {
-                //         setState(() {
-                //           birthdate = DateTime.parse(val);
-                //           _onVariablesValueChange();
-                //         });
-                //       },
-                //       validator: (val) {
-                //         if (val == null) {
-                //           return "Campo obrigatório";
-                //         }
-                //         return null;
-                //       },
-                //       onSaved: (val) => {},
-                //     )
-                //     ),
                 Padding(
                     padding: const EdgeInsets.all(10),
                     child: DropdownButtonFormField<String>(
@@ -317,25 +291,13 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
   }
 
   Widget bmiResult(context, BMIOutput output) {
-    Color color;
-    String resultStr;
-    switch (output.result) {
-      case 'underweight':
-        color = const Color(0xFFffc107);
-        resultStr = 'Abaixo do peso';
-      case 'healthy weight':
-        color = const Color(0xFF28a745);
-        resultStr = 'Peso saudável';
-      case 'overweight':
-        color = const Color(0xFFffc107);
-        resultStr = 'Acima do peso';
-      case 'obesity':
-        color = const Color(0xFF651F06);
-        resultStr = 'Obesidade';
-      default:
-        color = const Color(0xFF28a745);
-        resultStr = 'Indefinido';
-    }
+    final (Color color, String resultStr) = switch (output.result) {
+      'underweight' => (const Color(0xFFffc107), 'Abaixo do peso'),
+      'healthy weight' => (const Color(0xFF28a745), 'Peso saudável'),
+      'overweight' => (const Color(0xFFffc107), 'Acima do peso'),
+      'obesity' => (const Color(0xFF651F06), 'Obesidade'),
+      _ => (const Color(0xFF28a745), 'Indefinido'),
+    };
 
     return Card(
         elevation: 4,

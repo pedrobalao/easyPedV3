@@ -1,4 +1,4 @@
-class MedicalCalculation {
+final class MedicalCalculation {
 
   MedicalCalculation(
       {this.id,
@@ -46,7 +46,7 @@ class MedicalCalculation {
   }
 }
 
-class Variable {
+final class Variable {
 
   Variable(
       {this.id,
@@ -93,7 +93,7 @@ class Variable {
   }
 }
 
-class CalculationOutput {
+final class CalculationOutput {
 
   CalculationOutput(
       {this.id,

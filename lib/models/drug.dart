@@ -1,4 +1,4 @@
-class Drug {
+final class Drug {
 
   Drug(
       {this.id,
@@ -84,7 +84,7 @@ class Drug {
   }
 }
 
-class Indications {
+final class Indications {
 
   Indications({this.id, this.drugId, this.indicationText, this.doses});
 
@@ -120,7 +120,7 @@ class Indications {
   }
 }
 
-class Doses {
+final class Doses {
 
   Doses(
       {this.id,
@@ -178,7 +178,7 @@ class Doses {
   }
 }
 
-class Variables {
+final class Variables {
 
   Variables({this.id, this.description, this.idUnit, this.type});
 
@@ -204,7 +204,7 @@ class Variables {
   }
 }
 
-class Calculations {
+final class Calculations {
 
   Calculations({
     this.id,
@@ -247,7 +247,7 @@ class Calculations {
   }
 }
 
-class DoseCalculationResult {
+final class DoseCalculationResult {
 
   DoseCalculationResult(
       {this.id,
@@ -280,7 +280,7 @@ class DoseCalculationResult {
   }
 }
 
-class CalculationInput {
+final class CalculationInput {
 
   CalculationInput({this.variable, this.value});
 
@@ -299,7 +299,7 @@ class CalculationInput {
   }
 }
 
-class DrugCategory {
+final class DrugCategory {
 
   DrugCategory({this.id, this.description});
 
@@ -318,7 +318,7 @@ class DrugCategory {
   }
 }
 
-class DrugSubCategory {
+final class DrugSubCategory {
 
   DrugSubCategory({this.id, this.description, this.categoryId});
 

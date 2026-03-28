@@ -1,4 +1,4 @@
-class BMIInput {
+final class BMIInput {
 
   BMIInput({this.gender, this.birthdate, this.weight, this.length});
 
@@ -23,7 +23,7 @@ class BMIInput {
   }
 }
 
-class BMIOutput {
+final class BMIOutput {
 
   BMIOutput({this.bmi, this.percentile, this.result});
 
@@ -45,7 +45,7 @@ class BMIOutput {
   }
 }
 
-class PercentileInput {
+final class PercentileInput {
 
   PercentileInput({this.gender, this.birthdate, this.value});
 
@@ -67,7 +67,7 @@ class PercentileInput {
   }
 }
 
-class PercentileOutput {
+final class PercentileOutput {
 
   PercentileOutput({this.percentile, this.description});
 

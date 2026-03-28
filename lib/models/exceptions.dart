@@ -1,5 +1,5 @@
 /// Base class for all API exceptions.
-class ApiException implements Exception {
+final class ApiException implements Exception {
   ApiException({
     required this.message,
     this.statusCode,
@@ -15,7 +15,7 @@ class ApiException implements Exception {
 }
 
 /// Thrown when a network error occurs (no connectivity, DNS failure, etc.).
-class NetworkException implements Exception {
+final class NetworkException implements Exception {
   NetworkException({this.message = 'Network error occurred'});
 
   final String message;
@@ -25,7 +25,7 @@ class NetworkException implements Exception {
 }
 
 /// Thrown when the user is not authenticated or the token is invalid/expired.
-class UnauthorizedException implements Exception {
+final class UnauthorizedException implements Exception {
   UnauthorizedException({this.message = 'User is not authorized'});
 
   final String message;
@@ -35,7 +35,7 @@ class UnauthorizedException implements Exception {
 }
 
 /// Thrown when a requested resource is not found (404).
-class NotFoundException implements Exception {
+final class NotFoundException implements Exception {
   NotFoundException({this.message = 'Resource not found'});
 
   final String message;
@@ -45,7 +45,7 @@ class NotFoundException implements Exception {
 }
 
 /// Thrown when a server error occurs (5xx).
-class ServerException implements Exception {
+final class ServerException implements Exception {
   ServerException({this.message = 'Server error occurred', this.statusCode});
 
   final String message;

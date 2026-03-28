@@ -1,4 +1,4 @@
-class SurgeryReferral {
+final class SurgeryReferral {
 
   SurgeryReferral({this.scope, this.referral, this.observations});
 

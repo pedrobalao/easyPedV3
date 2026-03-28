@@ -1,4 +1,4 @@
-class Congress {
+final class Congress {
 
   Congress(
       {this.id,

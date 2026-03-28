@@ -1,16 +1,52 @@
 # easypedv3
 
-A new Flutter project.
+A pediatric reference app built with Flutter.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) (>=3.0.0)
+- A Firebase project configured for Android and iOS
+- Google Sign-In credentials
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Environment Setup
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project uses environment variables loaded via [`flutter_dotenv`](https://pub.dev/packages/flutter_dotenv).
+
+1. Copy `.env.example` to `.env` at the project root:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Fill in the required values in `.env`:
+
+   | Variable           | Description                                      |
+   |--------------------|--------------------------------------------------|
+   | `API_BASE_URL`     | Base URL of the easyPed backend API              |
+   | `GOOGLE_CLIENT_ID` | OAuth client ID for Firebase Google Sign-In      |
+
+3. Place your `google-services.json` (Android) and `GoogleService-Info.plist` (iOS) in the correct platform folders.
+
+### Running the App
+
+```bash
+flutter pub get
+flutter run
+```
+
+### Building
+
+```bash
+# Android App Bundle
+flutter build appbundle
+
+# iOS IPA
+flutter build ipa
+```
+
+## Resources
+
+- [Flutter documentation](https://flutter.dev/docs)
+- [Firebase for Flutter](https://firebase.flutter.dev/)

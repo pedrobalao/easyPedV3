@@ -9,7 +9,6 @@ class _Menu {
 
   final String title;
   final Icon icon;
-  //final Widget action;
   final String route;
 }
 

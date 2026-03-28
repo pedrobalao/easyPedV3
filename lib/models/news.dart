@@ -1,4 +1,4 @@
-class News {
+final class News {
 
   News(
       {this.id,
