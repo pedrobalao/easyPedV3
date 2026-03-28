@@ -21,14 +21,19 @@ class ConnectionError extends StatelessWidget {
               Lottie.asset('assets/lotties/error.json'),
               Text(
                 'Ups...algo correu mal. Verifique que tem internet e volte a tentar mais tarde. Obrigado.',
-                style: Styles.headLineStyle1.copyWith(color: Styles.errorColor),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(color: Theme.of(context).colorScheme.error),
               ),
               const Gap(20),
               GestureDetector(
                 child: Text(
                   'Voltar ao início',
-                  style: Styles.noteStyle
-                      .merge(TextStyle(color: Styles.textColor)),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: Theme.of(context).colorScheme.primary),
                 ),
                 onTap: () {
                   Navigator.popAndPushNamed(context, '/');

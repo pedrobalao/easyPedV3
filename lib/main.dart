@@ -98,8 +98,12 @@ class MyApp extends ConsumerWidget {
         child: MaterialApp.router(
           routerConfig: router,
           debugShowCheckedModeBanner: false,
-          theme: lightTheme,
-          darkTheme: darkTheme,
+          theme: themeData,
+          darkTheme: themeData.copyWith(
+            colorScheme: themeData.colorScheme.copyWith(
+              brightness: Brightness.dark,
+            ),
+          ),
           themeMode: themeMode,
         ));
   }

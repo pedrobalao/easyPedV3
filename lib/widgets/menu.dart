@@ -17,6 +17,36 @@ class _Menu {
 class Menu extends ConsumerWidget {
   const Menu({super.key});
 
+  List<_Menu> _menus() {
+    return [
+      _Menu(title: 'Home', icon: const Icon(Icons.home), route: '/'),
+      _Menu(
+          title: 'Medicamentos',
+          icon: const Icon(Icons.polyline_outlined),
+          route: '/drugs'),
+      _Menu(
+          title: 'Doenças',
+          icon: const Icon(Icons.coronavirus),
+          route: '/diseases'),
+      _Menu(
+          title: 'Percentis',
+          icon: const Icon(Icons.percent),
+          route: '/percentiles'),
+      _Menu(
+          title: 'Calculos Médicos',
+          icon: const Icon(Icons.calculate),
+          route: '/medical-calculations'),
+      _Menu(
+          title: 'Referenciação Cirúrgica',
+          icon: const Icon(Icons.meeting_room),
+          route: '/surgeries-referral'),
+      _Menu(
+          title: 'Sobre',
+          icon: const Icon(Icons.app_shortcut),
+          route: '/about'),
+    ];
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = FirebaseAuth.instance.currentUser;
@@ -90,39 +120,39 @@ class Menu extends ConsumerWidget {
 
     // Theme mode toggle
     final themeMode = ref.watch(themeModeProvider);
-    widgets.add(const Divider());
-    widgets.add(ListTile(
-      leading: Icon(
-        themeMode == ThemeMode.dark
-            ? Icons.dark_mode
-            : themeMode == ThemeMode.light
-                ? Icons.light_mode
-                : Icons.brightness_auto,
-      ),
-      title: const Text('Tema'),
-      subtitle: Text(
-        themeMode == ThemeMode.dark
-            ? 'Escuro'
-            : themeMode == ThemeMode.light
-                ? 'Claro'
-                : 'Sistema',
-      ),
-      onTap: () {
-        final next = switch (themeMode) {
-          ThemeMode.system => ThemeMode.light,
-          ThemeMode.light => ThemeMode.dark,
-          ThemeMode.dark => ThemeMode.system,
-        };
-        ref.read(themeModeProvider.notifier).setThemeMode(next);
-      },
-    ));
-
-    widgets.add(ListTile(
-        leading: const Icon(Icons.logout),
-        title: const Text('Sair'),
+    widgets
+      ..add(const Divider())
+      ..add(ListTile(
+        leading: Icon(
+          themeMode == ThemeMode.dark
+              ? Icons.dark_mode
+              : themeMode == ThemeMode.light
+                  ? Icons.light_mode
+                  : Icons.brightness_auto,
+        ),
+        title: const Text('Tema'),
+        subtitle: Text(
+          themeMode == ThemeMode.dark
+              ? 'Escuro'
+              : themeMode == ThemeMode.light
+                  ? 'Claro'
+                  : 'Sistema',
+        ),
         onTap: () {
-          FirebaseUIAuth.signOut(context: context);
-        }));
+          final next = switch (themeMode) {
+            ThemeMode.system => ThemeMode.light,
+            ThemeMode.light => ThemeMode.dark,
+            ThemeMode.dark => ThemeMode.system,
+          };
+          ref.read(themeModeProvider.notifier).setThemeMode(next);
+        },
+      ))
+      ..add(ListTile(
+          leading: const Icon(Icons.logout),
+          title: const Text('Sair'),
+          onTap: () {
+            FirebaseUIAuth.signOut(context: context);
+          }));
 
     return Drawer(
       child: ListView(

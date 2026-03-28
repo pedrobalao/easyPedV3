@@ -12,12 +12,12 @@ void main() {
     final drugService = DrugService();
 
     test('search drug', () async {
-      final result = await drugService.searchDrug('parac', authToken!);
+      final result = await drugService.searchDrug('parac');
       expect(result.length, greaterThan(0));
     });
 
     test('fetch drug 5', () async {
-      final result = await drugService.fetchDrug(5, authToken!);
+      final result = await drugService.fetchDrug(5);
       expect(result.name, equals('Azitromicina'));
     });
   });
