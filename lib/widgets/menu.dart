@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'package:easypedv3/providers/theme_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class _Menu {
@@ -12,41 +14,11 @@ class _Menu {
   final String route;
 }
 
-class Menu extends StatelessWidget {
+class Menu extends ConsumerWidget {
   const Menu({super.key});
 
-  List<_Menu> _menus() {
-    return [
-      _Menu(title: 'Home', icon: const Icon(Icons.home), route: '/'),
-      _Menu(
-          title: 'Medicamentos',
-          icon: const Icon(Icons.polyline_outlined),
-          route: '/drugs'),
-      _Menu(
-          title: 'Doenças',
-          icon: const Icon(Icons.coronavirus),
-          route: '/diseases'),
-      _Menu(
-          title: 'Percentis',
-          icon: const Icon(Icons.percent),
-          route: '/percentiles'),
-      _Menu(
-          title: 'Calculos Médicos',
-          icon: const Icon(Icons.calculate),
-          route: '/medical-calculations'),
-      _Menu(
-          title: 'Referenciação Cirúrgica',
-          icon: const Icon(Icons.meeting_room),
-          route: '/surgeries-referral'),
-      _Menu(
-          title: 'Sobre',
-          icon: const Icon(Icons.app_shortcut),
-          route: '/about'),
-    ];
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final user = FirebaseAuth.instance.currentUser;
 
     var email = 'your@email.com';
@@ -116,6 +88,35 @@ class Menu extends StatelessWidget {
       ));
     }
 
+    // Theme mode toggle
+    final themeMode = ref.watch(themeModeProvider);
+    widgets.add(const Divider());
+    widgets.add(ListTile(
+      leading: Icon(
+        themeMode == ThemeMode.dark
+            ? Icons.dark_mode
+            : themeMode == ThemeMode.light
+                ? Icons.light_mode
+                : Icons.brightness_auto,
+      ),
+      title: const Text('Tema'),
+      subtitle: Text(
+        themeMode == ThemeMode.dark
+            ? 'Escuro'
+            : themeMode == ThemeMode.light
+                ? 'Claro'
+                : 'Sistema',
+      ),
+      onTap: () {
+        final next = switch (themeMode) {
+          ThemeMode.system => ThemeMode.light,
+          ThemeMode.light => ThemeMode.dark,
+          ThemeMode.dark => ThemeMode.system,
+        };
+        ref.read(themeModeProvider.notifier).setThemeMode(next);
+      },
+    ));
+
     widgets.add(ListTile(
         leading: const Icon(Icons.logout),
         title: const Text('Sair'),
@@ -125,9 +126,32 @@ class Menu extends StatelessWidget {
 
     return Drawer(
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
-        children: widgets,
+        children: [
+          UserAccountsDrawerHeader(
+            decoration: const BoxDecoration(color: Color(0xFF218838)),
+            accountName: Text(
+              name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            accountEmail: Text(
+              email,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            currentAccountPicture: CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(photoUrl),
+              backgroundColor: Colors.transparent,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Sair'),
+            onTap: () {
+              FirebaseUIAuth.signOut(context: context);
+            },
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:easypedv3/firebase_options.dart';
+import 'package:easypedv3/providers/theme_provider.dart';
 import 'package:easypedv3/router.dart';
 import 'package:easypedv3/services/app_info_service.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,9 +21,10 @@ void main() async {
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // Initialize Hive for local caching
+    // Initialize Hive for local caching and preferences
     await Hive.initFlutter();
     await Hive.openBox('cache_timestamps');
+    await Hive.openBox('theme_preferences');
 
     await AppInfoService.initiateAppInfoService();
 
@@ -89,13 +91,16 @@ class MyApp extends ConsumerWidget {
     );
 
     final router = ref.watch(routerProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: MaterialApp.router(
           routerConfig: router,
           debugShowCheckedModeBanner: false,
-          theme: themeData,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: themeMode,
         ));
   }
 }
