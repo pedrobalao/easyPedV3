@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 /// Simplified menu widget — the drawer is no longer the primary navigation.
 /// Primary navigation is handled by the bottom [NavigationBar].
-/// This widget is retained for optional use in secondary locations or
-/// for providing user-profile / sign-out functionality.
+/// This widget provides user-profile display and sign-out functionality.
 class Menu extends StatelessWidget {
   const Menu({super.key});
 
