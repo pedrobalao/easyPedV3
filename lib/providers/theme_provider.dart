@@ -18,9 +18,13 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   ThemeModeNotifier() : super(_readFromHive());
 
   static ThemeMode _readFromHive() {
-    final box = Hive.box(_boxName);
-    final stored = box.get(_key, defaultValue: 'system') as String;
-    return _fromString(stored);
+    try {
+      final box = Hive.box(_boxName);
+      final stored = box.get(_key, defaultValue: 'system') as String;
+      return _fromString(stored);
+    } catch (_) {
+      return ThemeMode.system;
+    }
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {

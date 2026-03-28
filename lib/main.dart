@@ -54,6 +54,8 @@ class MyApp extends ConsumerWidget {
 
     const negativeColor = Color(0xFF651F06);
 
+    const accentColor = Color(0xFF28a745);
+
     final lightTheme = ThemeData(
       brightness: Brightness.light,
       primaryColor: primaryColor,
@@ -66,7 +68,7 @@ class MyApp extends ConsumerWidget {
         headlineMedium: GoogleFonts.openSans(
             fontSize: 18,
             color: Colors.white,
-            backgroundColor: const Color(0xFF28a745)),
+            backgroundColor: accentColor),
         headlineSmall:
             GoogleFonts.openSans(fontSize: 32, color: secondaryColor),
         bodyLarge: GoogleFonts.openSans(fontSize: 14),
@@ -98,7 +100,7 @@ class MyApp extends ConsumerWidget {
         headlineMedium: GoogleFonts.openSans(
             fontSize: 18,
             color: Colors.white,
-            backgroundColor: const Color(0xFF28a745)),
+            backgroundColor: accentColor),
         headlineSmall:
             GoogleFonts.openSans(fontSize: 32, color: secondaryColor),
         bodyLarge: GoogleFonts.openSans(fontSize: 14),
