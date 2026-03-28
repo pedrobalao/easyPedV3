@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_const
-
 import 'dart:async';
 
 import 'package:easypedv3/firebase_options.dart';
@@ -49,10 +47,10 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const primaryColor = const Color(0xFF2963C8);
-    const secondaryColor = const Color(0xFF218838);
+    const primaryColor = Color(0xFF2963C8);
+    const secondaryColor = Color(0xFF218838);
 
-    const negativeColor = const Color(0xFF651F06);
+    const negativeColor = Color(0xFF651F06);
 
     final themeData = ThemeData(
       // Define the default brightness and colors.

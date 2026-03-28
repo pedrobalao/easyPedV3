@@ -1,4 +1,4 @@
-class Disease {
+final class Disease {
 
   Disease(
       {this.id,
@@ -67,7 +67,7 @@ class Disease {
   }
 }
 
-class Treatment {
+final class Treatment {
 
   Treatment({this.conditions, this.initialEvaluation});
 
@@ -93,7 +93,7 @@ class Treatment {
   }
 }
 
-class Conditions {
+final class Conditions {
 
   Conditions(
       {this.id,
