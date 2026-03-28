@@ -86,7 +86,7 @@ class DiseaseScreen extends ConsumerWidget {
       final wgs = <Widget>[];
 
       wgs.add(ListTile(
-        tileColor: const Color(0xFF28a745),
+        tileColor: Theme.of(context).colorScheme.primary,
         title: Text(condition.condition ?? '',
             textAlign: TextAlign.left,
             overflow: TextOverflow.clip,

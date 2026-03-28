@@ -22,7 +22,7 @@ class Error404Screen extends StatelessWidget {
                 },
                 child: Text(
                   'Voltar ao início'.toUpperCase(),
-                  style: const TextStyle(color: Color(0xFF2963C8)),
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
             ],

@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'package:easypedv3/providers/theme_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class _Menu {
@@ -12,7 +14,7 @@ class _Menu {
   final String route;
 }
 
-class Menu extends StatelessWidget {
+class Menu extends ConsumerWidget {
   const Menu({super.key});
 
   List<_Menu> _menus() {
@@ -46,7 +48,7 @@ class Menu extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final user = FirebaseAuth.instance.currentUser;
 
     var email = 'your@email.com';
@@ -82,7 +84,7 @@ class Menu extends StatelessWidget {
     final header = UserAccountsDrawerHeader(
       // <-- SEE HERE
 
-      decoration: const BoxDecoration(color: Color(0xFF218838)),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
       accountName: Text(
         name, //user.displayName!,
         style: const TextStyle(
@@ -115,6 +117,35 @@ class Menu extends StatelessWidget {
         },
       ));
     }
+
+    // Theme mode toggle
+    final themeMode = ref.watch(themeModeProvider);
+    widgets.add(const Divider());
+    widgets.add(ListTile(
+      leading: Icon(
+        themeMode == ThemeMode.dark
+            ? Icons.dark_mode
+            : themeMode == ThemeMode.light
+                ? Icons.light_mode
+                : Icons.brightness_auto,
+      ),
+      title: const Text('Tema'),
+      subtitle: Text(
+        themeMode == ThemeMode.dark
+            ? 'Escuro'
+            : themeMode == ThemeMode.light
+                ? 'Claro'
+                : 'Sistema',
+      ),
+      onTap: () {
+        final next = switch (themeMode) {
+          ThemeMode.system => ThemeMode.light,
+          ThemeMode.light => ThemeMode.dark,
+          ThemeMode.dark => ThemeMode.system,
+        };
+        ref.read(themeModeProvider.notifier).setThemeMode(next);
+      },
+    ));
 
     widgets.add(ListTile(
         leading: const Icon(Icons.logout),

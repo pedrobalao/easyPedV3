@@ -161,9 +161,9 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
                 Padding(
                     padding: const EdgeInsets.all(10),
                     child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        fillColor: Color(0xFF2963C8),
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        fillColor: Theme.of(context).colorScheme.primary,
                         labelText: 'Sexo',
                       ),
                       isExpanded: true,
@@ -190,9 +190,9 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
                     child: TextFormField(
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          fillColor: Color(0xFF2963C8),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          fillColor: Theme.of(context).colorScheme.primary,
                           labelText: 'Peso (kg)',
                         ),
                         onChanged: (String? value) {
@@ -229,9 +229,9 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
                           FilteringTextInputFormatter.allow(
                               RegExp(r'^\d*\.?\d{0,3}')),
                         ],
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          fillColor: Color(0xFF2963C8),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          fillColor: Theme.of(context).colorScheme.primary,
                           labelText: 'Altura (cm)',
                         ),
                         onChanged: (String? value) {
@@ -271,7 +271,7 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
         clipBehavior: Clip.antiAlias,
         child: Column(children: [
           ListTile(
-            tileColor: const Color(0xFF28a745),
+            tileColor: Theme.of(context).colorScheme.primary,
             title: Text('Percentil $type',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,
@@ -304,7 +304,7 @@ class PercentileState extends ConsumerState<PercentilesWidget> {
         clipBehavior: Clip.antiAlias,
         child: Column(children: [
           ListTile(
-            tileColor: const Color(0xFF28a745),
+            tileColor: Theme.of(context).colorScheme.primary,
             title: Text('IMC',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.clip,

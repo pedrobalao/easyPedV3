@@ -39,7 +39,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       controller: dateinput, //editing controller of this TextField
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        fillColor: const Color(0xFF2963C8),
+        fillColor: Theme.of(context).colorScheme.primary,
         labelText: widget.label,
       ),
       readOnly: true, //set it true, so that user will not able to edit text
