@@ -24,6 +24,26 @@ class ToolsScreen extends StatelessWidget {
         icon: Icons.meeting_room,
         route: '/tools/surgeries-referral',
       ),
+      _ToolItem(
+        title: 'Sinais Vitais por Idade',
+        icon: Icons.monitor_heart,
+        route: '/tools/vital-signs',
+      ),
+      _ToolItem(
+        title: 'Escala de Glasgow',
+        icon: Icons.psychology,
+        route: '/tools/glasgow-scale',
+      ),
+      _ToolItem(
+        title: 'Score de APGAR',
+        icon: Icons.child_care,
+        route: '/tools/apgar-score',
+      ),
+      _ToolItem(
+        title: 'Fluidoterapia',
+        icon: Icons.water_drop,
+        route: '/tools/fluid-resuscitation',
+      ),
     ];
 
     return Scaffold(
