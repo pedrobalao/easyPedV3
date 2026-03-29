@@ -9,37 +9,37 @@ class ToolsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = <_ToolItem>[
-      _ToolItem(
+      const _ToolItem(
         title: 'Percentis',
         icon: Icons.percent,
         route: '/tools/percentiles',
       ),
-      _ToolItem(
+      const _ToolItem(
         title: 'Cálculos Médicos',
         icon: Icons.calculate,
         route: '/tools/medical-calculations',
       ),
-      _ToolItem(
+      const _ToolItem(
         title: 'Referenciação Cirúrgica',
         icon: Icons.meeting_room,
         route: '/tools/surgeries-referral',
       ),
-      _ToolItem(
+      const _ToolItem(
         title: 'Sinais Vitais por Idade',
         icon: Icons.monitor_heart,
         route: '/tools/vital-signs',
       ),
-      _ToolItem(
+      const _ToolItem(
         title: 'Escala de Glasgow',
         icon: Icons.psychology,
         route: '/tools/glasgow-scale',
       ),
-      _ToolItem(
+      const _ToolItem(
         title: 'Score de APGAR',
         icon: Icons.child_care,
         route: '/tools/apgar-score',
       ),
-      _ToolItem(
+      const _ToolItem(
         title: 'Fluidoterapia',
         icon: Icons.water_drop,
         route: '/tools/fluid-resuscitation',
