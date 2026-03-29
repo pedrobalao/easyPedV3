@@ -61,8 +61,7 @@ class DrugScreen extends ConsumerWidget {
         buffer.writeln('\nIndicação: ${ind.indicationText ?? ""}');
         if (ind.doses != null) {
           for (final dose in ind.doses!) {
-            buffer.writeln(
-                '  Via: ${dose.idVia ?? "-"} | '
+            buffer.writeln('  Via: ${dose.idVia ?? "-"} | '
                 'Dose Pediátrica: ${dose.pediatricDose ?? "-"} '
                 '${dose.idUnityPediatricDose ?? ""} | '
                 'Dose Adulto: ${dose.adultDose ?? "-"} '
@@ -73,9 +72,7 @@ class DrugScreen extends ConsumerWidget {
     }
     buffer.writeln('\n— easyPed');
 
-    SharePlus.instance.share(
-      ShareParams(text: buffer.toString()),
-    );
+    Share.share(buffer.toString());
   }
 
   @override
@@ -118,8 +115,10 @@ class DrugScreen extends ConsumerWidget {
               ],
               bottom: TabBar(
                 labelColor: Theme.of(context).colorScheme.onPrimary,
-                unselectedLabelColor:
-                    Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.6),
+                unselectedLabelColor: Theme.of(context)
+                    .colorScheme
+                    .onPrimary
+                    .withValues(alpha: 0.6),
                 indicatorColor: Theme.of(context).colorScheme.onPrimary,
                 tabs: const [
                   Tab(icon: Icon(Icons.info_outline), text: 'Geral'),

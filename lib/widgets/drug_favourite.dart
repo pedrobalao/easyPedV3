@@ -1,4 +1,3 @@
-import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
