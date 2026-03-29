@@ -4,6 +4,7 @@ import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/widgets/base_page_layout.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/loading.dart';
+import 'package:easypedv3/widgets/skeletons/skeleton_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +17,10 @@ class DiseasesListScreen extends ConsumerWidget {
     final diseasesAsync = ref.watch(diseaseListProvider);
 
     return diseasesAsync.when(
-      loading: () => const ScreenLoading(title: 'Doenças'),
+      loading: () => Scaffold(
+        appBar: AppBar(centerTitle: true, title: const Text('Doenças')),
+        body: const SkeletonList(),
+      ),
       error: (_, __) => const ConnectionError(),
       data: (diseases) => Scaffold(
           appBar: AppBar(
@@ -43,8 +47,14 @@ class DiseasesListScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 return Card(
                     child: ListTile(
-                  title: Text(diseases[index].description ?? '',
-                      style: Theme.of(context).textTheme.displaySmall),
+                  title: Hero(
+                    tag: 'disease-name-${diseases[index].id}',
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(diseases[index].description ?? '',
+                          style: Theme.of(context).textTheme.displaySmall),
+                    ),
+                  ),
                   onTap: () {
                     final id = diseases[index].id;
                     context.push('/diseases/$id');

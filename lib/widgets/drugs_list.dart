@@ -18,8 +18,14 @@ class DrugsList extends StatelessWidget {
       itemBuilder: (context, index) {
         return Card(
             child: ListTile(
-                title: Text(drugs[index].name ?? '',
-                    style: Theme.of(context).textTheme.displaySmall),
+                title: Hero(
+                  tag: 'drug-name-${drugs[index].id}',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Text(drugs[index].name ?? '',
+                        style: Theme.of(context).textTheme.displaySmall),
+                  ),
+                ),
                 onTap: () {
                   final id = drugs[index].id;
                   context.push('/drugs/$id');

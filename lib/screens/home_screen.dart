@@ -5,6 +5,7 @@ import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:easypedv3/widgets/news_slide.dart';
 import 'package:easypedv3/widgets/quick_access_grid.dart';
+import 'package:easypedv3/widgets/skeletons/skeleton_home.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,10 +69,10 @@ class HomeScreen extends ConsumerWidget {
     final recentSearches = ref.watch(recentSearchesProvider);
 
     return newsAsync.when(
-      loading: () => const ScreenLoading(title: 'easyPed'),
+      loading: () => const SkeletonHome(),
       error: (_, __) => const ConnectionError(),
       data: (news) => congressesAsync.when(
-        loading: () => const ScreenLoading(title: 'easyPed'),
+        loading: () => const SkeletonHome(),
         error: (_, __) => const ConnectionError(),
         data: (congresses) => Scaffold(
           appBar: AppBar(title: const Text('easyPed'), actions: <Widget>[
@@ -257,8 +258,14 @@ class _FavouritesSection extends StatelessWidget {
               child: ListTile(
                 leading: Icon(Icons.medication,
                     color: Theme.of(context).colorScheme.primary),
-                title: Text(drug.name ?? '',
-                    style: Theme.of(context).textTheme.displaySmall),
+                title: Hero(
+                  tag: 'drug-name-${drug.id}',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Text(drug.name ?? '',
+                        style: Theme.of(context).textTheme.displaySmall),
+                  ),
+                ),
                 subtitle: Text(drug.subcategoryDescription ?? '',
                     style: Theme.of(context).textTheme.bodyMedium),
                 trailing: const Icon(Icons.chevron_right),

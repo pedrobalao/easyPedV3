@@ -6,6 +6,7 @@ import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/drug_categories_list.dart';
 import 'package:easypedv3/widgets/drugs_favourites_list.dart';
 import 'package:easypedv3/widgets/loading.dart';
+import 'package:easypedv3/widgets/skeletons/skeleton_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,10 +19,16 @@ class DrugsScreen extends ConsumerWidget {
     final categoriesAsync = ref.watch(categoriesProvider);
 
     return favouritesAsync.when(
-      loading: () => const ScreenLoading(title: 'Medicamentos'),
+      loading: () => Scaffold(
+        appBar: AppBar(centerTitle: true, title: const Text('Medicamentos')),
+        body: const SkeletonList(),
+      ),
       error: (_, __) => const ConnectionError(),
       data: (favourites) => categoriesAsync.when(
-        loading: () => const ScreenLoading(title: 'Medicamentos'),
+        loading: () => Scaffold(
+          appBar: AppBar(centerTitle: true, title: const Text('Medicamentos')),
+          body: const SkeletonList(),
+        ),
         error: (_, __) => const ConnectionError(),
         data: (categories) => Scaffold(
           appBar: AppBar(

@@ -1,7 +1,7 @@
 import 'package:easypedv3/models/disease.dart';
 import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
-import 'package:easypedv3/widgets/loading.dart';
+import 'package:easypedv3/widgets/skeletons/skeleton_drug_detail.dart';
 import 'package:easypedv3/widgets/title_value.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class DiseaseScreen extends ConsumerWidget {
     final diseaseAsync = ref.watch(diseaseDetailProvider(diseaseId));
 
     return diseaseAsync.when(
-      loading: () => const ScreenLoading(),
+      loading: () => const SkeletonDrugDetail(),
       error: (_, __) => const ConnectionError(),
       data: (disease) {
         FirebaseAnalytics.instance.logViewItem(items: [
@@ -29,7 +29,14 @@ class DiseaseScreen extends ConsumerWidget {
         return Scaffold(
             appBar: AppBar(
                 centerTitle: true,
-                title: Text(disease.description ?? '')),
+                title: Hero(
+                  tag: 'disease-name-$diseaseId',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Text(disease.description ?? '',
+                        style: Theme.of(context).appBarTheme.titleTextStyle),
+                  ),
+                )),
             body: SingleChildScrollView(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
