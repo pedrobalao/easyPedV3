@@ -25,6 +25,7 @@ void main() async {
     await Hive.initFlutter();
     await Hive.openBox('cache_timestamps');
     await Hive.openBox('theme_preferences');
+    await Hive.openBox('recent_searches');
 
     await AppInfoService.initiateAppInfoService();
 

@@ -1,8 +1,7 @@
 import 'package:easypedv3/providers/providers.dart';
-import 'package:easypedv3/screens/drugs/drugs_screen.dart';
 import 'package:easypedv3/widgets/congresses_slide.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
-import 'package:easypedv3/widgets/loading.dart';
+import 'package:easypedv3/widgets/global_search.dart';
 import 'package:easypedv3/widgets/news_slide.dart';
 import 'package:easypedv3/widgets/quick_access_grid.dart';
 import 'package:easypedv3/widgets/skeletons/skeleton_home.dart';
@@ -66,7 +65,7 @@ class HomeScreen extends ConsumerWidget {
     final newsAsync = ref.watch(newsProvider);
     final congressesAsync = ref.watch(congressProvider);
     final favouritesAsync = ref.watch(favouritesProvider);
-    final recentSearches = ref.watch(recentSearchesProvider);
+    final recentSearches = ref.watch(recentSearchesNotifierProvider);
 
     return newsAsync.when(
       loading: () => const SkeletonHome(),
@@ -81,8 +80,14 @@ class HomeScreen extends ConsumerWidget {
               onPressed: () {
                 showSearch(
                   context: context,
-                  delegate: DrugSearchDelegate(
+                  delegate: GlobalSearchDelegate(
                     drugRepository: ref.read(drugRepositoryProvider),
+                    diseaseRepository: ref.read(diseaseRepositoryProvider),
+                    calculatorRepository:
+                        ref.read(calculatorRepositoryProvider),
+                    surgeryReferralRepository:
+                        ref.read(surgeryReferralRepositoryProvider),
+                    ref: ref,
                   ),
                 );
               },
@@ -142,14 +147,23 @@ class HomeScreen extends ConsumerWidget {
                       onTap: (query) {
                         showSearch(
                           context: context,
-                          delegate: DrugSearchDelegate(
+                          delegate: GlobalSearchDelegate(
                             drugRepository: ref.read(drugRepositoryProvider),
+                            diseaseRepository:
+                                ref.read(diseaseRepositoryProvider),
+                            calculatorRepository:
+                                ref.read(calculatorRepositoryProvider),
+                            surgeryReferralRepository:
+                                ref.read(surgeryReferralRepositoryProvider),
+                            ref: ref,
                           ),
                           query: query,
                         );
                       },
                       onClear: () {
-                        ref.read(recentSearchesProvider.notifier).state = [];
+                        ref
+                            .read(recentSearchesNotifierProvider.notifier)
+                            .clearAll();
                       },
                     ),
                     const Gap(8),
