@@ -228,8 +228,8 @@ class _SearchResultsViewState extends State<_SearchResultsView> {
   }
 
   Future<List<_SearchResult>> _performSearch() async {
-    final queryWords =
-        _normalise(widget.query).split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
+    final words = _normalise(widget.query).split(RegExp(r'\s+'));
+    final queryWords = words.where((w) => w.isNotEmpty).toList();
     if (queryWords.isEmpty) return [];
 
     // Run API searches and local filtering in parallel.
