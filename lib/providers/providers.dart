@@ -145,3 +145,7 @@ final congressProvider = FutureProvider<List<Congress>>((ref) async {
 
 /// Replaces LocalState singleton — tracks whether disclaimer was shown.
 final showedDisclaimerProvider = StateProvider<bool>((ref) => false);
+
+/// In-memory list of recent drug search queries.
+final recentSearchesProvider =
+    StateProvider<List<String>>((ref) => <String>[]);
