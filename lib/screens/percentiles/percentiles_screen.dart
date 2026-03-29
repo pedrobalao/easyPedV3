@@ -146,8 +146,9 @@ class PercentileState extends ConsumerState<PercentilesWidget>
   /// Calculate the patient's age in months from their birthdate.
   double? _getAgeInMonths() {
     final now = DateTime.now();
-    final diff = now.difference(birthdate);
-    final months = diff.inDays / 30.44; // Average days per month
+    final months =
+        (now.year - birthdate.year) * 12 + (now.month - birthdate.month) +
+        (now.day - birthdate.day) / 30;
     if (months < 0 || months > 60) return null;
     return months;
   }

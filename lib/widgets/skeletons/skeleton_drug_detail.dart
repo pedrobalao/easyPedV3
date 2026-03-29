@@ -10,6 +10,7 @@ class SkeletonDrugDetail extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final baseColor = colorScheme.surfaceContainerHighest;
     final highlightColor = colorScheme.surface;
+    final placeholderColor = colorScheme.surfaceContainerHigh;
 
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text('...')),
@@ -26,7 +27,7 @@ class SkeletonDrugDetail extends StatelessWidget {
                 height: 24,
                 width: 200,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: placeholderColor,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -40,7 +41,7 @@ class SkeletonDrugDetail extends StatelessWidget {
                       height: 36,
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: placeholderColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
@@ -60,7 +61,7 @@ class SkeletonDrugDetail extends StatelessWidget {
                         height: 14,
                         width: 120,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: placeholderColor,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -69,7 +70,7 @@ class SkeletonDrugDetail extends StatelessWidget {
                         height: 12,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: placeholderColor,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),

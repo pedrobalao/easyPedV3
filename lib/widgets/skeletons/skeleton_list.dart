@@ -12,6 +12,7 @@ class SkeletonList extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final baseColor = colorScheme.surfaceContainerHighest;
     final highlightColor = colorScheme.surface;
+    final placeholderColor = colorScheme.surfaceContainerHigh;
 
     return Shimmer.fromColors(
       baseColor: baseColor,
@@ -30,7 +31,7 @@ class SkeletonList extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: placeholderColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
@@ -38,7 +39,7 @@ class SkeletonList extends StatelessWidget {
                   height: 14,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: placeholderColor,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -47,7 +48,7 @@ class SkeletonList extends StatelessWidget {
                   width: 150,
                   margin: const EdgeInsets.only(top: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: placeholderColor,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),

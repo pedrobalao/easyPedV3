@@ -10,6 +10,7 @@ class SkeletonHome extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final baseColor = colorScheme.surfaceContainerHighest;
     final highlightColor = colorScheme.surface;
+    final placeholderColor = colorScheme.surfaceContainerHigh;
 
     return Scaffold(
       appBar: AppBar(title: const Text('easyPed')),
@@ -22,7 +23,7 @@ class SkeletonHome extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Section header placeholder
-              _sectionHeader(),
+              _sectionHeader(placeholderColor),
               const SizedBox(height: 8),
               // Quick access grid skeleton
               GridView.builder(
@@ -38,7 +39,7 @@ class SkeletonHome extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: placeholderColor,
                       borderRadius: BorderRadius.circular(12),
                     ),
                   );
@@ -46,7 +47,7 @@ class SkeletonHome extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               // Favourites section
-              _sectionHeader(),
+              _sectionHeader(placeholderColor),
               const SizedBox(height: 8),
               ...List.generate(
                 3,
@@ -55,7 +56,7 @@ class SkeletonHome extends StatelessWidget {
                   child: Container(
                     height: 64,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: placeholderColor,
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -63,12 +64,12 @@ class SkeletonHome extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               // Carousel placeholder
-              _sectionHeader(),
+              _sectionHeader(placeholderColor),
               const SizedBox(height: 8),
               Container(
                 height: 180,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: placeholderColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
@@ -79,14 +80,14 @@ class SkeletonHome extends StatelessWidget {
     );
   }
 
-  Widget _sectionHeader() {
+  Widget _sectionHeader(Color placeholderColor) {
     return Row(
       children: [
         Container(
           width: 20,
           height: 20,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: placeholderColor,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -95,7 +96,7 @@ class SkeletonHome extends StatelessWidget {
           height: 16,
           width: 120,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: placeholderColor,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
