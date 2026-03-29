@@ -11,6 +11,10 @@ import 'package:easypedv3/screens/medical_calculations/medical_calculation_scree
 import 'package:easypedv3/screens/medical_calculations/medical_calculations_list_screen.dart';
 import 'package:easypedv3/screens/percentiles/percentiles_screen.dart';
 import 'package:easypedv3/screens/surgeries_referral/surgeries_referral_list_screen.dart';
+import 'package:easypedv3/screens/tools/apgar_score_screen.dart';
+import 'package:easypedv3/screens/tools/fluid_resuscitation_screen.dart';
+import 'package:easypedv3/screens/tools/glasgow_scale_screen.dart';
+import 'package:easypedv3/screens/tools/vital_signs_screen.dart';
 import 'package:easypedv3/screens/tools_screen.dart';
 import 'package:easypedv3/widgets/scaffold_with_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -159,6 +163,23 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'surgeries-referral',
                     builder: (context, state) =>
                         const SurgeriesReferralListScreen(),
+                  ),
+                  GoRoute(
+                    path: 'vital-signs',
+                    builder: (context, state) => const VitalSignsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'glasgow-scale',
+                    builder: (context, state) => const GlasgowScaleScreen(),
+                  ),
+                  GoRoute(
+                    path: 'apgar-score',
+                    builder: (context, state) => const ApgarScoreScreen(),
+                  ),
+                  GoRoute(
+                    path: 'fluid-resuscitation',
+                    builder: (context, state) =>
+                        const FluidResuscitationScreen(),
                   ),
                 ],
               ),
