@@ -1,5 +1,6 @@
 import 'package:easypedv3/models/congress.dart';
 import 'package:easypedv3/utils/app_styles.dart';
+import 'package:easypedv3/widgets/page_indicator.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -50,7 +51,7 @@ class _CongressesSlideState extends State<CongressesSlide> {
           ),
         ),
         const Gap(8),
-        _PageIndicator(
+        PageIndicator(
           count: widget.congresses.length,
           currentIndex: _currentPage,
           activeColor: Theme.of(context).colorScheme.primary,
@@ -143,38 +144,6 @@ class _CongressCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _PageIndicator extends StatelessWidget {
-  const _PageIndicator({
-    required this.count,
-    required this.currentIndex,
-    required this.activeColor,
-  });
-
-  final int count;
-  final int currentIndex;
-  final Color activeColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(count, (index) {
-        final isActive = index == currentIndex;
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: isActive ? 24 : 8,
-          height: 8,
-          decoration: BoxDecoration(
-            color: isActive ? activeColor : activeColor.withAlpha(77),
-            borderRadius: BorderRadius.circular(4),
-          ),
-        );
-      }),
     );
   }
 }
