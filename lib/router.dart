@@ -18,6 +18,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// Custom fade-through page transition for GoRouter.
+CustomTransitionPage<T> fadeTransitionPage<T>({
+  required Widget child,
+  required GoRouterState state,
+}) {
+  return CustomTransitionPage<T>(
+    key: state.pageKey,
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+        child: child,
+      );
+    },
+  );
+}
+
 // Navigator keys for each tab so they preserve their own navigation stack.
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
@@ -76,9 +93,12 @@ final routerProvider = Provider<GoRouter>((ref) {
                 routes: [
                   GoRoute(
                     path: ':id',
-                    builder: (context, state) {
+                    pageBuilder: (context, state) {
                       final id = int.parse(state.pathParameters['id']!);
-                      return DrugScreen(id: id);
+                      return fadeTransitionPage(
+                        state: state,
+                        child: DrugScreen(id: id),
+                      );
                     },
                   ),
                 ],
@@ -95,9 +115,12 @@ final routerProvider = Provider<GoRouter>((ref) {
                 routes: [
                   GoRoute(
                     path: ':id',
-                    builder: (context, state) {
+                    pageBuilder: (context, state) {
                       final id = int.parse(state.pathParameters['id']!);
-                      return DiseaseScreen(diseaseId: id);
+                      return fadeTransitionPage(
+                        state: state,
+                        child: DiseaseScreen(diseaseId: id),
+                      );
                     },
                   ),
                 ],
