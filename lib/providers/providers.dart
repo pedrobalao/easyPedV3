@@ -10,6 +10,9 @@ import 'package:easypedv3/services/drugs_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+export 'package:easypedv3/providers/search_provider.dart'
+    show recentSearchesNotifierProvider;
+
 // ── Auth ────────────────────────────────────────────────────────────
 
 /// Stream of Firebase auth state changes.
@@ -145,7 +148,3 @@ final congressProvider = FutureProvider<List<Congress>>((ref) async {
 
 /// Replaces LocalState singleton — tracks whether disclaimer was shown.
 final showedDisclaimerProvider = StateProvider<bool>((ref) => false);
-
-/// In-memory list of recent drug search queries.
-final recentSearchesProvider =
-    StateProvider<List<String>>((ref) => <String>[]);
