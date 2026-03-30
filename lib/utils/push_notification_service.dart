@@ -104,6 +104,10 @@ class PushNotificationService {
   }
 
   /// Deep-link navigation based on notification data payload.
+  ///
+  /// Call this from the app-level where the [GoRouter] instance is accessible,
+  /// e.g. after consuming a pending notification message via
+  /// [consumePendingMessage].
   static void handleDeepLink(
     RemoteMessage message,
     GoRouter router,

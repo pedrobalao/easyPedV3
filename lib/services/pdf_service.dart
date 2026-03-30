@@ -84,8 +84,9 @@ class PdfService {
           if (drug.variables != null)
             ...drug.variables!.map((v) {
               final value = variables[v.id];
+              final label = v.description ?? v.id ?? 'Parâmetro';
               return _buildInfoRow(
-                '${v.description ?? v.id ?? ""}',
+                label,
                 '$value ${v.idUnit ?? ""}',
               );
             }),

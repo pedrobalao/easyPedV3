@@ -62,8 +62,8 @@ class NotesRepository {
         keysToRemove.add(key);
       }
     }
-    for (final key in keysToRemove) {
-      _box.delete(key);
+    if (keysToRemove.isNotEmpty) {
+      _box.deleteAll(keysToRemove);
     }
   }
 

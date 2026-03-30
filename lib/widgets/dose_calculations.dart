@@ -217,9 +217,12 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
         variables: mapOfVariables,
       );
 
+      final safeName = (widget.drug.name ?? 'dose')
+          .replaceAll(RegExp(r'[^\w\s-]'), '')
+          .replaceAll(RegExp(r'\s+'), '_');
       await Printing.layoutPdf(
         onLayout: (_) async => pdfBytes,
-        name: 'easyPed_${widget.drug.name ?? "dose"}_calculo.pdf',
+        name: 'easyPed_${safeName}_calculo.pdf',
       );
 
       FirebaseAnalytics.instance.logEvent(
