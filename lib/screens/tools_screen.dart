@@ -44,6 +44,11 @@ class ToolsScreen extends StatelessWidget {
         icon: Icons.water_drop,
         route: '/tools/fluid-resuscitation',
       ),
+      const _ToolItem(
+        title: 'Notas Clínicas',
+        icon: Icons.note_alt,
+        route: '/tools/clinical-notes',
+      ),
     ];
 
     return Scaffold(
