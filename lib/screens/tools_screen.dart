@@ -10,6 +10,11 @@ class ToolsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = <_ToolItem>[
       const _ToolItem(
+        title: 'Assistente IA',
+        icon: Icons.smart_toy,
+        route: '/tools/ai-assistant',
+      ),
+      const _ToolItem(
         title: 'Percentis',
         icon: Icons.percent,
         route: '/tools/percentiles',
