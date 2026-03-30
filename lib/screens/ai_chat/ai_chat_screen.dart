@@ -194,7 +194,6 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                 ? _EmptyState(
                     suggestions: _quickSuggestions,
                     onSuggestionTap: (suggestion) {
-                      _textController.text = suggestion;
                       _sendMessage(suggestion);
                     },
                   )
@@ -340,8 +339,10 @@ class _TypingIndicatorState extends State<_TypingIndicator>
               mainAxisSize: MainAxisSize.min,
               children: List.generate(3, (i) {
                 final delay = i * 0.33;
-                final t = ((_controller.value - delay) % 1.0).clamp(0.0, 1.0);
-                final opacity = 0.3 + 0.7 * (1.0 - (2.0 * t - 1.0).abs());
+                final animationProgress =
+                    ((_controller.value - delay) % 1.0).clamp(0.0, 1.0);
+                final opacity =
+                    0.3 + 0.7 * (1.0 - (2.0 * animationProgress - 1.0).abs());
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2),
                   child: Opacity(
