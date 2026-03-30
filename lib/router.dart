@@ -1,5 +1,7 @@
+import 'package:easypedv3/providers/biometric_provider.dart';
 import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/screens/about/about_screen.dart';
+import 'package:easypedv3/screens/auth/biometric_screen.dart';
 import 'package:easypedv3/screens/auth/signin_screen.dart';
 import 'package:easypedv3/screens/diseases/disease_screen.dart';
 import 'package:easypedv3/screens/diseases/diseases_list_screen.dart';
@@ -50,6 +52,8 @@ final _aboutNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'about');
 /// GoRouter configuration provider, integrates auth redirect.
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
+  final biometricEnabled = ref.watch(biometricEnabledProvider);
+  final biometricAuthenticated = ref.watch(biometricAuthenticatedProvider);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -57,13 +61,32 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (BuildContext context, GoRouterState state) {
       final isAuthenticated = authState.valueOrNull != null;
       final isOnSignIn = state.matchedLocation == '/sign-in';
+      final isOnBiometric = state.matchedLocation == '/biometric';
 
       if (!isAuthenticated && !isOnSignIn) {
         return '/sign-in';
       }
       if (isAuthenticated && isOnSignIn) {
+        // After Firebase auth, check if biometric gate is needed.
+        if (biometricEnabled && !biometricAuthenticated) {
+          return '/biometric';
+        }
         return '/';
       }
+
+      // Biometric gate: if enabled and not yet verified, redirect.
+      if (isAuthenticated &&
+          biometricEnabled &&
+          !biometricAuthenticated &&
+          !isOnBiometric) {
+        return '/biometric';
+      }
+
+      // Already authenticated biometrically — leave biometric screen.
+      if (isAuthenticated && biometricAuthenticated && isOnBiometric) {
+        return '/';
+      }
+
       return null;
     },
     errorBuilder: (context, state) => const Error404Screen(),
@@ -72,6 +95,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/sign-in',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const EPSignScreen(),
+      ),
+      GoRoute(
+        path: '/biometric',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const BiometricScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

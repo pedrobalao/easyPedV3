@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:easypedv3/firebase_options.dart';
+import 'package:easypedv3/providers/biometric_provider.dart';
 import 'package:easypedv3/providers/theme_provider.dart';
 import 'package:easypedv3/router.dart';
 import 'package:easypedv3/services/app_info_service.dart';
+import 'package:easypedv3/services/biometric_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -26,6 +28,7 @@ void main() async {
     await Hive.openBox('cache_timestamps');
     await Hive.openBox('theme_preferences');
     await Hive.openBox('recent_searches');
+    await Hive.openBox('biometric_preferences');
 
     await AppInfoService.initiateAppInfoService();
 
@@ -45,11 +48,45 @@ void main() async {
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final biometricService = ref.read(biometricServiceProvider);
+    if (!biometricService.isEnabled) return;
+
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      // Record when the app went to the background.
+      biometricService.recordLastActive();
+    } else if (state == AppLifecycleState.resumed) {
+      // Require re-authentication if background timeout exceeded.
+      if (biometricService.shouldReauthenticate()) {
+        ref.read(biometricAuthenticatedProvider.notifier).state = false;
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: const Color(0xFF2963C8),
       secondary: const Color(0xFF28a745),

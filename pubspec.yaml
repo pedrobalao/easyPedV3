@@ -61,6 +61,7 @@ dependencies:
   fl_chart: ^0.69.2
   shimmer: ^3.0.0
   share_plus: ^10.1.4
+  local_auth: ^2.3.0
 
 flutter_icons:
   android: false
