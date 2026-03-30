@@ -1,6 +1,7 @@
 import 'package:easypedv3/providers/biometric_provider.dart';
 import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/screens/about/about_screen.dart';
+import 'package:easypedv3/screens/ai_chat/ai_chat_screen.dart';
 import 'package:easypedv3/screens/auth/biometric_screen.dart';
 import 'package:easypedv3/screens/auth/signin_screen.dart';
 import 'package:easypedv3/screens/diseases/disease_screen.dart';
@@ -215,6 +216,10 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'clinical-notes',
                     builder: (context, state) =>
                         const ClinicalNotesScreen(),
+                  ),
+                  GoRoute(
+                    path: 'ai-assistant',
+                    builder: (context, state) => const AiChatScreen(),
                   ),
                 ],
               ),
