@@ -11,6 +11,8 @@ import 'package:easypedv3/services/drugs_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+export 'package:easypedv3/providers/ai_chat_provider.dart'
+    show aiChatServiceProvider, chatMessagesProvider, chatLoadingProvider;
 export 'package:easypedv3/providers/search_provider.dart'
     show recentSearchesNotifierProvider;
 
