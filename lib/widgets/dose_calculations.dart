@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/services/pdf_service.dart';
 import 'package:easypedv3/utils/string_utils.dart';
 import 'package:easypedv3/widgets/loading.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:printing/printing.dart';
 
 class DoseCalculations extends ConsumerStatefulWidget {
   const DoseCalculations({required this.drug, super.key});
@@ -195,8 +197,45 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
           return resultWidgets[index];
         },
         itemCount: resultWidgets.length,
-      )
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: OutlinedButton.icon(
+          icon: const Icon(Icons.picture_as_pdf),
+          label: const Text('Exportar PDF'),
+          onPressed: () => _exportPdf(context),
+        ),
+      ),
     ]);
+  }
+
+  Future<void> _exportPdf(BuildContext context) async {
+    try {
+      final pdfBytes = await PdfService.generateDoseCalculationPdf(
+        drug: widget.drug,
+        results: _doseCalculationsResults,
+        variables: mapOfVariables,
+      );
+
+      final safeName = (widget.drug.name ?? 'dose')
+          .replaceAll(RegExp(r'[^\w\s-]'), '')
+          .replaceAll(RegExp(r'\s+'), '_');
+      await Printing.layoutPdf(
+        onLayout: (_) async => pdfBytes,
+        name: 'easyPed_${safeName}_calculo.pdf',
+      );
+
+      FirebaseAnalytics.instance.logEvent(
+        name: 'dose_pdf_export',
+        parameters: {'drug_id': widget.drug.id ?? 0},
+      );
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Erro ao gerar PDF')),
+        );
+      }
+    }
   }
 
   @override

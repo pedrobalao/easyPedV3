@@ -12,8 +12,10 @@ import 'package:easypedv3/screens/home_screen.dart';
 import 'package:easypedv3/screens/medical_calculations/medical_calculation_screen.dart';
 import 'package:easypedv3/screens/medical_calculations/medical_calculations_list_screen.dart';
 import 'package:easypedv3/screens/percentiles/percentiles_screen.dart';
+import 'package:easypedv3/screens/settings/notification_preferences_screen.dart';
 import 'package:easypedv3/screens/surgeries_referral/surgeries_referral_list_screen.dart';
 import 'package:easypedv3/screens/tools/apgar_score_screen.dart';
+import 'package:easypedv3/screens/tools/clinical_notes_screen.dart';
 import 'package:easypedv3/screens/tools/fluid_resuscitation_screen.dart';
 import 'package:easypedv3/screens/tools/glasgow_scale_screen.dart';
 import 'package:easypedv3/screens/tools/vital_signs_screen.dart';
@@ -209,6 +211,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                     builder: (context, state) =>
                         const FluidResuscitationScreen(),
                   ),
+                  GoRoute(
+                    path: 'clinical-notes',
+                    builder: (context, state) =>
+                        const ClinicalNotesScreen(),
+                  ),
                 ],
               ),
             ],
@@ -220,6 +227,13 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/about',
                 builder: (context, state) => const AboutScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'notification-preferences',
+                    builder: (context, state) =>
+                        const NotificationPreferencesScreen(),
+                  ),
+                ],
               ),
             ],
           ),
