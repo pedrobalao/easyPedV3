@@ -29,6 +29,8 @@ void main() async {
     await Hive.openBox('theme_preferences');
     await Hive.openBox('recent_searches');
     await Hive.openBox('biometric_preferences');
+    await Hive.openBox('clinical_notes');
+    await Hive.openBox('notification_preferences');
 
     await AppInfoService.initiateAppInfoService();
 

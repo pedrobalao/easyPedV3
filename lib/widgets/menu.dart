@@ -190,6 +190,15 @@ class Menu extends ConsumerWidget {
                   .setEnabled(enabled: value);
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.notifications),
+            title: const Text('Notificações'),
+            subtitle: const Text('Gerir preferências de notificações'),
+            onTap: () {
+              Navigator.pop(context);
+              context.go('/about/notification-preferences');
+            },
+          ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout),

@@ -5,6 +5,7 @@ import 'package:easypedv3/models/medical_calculation.dart';
 import 'package:easypedv3/models/news.dart';
 import 'package:easypedv3/models/percentile.dart';
 import 'package:easypedv3/models/surgery_referral.dart';
+import 'package:easypedv3/repositories/notes_repository.dart';
 import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/services/drugs_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -148,3 +149,10 @@ final congressProvider = FutureProvider<List<Congress>>((ref) async {
 
 /// Replaces LocalState singleton — tracks whether disclaimer was shown.
 final showedDisclaimerProvider = StateProvider<bool>((ref) => false);
+
+// ── Notes repository ────────────────────────────────────────────────
+
+/// Singleton NotesRepository provider for clinical notes.
+final notesRepositoryProvider = Provider<NotesRepository>((ref) {
+  return NotesRepository();
+});
