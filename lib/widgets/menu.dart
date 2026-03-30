@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:easypedv3/providers/biometric_provider.dart';
 import 'package:easypedv3/providers/theme_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -50,6 +51,7 @@ class Menu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = FirebaseAuth.instance.currentUser;
+    final biometricLockEnabled = ref.watch(biometricEnabledProvider);
 
     var email = 'your@email.com';
     var name = 'user';
@@ -174,6 +176,21 @@ class Menu extends ConsumerWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
+          // Biometric lock toggle
+          SwitchListTile(
+            secondary: const Icon(Icons.fingerprint),
+            title: const Text('Bloqueio biométrico'),
+            subtitle: Text(
+              biometricLockEnabled ? 'Ativado' : 'Desativado',
+            ),
+            value: biometricLockEnabled,
+            onChanged: (value) {
+              ref
+                  .read(biometricEnabledProvider.notifier)
+                  .setEnabled(enabled: value);
+            },
+          ),
+          const Divider(),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Sair'),
