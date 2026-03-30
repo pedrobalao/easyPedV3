@@ -73,8 +73,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     final biometricService = ref.read(biometricServiceProvider);
     if (!biometricService.isEnabled) return;
 
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused) {
       // Record when the app went to the background.
       biometricService.recordLastActive();
     } else if (state == AppLifecycleState.resumed) {
