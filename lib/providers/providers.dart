@@ -3,7 +3,6 @@ import 'package:easypedv3/models/disease.dart';
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/models/medical_calculation.dart';
 import 'package:easypedv3/models/news.dart';
-import 'package:easypedv3/models/percentile.dart';
 import 'package:easypedv3/models/surgery_referral.dart';
 import 'package:easypedv3/repositories/notes_repository.dart';
 import 'package:easypedv3/repositories/repositories.dart';
@@ -14,9 +13,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 export 'package:easypedv3/providers/ai_chat_provider.dart'
     show
         aiChatServiceProvider,
-        chatMessagesProvider,
+        aiDisclaimerAcceptedProvider,
         chatLoadingProvider,
-        aiDisclaimerAcceptedProvider;
+        chatMessagesProvider;
 export 'package:easypedv3/providers/search_provider.dart'
     show recentSearchesNotifierProvider;
 
@@ -54,8 +53,7 @@ final percentileRepositoryProvider = Provider<PercentileRepository>((ref) {
 
 final surgeryReferralRepositoryProvider =
     Provider<SurgeryReferralRepository>((ref) {
-  return SurgeryReferralRepository(
-      drugService: ref.watch(drugServiceProvider));
+  return SurgeryReferralRepository(drugService: ref.watch(drugServiceProvider));
 });
 
 final newsRepositoryProvider = Provider<NewsRepository>((ref) {
@@ -77,8 +75,7 @@ final categoriesProvider = FutureProvider<List<DrugCategory>>((ref) async {
 });
 
 /// Single drug by ID.
-final drugDetailProvider =
-    FutureProvider.family<Drug, int>((ref, id) async {
+final drugDetailProvider = FutureProvider.family<Drug, int>((ref, id) async {
   final repo = ref.watch(drugRepositoryProvider);
   return repo.getDrug(id);
 });
@@ -91,8 +88,9 @@ final subCategoriesProvider =
 });
 
 /// Drugs for a given sub-category.
-final drugsBySubCategoryProvider = FutureProvider.family<List<Drug>,
-    ({int categoryId, int subCategoryId})>((ref, params) async {
+final drugsBySubCategoryProvider =
+    FutureProvider.family<List<Drug>, ({int categoryId, int subCategoryId})>(
+        (ref, params) async {
   final repo = ref.watch(drugRepositoryProvider);
   return repo.getDrugsBySubCategory(params.categoryId, params.subCategoryId);
 });

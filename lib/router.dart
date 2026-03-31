@@ -22,7 +22,6 @@ import 'package:easypedv3/screens/tools/glasgow_scale_screen.dart';
 import 'package:easypedv3/screens/tools/vital_signs_screen.dart';
 import 'package:easypedv3/screens/tools_screen.dart';
 import 'package:easypedv3/widgets/scaffold_with_nav_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -214,8 +213,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'clinical-notes',
-                    builder: (context, state) =>
-                        const ClinicalNotesScreen(),
+                    builder: (context, state) => const ClinicalNotesScreen(),
                   ),
                   GoRoute(
                     path: 'ai-assistant',

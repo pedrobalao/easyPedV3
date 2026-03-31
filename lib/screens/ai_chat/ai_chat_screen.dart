@@ -46,7 +46,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
     final accepted = ref.read(aiDisclaimerAcceptedProvider);
     if (!accepted) {
-      Future.delayed(Duration.zero, () => _showDisclaimerDialog());
+      Future.delayed(Duration.zero, _showDisclaimerDialog);
     }
   }
 
@@ -265,9 +265,8 @@ class _ChatBubble extends StatelessWidget {
             SelectableText(
               message.text,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: isUser
-                        ? colorScheme.onPrimary
-                        : colorScheme.onSurface,
+                    color:
+                        isUser ? colorScheme.onPrimary : colorScheme.onSurface,
                   ),
             ),
             const SizedBox(height: 4),

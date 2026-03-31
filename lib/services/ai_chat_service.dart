@@ -1,11 +1,11 @@
-import 'package:firebase_vertexai/firebase_vertexai.dart';
+import 'package:firebase_ai/firebase_ai.dart';
 
 /// Service that wraps Firebase Vertex AI (Gemini 2.0 Flash) for pediatric
 /// medical chat assistance.
 class AiChatService {
   AiChatService() {
-    _model = FirebaseVertexAI.instanceFor().generativeModel(
-      model: 'gemini-2.0-flash',
+    _model = FirebaseAI.vertexAI().generativeModel(
+      model: 'gemini-2.5-flash-lite',
       systemInstruction: Content.system(_systemPrompt),
     );
   }
