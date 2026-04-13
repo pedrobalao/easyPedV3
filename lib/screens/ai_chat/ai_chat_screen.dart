@@ -1,5 +1,6 @@
 import 'package:easypedv3/models/chat_message.dart';
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/widgets/pro_feature_gate.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -146,12 +147,6 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _checkDisclaimer();
-
-    final messages = ref.watch(chatMessagesProvider);
-    final isLoading = ref.watch(chatLoadingProvider);
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -164,64 +159,103 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // ── Persistent disclaimer banner ──
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(12),
-            color: colorScheme.primary.withValues(alpha: 0.1),
-            child: Row(
-              children: [
-                Icon(Icons.info_outline, color: colorScheme.primary, size: 20),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'As respostas são para fins educacionais e devem ser '
-                    'validadas pelo médico.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.primary,
-                        ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // ── Messages or empty state ──
-          Expanded(
-            child: messages.isEmpty
-                ? _EmptyState(
-                    suggestions: _quickSuggestions,
-                    onSuggestionTap: (suggestion) {
-                      _sendMessage(suggestion);
-                    },
-                  )
-                : ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    itemCount: messages.length + (isLoading ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index == messages.length && isLoading) {
-                        return const _TypingIndicator();
-                      }
-                      return _ChatBubble(message: messages[index]);
-                    },
-                  ),
-          ),
-
-          // ── Input area ──
-          const Divider(height: 1),
-          _InputArea(
-            controller: _textController,
-            isLoading: isLoading,
-            onSend: () => _sendMessage(),
-          ),
-        ],
+      body: ProFeatureGate(
+        featureName: 'Assistente IA',
+        featureKey: 'ai_chat',
+        child: _AiChatBody(
+          checkDisclaimer: _checkDisclaimer,
+          textController: _textController,
+          scrollController: _scrollController,
+          quickSuggestions: _quickSuggestions,
+          onSend: _sendMessage,
+        ),
       ),
+    );
+  }
+}
+
+// ── AI Chat body (shown only for Pro users) ──────────────────────────
+
+class _AiChatBody extends ConsumerWidget {
+  const _AiChatBody({
+    required this.checkDisclaimer,
+    required this.textController,
+    required this.scrollController,
+    required this.quickSuggestions,
+    required this.onSend,
+  });
+
+  final VoidCallback checkDisclaimer;
+  final TextEditingController textController;
+  final ScrollController scrollController;
+  final List<String> quickSuggestions;
+  final void Function([String?]) onSend;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    checkDisclaimer();
+
+    final messages = ref.watch(chatMessagesProvider);
+    final isLoading = ref.watch(chatLoadingProvider);
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      children: [
+        // ── Persistent disclaimer banner ──
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          color: colorScheme.primary.withValues(alpha: 0.1),
+          child: Row(
+            children: [
+              Icon(Icons.info_outline, color: colorScheme.primary, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'As respostas são para fins educacionais e devem ser '
+                  'validadas pelo médico.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.primary,
+                      ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // ── Messages or empty state ──
+        Expanded(
+          child: messages.isEmpty
+              ? _EmptyState(
+                  suggestions: quickSuggestions,
+                  onSuggestionTap: (suggestion) {
+                    onSend(suggestion);
+                  },
+                )
+              : ListView.builder(
+                  controller: scrollController,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  itemCount: messages.length + (isLoading ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == messages.length && isLoading) {
+                      return const _TypingIndicator();
+                    }
+                    return _ChatBubble(message: messages[index]);
+                  },
+                ),
+        ),
+
+        // ── Input area ──
+        const Divider(height: 1),
+        _InputArea(
+          controller: textController,
+          isLoading: isLoading,
+          onSend: () => onSend(),
+        ),
+      ],
     );
   }
 }

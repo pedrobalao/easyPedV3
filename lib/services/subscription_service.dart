@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:easypedv3/services/analytics_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -49,12 +50,32 @@ class SubscriptionService {
     // Emit the current status immediately, then track future changes.
     final initial = await Purchases.getCustomerInfo();
     _isProController.add(initial.entitlements.active.containsKey('pro'));
+    _updateSubscriptionStatus(initial);
 
     Purchases.addCustomerInfoUpdateListener((customerInfo) {
       _isProController.add(
         customerInfo.entitlements.active.containsKey('pro'),
       );
+      _updateSubscriptionStatus(customerInfo);
     });
+  }
+
+  /// Sets the Firebase Analytics `subscription_status` user property
+  /// based on the current customer info.
+  void _updateSubscriptionStatus(CustomerInfo info) {
+    final proEntitlement = info.entitlements.active['pro'];
+    if (proEntitlement == null) {
+      AnalyticsService.setSubscriptionStatus('free');
+      return;
+    }
+    final periodType = proEntitlement.periodType;
+    if (periodType == PeriodType.annual) {
+      AnalyticsService.setSubscriptionStatus('pro_yearly');
+    } else if (periodType == PeriodType.monthly) {
+      AnalyticsService.setSubscriptionStatus('pro_monthly');
+    } else {
+      AnalyticsService.setSubscriptionStatus('pro_monthly');
+    }
   }
 
   // ── Status ──────────────────────────────────────────────────────────

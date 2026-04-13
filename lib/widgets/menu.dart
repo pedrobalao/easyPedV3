@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:easypedv3/providers/biometric_provider.dart';
+import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/providers/theme_provider.dart';
+import 'package:easypedv3/widgets/pro_feature_gate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +10,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class _Menu {
-  _Menu({required this.title, required this.icon, required this.route});
+  _Menu({
+    required this.title,
+    required this.icon,
+    required this.route,
+    this.isProFeature = false,
+  });
 
   final String title;
   final Icon icon;
   final String route;
+  final bool isProFeature;
 }
 
 class Menu extends ConsumerWidget {
@@ -176,6 +184,25 @@ class Menu extends ConsumerWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
+          // Subscription status / upgrade
+          if (!(ref.watch(isProProvider).value ?? false))
+            ListTile(
+              leading: Icon(
+                Icons.workspace_premium,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              title: Row(
+                children: [
+                  const Text('Atualizar para Pro'),
+                  const SizedBox(width: 8),
+                  const ProBadge(),
+                ],
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                context.push('/subscription');
+              },
+            ),
           // Biometric lock toggle
           SwitchListTile(
             secondary: const Icon(Icons.fingerprint),

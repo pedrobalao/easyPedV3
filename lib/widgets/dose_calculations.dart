@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/providers/subscription_provider.dart';
+import 'package:easypedv3/services/analytics_service.dart';
 import 'package:easypedv3/services/pdf_service.dart';
 import 'package:easypedv3/utils/string_utils.dart';
 import 'package:easypedv3/widgets/loading.dart';
@@ -9,6 +11,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 
 class DoseCalculations extends ConsumerStatefulWidget {
@@ -26,15 +29,17 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
   Map mapOfVariables = {};
   List<DoseCalculationResult> _doseCalculationsResults = [];
   bool _loading = false;
+  bool _limitReached = false;
 
   Timer? _debounce;
 
   static const int nullNumberVal = -99923143898;
 
   void _invalidateResult() {
-    if (_doseCalculationsResults.isNotEmpty) {
+    if (_doseCalculationsResults.isNotEmpty || _limitReached) {
       setState(() {
         _doseCalculationsResults = [];
+        _limitReached = false;
       });
     }
   }
@@ -49,8 +54,23 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
       }
       if (!mapOfVariables.containsValue(null) &&
           !mapOfVariables.containsValue('')) {
+        // Check usage limit for free users.
+        final isPro = ref.read(isProProvider).value ?? false;
+        final usage = ref.read(doseUsageProvider);
+
+        if (!isPro && usage >= DoseUsageNotifier.freeLimit) {
+          AnalyticsService.logFeatureGateHit(feature: 'dose_calc');
+          setState(() {
+            _loading = false;
+            _doseCalculationsResults = [];
+            _limitReached = true;
+          });
+          return;
+        }
+
         setState(() {
           _loading = true;
+          _limitReached = false;
         });
 
         if (kDebugMode) {
@@ -64,6 +84,11 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
           name: 'drug_dose_calculation',
           parameters: {'drug_id': widget.drug.id!},
         );
+
+        // Track usage for free users.
+        if (!isPro) {
+          ref.read(doseUsageProvider.notifier).increment();
+        }
 
         setState(() {
           _loading = false;
@@ -275,7 +300,80 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: _loading
               ? const Loading()
-              : doseCalculationResultsWidget(context))
+              : _limitReached
+                  ? _DoseUsageLimitPrompt()
+                  : doseCalculationResultsWidget(context))
     ]);
+  }
+}
+
+// ── Dose usage limit prompt ─────────────────────────────────────────
+
+class _DoseUsageLimitPrompt extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Center(
+      child: Card(
+        elevation: 0,
+        color: colorScheme.surfaceContainerLow,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        margin: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: colorScheme.primaryContainer,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.calculate_outlined,
+                  size: 28,
+                  color: colorScheme.primary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Limite diário atingido',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Atingiu o limite de ${DoseUsageNotifier.freeLimit} cálculos '
+                'gratuitos por dia. Atualize para Pro para cálculos ilimitados.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              FilledButton.icon(
+                onPressed: () => context.push('/subscription'),
+                icon: const Icon(Icons.workspace_premium, size: 18),
+                label: const Text('Atualizar para Pro'),
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

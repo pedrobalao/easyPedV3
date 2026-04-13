@@ -1,4 +1,5 @@
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -7,7 +8,10 @@ import 'package:url_launcher/url_launcher.dart';
 /// Paywall / upgrade screen that presents easyPed Pro benefits and allows
 /// users to subscribe via RevenueCat.
 class PaywallScreen extends ConsumerStatefulWidget {
-  const PaywallScreen({super.key});
+  const PaywallScreen({super.key, this.source});
+
+  /// Which feature triggered the paywall (used for analytics).
+  final String? source;
 
   @override
   ConsumerState<PaywallScreen> createState() => _PaywallScreenState();
@@ -18,9 +22,25 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   bool _isPurchasing = false;
   bool _isRestoring = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // Log paywall_viewed analytics event.
+    AnalyticsService.logPaywallViewed(
+      source: widget.source ?? 'unknown',
+    );
+  }
+
   // ── Purchase flow ──────────────────────────────────────────────────
   Future<void> _subscribe() async {
     if (_selectedPackage == null || _isPurchasing) return;
+
+    final planName = _selectedPackage!.packageType == PackageType.annual
+        ? 'yearly'
+        : 'monthly';
+
+    // Log purchase_started.
+    AnalyticsService.logPurchaseStarted(plan: planName);
 
     setState(() => _isPurchasing = true);
 
@@ -31,13 +51,24 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       if (!mounted) return;
 
       if (customerInfo != null) {
+        // Log purchase_completed.
+        AnalyticsService.logPurchaseCompleted(
+          plan: planName,
+          price: _selectedPackage!.storeProduct.priceString,
+        );
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Subscrição ativa com sucesso!')),
         );
         Navigator.of(context).pop();
+      } else {
+        // null means the user cancelled.
+        AnalyticsService.logPurchaseCancelled();
       }
-      // null means the user cancelled — do nothing.
     } catch (e) {
+      // Log purchase_failed.
+      AnalyticsService.logPurchaseFailed(errorCode: e.toString());
+
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao processar compra: $e')),
@@ -49,6 +80,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   Future<void> _restorePurchases() async {
     if (_isRestoring) return;
+
+    // Log restore_purchases_tapped.
+    AnalyticsService.logRestorePurchasesTapped();
 
     setState(() => _isRestoring = true);
 
@@ -148,7 +182,12 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                           package: annual,
                           isSelected: _selectedPackage == annual,
                           badge: _annualSavings(monthly, annual),
-                          onTap: () => setState(() => _selectedPackage = annual),
+                          onTap: () {
+                            AnalyticsService.logPaywallPlanSelected(
+                              plan: 'yearly',
+                            );
+                            setState(() => _selectedPackage = annual);
+                          },
                         ),
                       if (annual != null && monthly != null)
                         const SizedBox(height: 12),
@@ -156,8 +195,12 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                         _PlanCard(
                           package: monthly,
                           isSelected: _selectedPackage == monthly,
-                          onTap: () =>
-                              setState(() => _selectedPackage = monthly),
+                          onTap: () {
+                            AnalyticsService.logPaywallPlanSelected(
+                              plan: 'monthly',
+                            );
+                            setState(() => _selectedPackage = monthly);
+                          },
                         ),
                     ],
                   );

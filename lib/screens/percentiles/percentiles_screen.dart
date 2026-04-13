@@ -8,6 +8,7 @@ import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/date_picker_widget.dart';
 import 'package:easypedv3/widgets/growth_chart.dart';
 import 'package:easypedv3/widgets/loading.dart';
+import 'package:easypedv3/widgets/pro_feature_gate.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -300,46 +301,55 @@ class PercentileState extends ConsumerState<PercentilesWidget>
                 else
                   calculationResultsWidget(context),
 
-                // ── Growth Charts ───────────────────────────────
+                // ── Growth Charts (Pro only) ───────────────────────
                 if (!_loading &&
                     (weight != null || length != null) &&
                     _getAgeInMonths() != null) ...[
                   const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      'Curvas de Crescimento (OMS)',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const GrowthChartLegend(),
-                  // Tab bar for Weight / Height charts
-                  TabBar(
-                    controller: _tabController,
-                    tabs: const [
-                      Tab(text: 'Peso'),
-                      Tab(text: 'Altura'),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 320,
-                    child: TabBarView(
-                      controller: _tabController,
+                  ProFeatureGate(
+                    featureName: 'Curvas de Crescimento',
+                    featureKey: 'growth_charts',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Weight chart
-                        GrowthChart(
-                          chartType: GrowthChartType.weight,
-                          isMale: _isMale,
-                          patientAgeMonths: _getAgeInMonths(),
-                          patientValue: weight,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            'Curvas de Crescimento (OMS)',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
                         ),
-                        // Height chart
-                        GrowthChart(
-                          chartType: GrowthChartType.height,
-                          isMale: _isMale,
-                          patientAgeMonths: _getAgeInMonths(),
-                          patientValue: length,
+                        const SizedBox(height: 8),
+                        const GrowthChartLegend(),
+                        // Tab bar for Weight / Height charts
+                        TabBar(
+                          controller: _tabController,
+                          tabs: const [
+                            Tab(text: 'Peso'),
+                            Tab(text: 'Altura'),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 320,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              // Weight chart
+                              GrowthChart(
+                                chartType: GrowthChartType.weight,
+                                isMale: _isMale,
+                                patientAgeMonths: _getAgeInMonths(),
+                                patientValue: weight,
+                              ),
+                              // Height chart
+                              GrowthChart(
+                                chartType: GrowthChartType.height,
+                                isMale: _isMale,
+                                patientAgeMonths: _getAgeInMonths(),
+                                patientValue: length,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

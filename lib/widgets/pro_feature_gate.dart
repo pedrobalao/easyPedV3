@@ -1,4 +1,5 @@
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +16,7 @@ class ProFeatureGate extends ConsumerWidget {
     super.key,
     required this.child,
     this.featureName,
+    this.featureKey,
   });
 
   /// The premium content shown to Pro users.
@@ -23,24 +25,46 @@ class ProFeatureGate extends ConsumerWidget {
   /// Display name of the feature shown in the upgrade prompt (optional).
   final String? featureName;
 
+  /// Short snake_case key used for analytics (e.g. `ai_chat`, `growth_charts`).
+  final String? featureKey;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isProAsync = ref.watch(isProProvider);
 
     return isProAsync.when(
-      data: (isPro) => isPro ? child : _UpgradePrompt(featureName: featureName),
+      data: (isPro) {
+        if (isPro) return child;
+        return _UpgradePrompt(featureName: featureName, featureKey: featureKey);
+      },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, __) => _UpgradePrompt(featureName: featureName),
+      error: (_, __) =>
+          _UpgradePrompt(featureName: featureName, featureKey: featureKey),
     );
   }
 }
 
 // ── Upgrade prompt ────────────────────────────────────────────────────
 
-class _UpgradePrompt extends StatelessWidget {
-  const _UpgradePrompt({this.featureName});
+class _UpgradePrompt extends StatefulWidget {
+  const _UpgradePrompt({this.featureName, this.featureKey});
 
   final String? featureName;
+  final String? featureKey;
+
+  @override
+  State<_UpgradePrompt> createState() => _UpgradePromptState();
+}
+
+class _UpgradePromptState extends State<_UpgradePrompt> {
+  @override
+  void initState() {
+    super.initState();
+    // Log the feature_gate_hit event once when the prompt is first shown.
+    if (widget.featureKey != null) {
+      AnalyticsService.logFeatureGateHit(feature: widget.featureKey!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +96,8 @@ class _UpgradePrompt extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                featureName != null
-                    ? '$featureName é uma funcionalidade Pro'
+                widget.featureName != null
+                    ? '${widget.featureName} é uma funcionalidade Pro'
                     : 'Funcionalidade Pro',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,

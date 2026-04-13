@@ -1,8 +1,14 @@
 import 'package:easypedv3/models/clinical_note.dart';
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/services/analytics_service.dart';
+import 'package:easypedv3/widgets/pro_feature_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
+/// Maximum number of clinical notes for free users.
+const int _freeNoteLimit = 5;
 
 /// Temporary shift notepad for clinical notes with auto-delete after 24 hours.
 class ClinicalNotesScreen extends ConsumerStatefulWidget {
@@ -40,10 +46,53 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
     final text = _textController.text.trim();
     if (text.isEmpty) return;
 
+    // Check note limit for free users.
+    final isPro = ref.read(isProProvider).value ?? false;
+    if (!isPro && _notes.length >= _freeNoteLimit) {
+      AnalyticsService.logFeatureGateHit(feature: 'clinical_notes');
+      if (mounted) {
+        _showNoteLimitDialog();
+      }
+      return;
+    }
+
     final repo = ref.read(notesRepositoryProvider);
     await repo.addNote(text);
     _textController.clear();
     _loadNotes();
+  }
+
+  void _showNoteLimitDialog() {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        icon: Icon(Icons.note_alt, size: 48, color: colorScheme.primary),
+        title: const Text('Limite de notas atingido'),
+        content: Text(
+          'O plano gratuito permite até $_freeNoteLimit notas clínicas. '
+          'Atualize para Pro para notas ilimitadas.',
+          textAlign: TextAlign.center,
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton.icon(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              context.push('/subscription');
+            },
+            icon: const Icon(Icons.workspace_premium, size: 18),
+            label: const Text('Atualizar para Pro'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _deleteNote(String id) async {
@@ -70,6 +119,8 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isPro = ref.watch(isProProvider).value ?? false;
+    final noteCountAtLimit = !isPro && _notes.length >= _freeNoteLimit;
 
     return Scaffold(
       appBar: AppBar(
@@ -103,27 +154,48 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
           // Input area
           Padding(
             padding: const EdgeInsets.all(12),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Escrever nota clínica...',
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _textController,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          hintText: noteCountAtLimit
+                              ? 'Limite de notas atingido'
+                              : 'Escrever nota clínica...',
+                        ),
+                        enabled: !noteCountAtLimit,
+                        maxLines: 3,
+                        minLines: 1,
+                        textInputAction: TextInputAction.done,
+                        onSubmitted: (_) => _addNote(),
+                      ),
                     ),
-                    maxLines: 3,
-                    minLines: 1,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => _addNote(),
+                    const SizedBox(width: 8),
+                    IconButton.filled(
+                      icon: const Icon(Icons.add),
+                      onPressed: _addNote,
+                      tooltip: noteCountAtLimit
+                          ? 'Limite atingido'
+                          : 'Adicionar nota',
+                    ),
+                  ],
+                ),
+                if (!isPro)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      '${_notes.length}/$_freeNoteLimit notas (plano gratuito)',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: noteCountAtLimit
+                                ? colorScheme.error
+                                : colorScheme.onSurface.withValues(alpha: 0.5),
+                          ),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                IconButton.filled(
-                  icon: const Icon(Icons.add),
-                  onPressed: _addNote,
-                  tooltip: 'Adicionar nota',
-                ),
               ],
             ),
           ),
