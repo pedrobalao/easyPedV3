@@ -35,24 +35,36 @@ class ProFeatureGate extends ConsumerWidget {
     return isProAsync.when(
       data: (isPro) {
         if (isPro) return child;
-        // Log analytics event when a free user hits the gate.
-        if (featureKey != null) {
-          AnalyticsService.logFeatureGateHit(feature: featureKey!);
-        }
-        return _UpgradePrompt(featureName: featureName);
+        return _UpgradePrompt(featureName: featureName, featureKey: featureKey);
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, __) => _UpgradePrompt(featureName: featureName),
+      error: (_, __) =>
+          _UpgradePrompt(featureName: featureName, featureKey: featureKey),
     );
   }
 }
 
 // ── Upgrade prompt ────────────────────────────────────────────────────
 
-class _UpgradePrompt extends StatelessWidget {
-  const _UpgradePrompt({this.featureName});
+class _UpgradePrompt extends StatefulWidget {
+  const _UpgradePrompt({this.featureName, this.featureKey});
 
   final String? featureName;
+  final String? featureKey;
+
+  @override
+  State<_UpgradePrompt> createState() => _UpgradePromptState();
+}
+
+class _UpgradePromptState extends State<_UpgradePrompt> {
+  @override
+  void initState() {
+    super.initState();
+    // Log the feature_gate_hit event once when the prompt is first shown.
+    if (widget.featureKey != null) {
+      AnalyticsService.logFeatureGateHit(feature: widget.featureKey!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +96,8 @@ class _UpgradePrompt extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                featureName != null
-                    ? '$featureName é uma funcionalidade Pro'
+                widget.featureName != null
+                    ? '${widget.featureName} é uma funcionalidade Pro'
                     : 'Funcionalidade Pro',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
