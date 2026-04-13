@@ -1,0 +1,154 @@
+import 'package:easypedv3/providers/providers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+// ── ProFeatureGate ────────────────────────────────────────────────────
+
+/// Wraps a premium feature [child].
+///
+/// Pro users see [child] directly. Free users see a card with a lock icon,
+/// the [featureName] description, and an upgrade button that navigates to
+/// `/subscription`.
+class ProFeatureGate extends ConsumerWidget {
+  const ProFeatureGate({
+    super.key,
+    required this.child,
+    this.featureName,
+  });
+
+  /// The premium content shown to Pro users.
+  final Widget child;
+
+  /// Display name of the feature shown in the upgrade prompt (optional).
+  final String? featureName;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isProAsync = ref.watch(isProProvider);
+
+    return isProAsync.when(
+      data: (isPro) => isPro ? child : _UpgradePrompt(featureName: featureName),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => _UpgradePrompt(featureName: featureName),
+    );
+  }
+}
+
+// ── Upgrade prompt ────────────────────────────────────────────────────
+
+class _UpgradePrompt extends StatelessWidget {
+  const _UpgradePrompt({this.featureName});
+
+  final String? featureName;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Center(
+      child: Card(
+        elevation: 0,
+        color: colorScheme.surfaceContainerLow,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        margin: const EdgeInsets.all(24),
+        child: Padding(
+          padding: const EdgeInsets.all(28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: colorScheme.primaryContainer,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.lock_outline,
+                  size: 32,
+                  color: colorScheme.primary,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                featureName != null
+                    ? '$featureName é uma funcionalidade Pro'
+                    : 'Funcionalidade Pro',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Atualize para easyPed Pro para aceder a esta funcionalidade.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              FilledButton.icon(
+                onPressed: () => context.push('/subscription'),
+                icon: const Icon(Icons.workspace_premium, size: 18),
+                label: const Text('Atualizar para Pro'),
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── ProBadge ──────────────────────────────────────────────────────────
+
+/// A small 'PRO' chip used to mark premium features in lists or menus.
+class ProBadge extends StatelessWidget {
+  const ProBadge({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: colorScheme.primary,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        'PRO',
+        style: TextStyle(
+          color: colorScheme.onPrimary,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+}
+
+// ── WidgetRef extension ───────────────────────────────────────────────
+
+/// Convenience extension for quick inline pro-status checks.
+///
+/// ```dart
+/// if (ref.isPro) { /* show premium content */ }
+/// ```
+extension ProRef on WidgetRef {
+  /// Returns the current pro-status synchronously from the provider cache.
+  /// Defaults to `false` while loading or on error.
+  bool get isPro => watch(isProProvider).value ?? false;
+}

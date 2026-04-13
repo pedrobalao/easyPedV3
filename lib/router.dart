@@ -14,6 +14,7 @@ import 'package:easypedv3/screens/medical_calculations/medical_calculation_scree
 import 'package:easypedv3/screens/medical_calculations/medical_calculations_list_screen.dart';
 import 'package:easypedv3/screens/percentiles/percentiles_screen.dart';
 import 'package:easypedv3/screens/settings/notification_preferences_screen.dart';
+import 'package:easypedv3/screens/subscription/paywall_screen.dart';
 import 'package:easypedv3/screens/surgeries_referral/surgeries_referral_list_screen.dart';
 import 'package:easypedv3/screens/tools/apgar_score_screen.dart';
 import 'package:easypedv3/screens/tools/clinical_notes_screen.dart';
@@ -102,6 +103,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/biometric',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const BiometricScreen(),
+      ),
+      GoRoute(
+        path: '/subscription',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const PaywallScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

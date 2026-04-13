@@ -18,6 +18,8 @@ export 'package:easypedv3/providers/ai_chat_provider.dart'
         chatMessagesProvider;
 export 'package:easypedv3/providers/search_provider.dart'
     show recentSearchesNotifierProvider;
+export 'package:easypedv3/providers/subscription_provider.dart'
+    show isProProvider, offeringsProvider, subscriptionServiceProvider;
 
 // ── Auth ────────────────────────────────────────────────────────────
 

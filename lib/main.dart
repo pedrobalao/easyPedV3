@@ -5,6 +5,8 @@ import 'package:easypedv3/providers/biometric_provider.dart';
 import 'package:easypedv3/providers/theme_provider.dart';
 import 'package:easypedv3/router.dart';
 import 'package:easypedv3/services/app_info_service.dart';
+import 'package:easypedv3/services/subscription_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -45,6 +47,12 @@ void main() async {
 
     // The following lines are the same as previously explained in "Handling uncaught errors"
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+    // Initialize RevenueCat with the authenticated Firebase user ID.
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      await SubscriptionService.instance.init(currentUser.uid);
+    }
 
     runApp(const ProviderScope(child: MyApp()));
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
