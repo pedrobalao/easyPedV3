@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends ConsumerStatefulWidget {
@@ -91,13 +96,34 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isPro = ref.watch(isProProvider).value ?? false;
+    final customerInfoAsync = ref.watch(customerInfoProvider);
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
         appBar: AppBar(title: const Text('easyPed')),
         body: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            // ── Subscription section ──────────────────────────
             ListTile(
-              tileColor: Theme.of(context).colorScheme.secondary,
+              tileColor: colorScheme.secondary,
+              title: Text('Subscrição',
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.clip,
+                  style: Theme.of(context).textTheme.headlineMedium),
+            ),
+            _SubscriptionSection(
+              isPro: isPro,
+              customerInfoAsync: customerInfoAsync,
+              onUpgrade: () => context.push('/subscription'),
+              onRestore: _restorePurchases,
+              onManage: _openManageSubscription,
+            ),
+            const Gap(5),
+
+            ListTile(
+              tileColor: colorScheme.secondary,
               title: Text('Segue-nos nas redes sociais',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -115,7 +141,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
             )),
             const Gap(5),
             ListTile(
-              tileColor: Theme.of(context).colorScheme.secondary,
+              tileColor: colorScheme.secondary,
               title: Text('Autores',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -123,7 +149,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
             ),
             Padding(padding: const EdgeInsets.all(5), child: authorsWdgt()),
             ListTile(
-              tileColor: Theme.of(context).colorScheme.secondary,
+              tileColor: colorScheme.secondary,
               title: Text('Isenção de Responsabilidade',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -138,7 +164,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                   const Gap(1),
                 ])),
             ListTile(
-              tileColor: Theme.of(context).colorScheme.secondary,
+              tileColor: colorScheme.secondary,
               title: Text('Bibliografia essencial consultada',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.clip,
@@ -153,5 +179,197 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
             const Gap(5),
           ]),
         ));
+  }
+
+  // ── Subscription actions ─────────────────────────────────────────
+
+  Future<void> _restorePurchases() async {
+    try {
+      final service = ref.read(subscriptionServiceProvider);
+      final info = await service.restorePurchases();
+      if (!mounted) return;
+
+      final restored = info.entitlements.active.containsKey('pro');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(restored
+              ? 'Compras restauradas! easyPed Pro ativo.'
+              : 'Nenhuma compra anterior encontrada.'),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao restaurar compras: $e')),
+      );
+    }
+  }
+
+  Future<void> _openManageSubscription() async {
+    final url = Platform.isIOS
+        ? 'https://apps.apple.com/account/subscriptions'
+        : 'https://play.google.com/store/account/subscriptions';
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Não foi possível abrir $url')),
+        );
+      }
+    }
+  }
+}
+
+// ── Subscription section widget ──────────────────────────────────────
+
+class _SubscriptionSection extends StatelessWidget {
+  const _SubscriptionSection({
+    required this.isPro,
+    required this.customerInfoAsync,
+    required this.onUpgrade,
+    required this.onRestore,
+    required this.onManage,
+  });
+
+  final bool isPro;
+  final AsyncValue customerInfoAsync;
+  final VoidCallback onUpgrade;
+  final VoidCallback onRestore;
+  final VoidCallback onManage;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Card(
+        elevation: 0,
+        color: colorScheme.surfaceContainerLow,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    isPro ? Icons.workspace_premium : Icons.person,
+                    color: isPro ? colorScheme.primary : colorScheme.onSurface,
+                    size: 28,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          isPro ? 'easyPed Pro' : 'easyPed Free',
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        if (isPro)
+                          _ProDetails(customerInfoAsync: customerInfoAsync),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              if (isPro) ...[
+                // Manage subscription
+                OutlinedButton.icon(
+                  onPressed: onManage,
+                  icon: const Icon(Icons.settings, size: 18),
+                  label: const Text('Gerir subscrição'),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 44),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ] else ...[
+                // Upgrade button
+                FilledButton.icon(
+                  onPressed: onUpgrade,
+                  icon: const Icon(Icons.workspace_premium, size: 18),
+                  label: const Text('Atualizar para Pro'),
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 44),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // Restore purchases
+                Center(
+                  child: TextButton(
+                    onPressed: onRestore,
+                    child: const Text('Restaurar compras'),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Pro subscription details ─────────────────────────────────────────
+
+class _ProDetails extends StatelessWidget {
+  const _ProDetails({required this.customerInfoAsync});
+
+  final AsyncValue customerInfoAsync;
+
+  @override
+  Widget build(BuildContext context) {
+    return customerInfoAsync.when(
+      data: (info) {
+        final proEntitlement = info.entitlements.active['pro'];
+        if (proEntitlement == null) return const SizedBox.shrink();
+
+        final expiryDate = proEntitlement.expirationDate;
+        final periodType = proEntitlement.periodType;
+
+        final planLabel = periodType == PeriodType.annual
+            ? 'Plano Anual'
+            : periodType == PeriodType.monthly
+                ? 'Plano Mensal'
+                : 'Ativo';
+
+        String expiryLabel = '';
+        if (expiryDate != null) {
+          final date = DateTime.tryParse(expiryDate);
+          if (date != null) {
+            expiryLabel =
+                ' · Renova a ${date.day}/${date.month}/${date.year}';
+          }
+        }
+
+        return Text(
+          '$planLabel$expiryLabel',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
+              ),
+        );
+      },
+      loading: () => const SizedBox(
+        height: 14,
+        width: 14,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      ),
+      error: (_, __) => const SizedBox.shrink(),
+    );
   }
 }
