@@ -232,7 +232,7 @@ class _SubscriptionSection extends StatelessWidget {
   });
 
   final bool isPro;
-  final AsyncValue customerInfoAsync;
+  final AsyncValue<CustomerInfo> customerInfoAsync;
   final VoidCallback onUpgrade;
   final VoidCallback onRestore;
   final VoidCallback onManage;
@@ -327,7 +327,7 @@ class _SubscriptionSection extends StatelessWidget {
 class _ProDetails extends StatelessWidget {
   const _ProDetails({required this.customerInfoAsync});
 
-  final AsyncValue customerInfoAsync;
+  final AsyncValue<CustomerInfo> customerInfoAsync;
 
   @override
   Widget build(BuildContext context) {

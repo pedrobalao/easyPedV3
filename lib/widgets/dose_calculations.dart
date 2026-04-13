@@ -36,9 +36,10 @@ class DoseCalculationsState extends ConsumerState<DoseCalculations> {
   static const int nullNumberVal = -99923143898;
 
   void _invalidateResult() {
-    if (_doseCalculationsResults.isNotEmpty) {
+    if (_doseCalculationsResults.isNotEmpty || _limitReached) {
       setState(() {
         _doseCalculationsResults = [];
+        _limitReached = false;
       });
     }
   }
