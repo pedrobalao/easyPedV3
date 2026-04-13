@@ -65,6 +65,7 @@ dependencies:
   pdf: ^3.11.1
   printing: ^5.13.3
   firebase_ai: ^3.10.0
+  purchases_flutter: ^8.7.1
 
 flutter_icons:
   android: false
