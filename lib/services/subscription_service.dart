@@ -27,12 +27,28 @@ class SubscriptionService {
   ///
   /// Registers a listener that pushes pro-status updates to [isProStream].
   Future<void> init(String userId) async {
+    final appleKey = dotenv.env['REVENUECAT_APPLE_API_KEY'];
+    final googleKey = dotenv.env['REVENUECAT_GOOGLE_API_KEY'];
+
+    assert(
+      appleKey != null && appleKey.isNotEmpty,
+      'REVENUECAT_APPLE_API_KEY is missing from .env',
+    );
+    assert(
+      googleKey != null && googleKey.isNotEmpty,
+      'REVENUECAT_GOOGLE_API_KEY is missing from .env',
+    );
+
     final apiKey = Platform.isIOS
-        ? dotenv.env['REVENUECAT_APPLE_API_KEY']!
-        : dotenv.env['REVENUECAT_GOOGLE_API_KEY']!;
+        ? appleKey ?? (throw StateError('REVENUECAT_APPLE_API_KEY not set'))
+        : googleKey ?? (throw StateError('REVENUECAT_GOOGLE_API_KEY not set'));
 
     final configuration = PurchasesConfiguration(apiKey)..appUserID = userId;
     await Purchases.configure(configuration);
+
+    // Emit the current status immediately, then track future changes.
+    final initial = await Purchases.getCustomerInfo();
+    _isProController.add(initial.entitlements.active.containsKey('pro'));
 
     Purchases.addCustomerInfoUpdateListener((customerInfo) {
       _isProController.add(

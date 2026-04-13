@@ -82,7 +82,7 @@ class _UpgradePrompt extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Actualize para easyPed Pro para aceder a esta funcionalidade.',
+                'Atualize para easyPed Pro para aceder a esta funcionalidade.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurface.withValues(alpha: 0.7),
                     ),

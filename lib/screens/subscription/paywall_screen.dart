@@ -98,6 +98,20 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     final offeringsAsync = ref.watch(offeringsProvider);
 
+    // Automatically select the annual plan (or monthly) when offerings load.
+    ref.listen<AsyncValue<Offerings>>(offeringsProvider, (_, next) {
+      if (_selectedPackage == null) {
+        final offerings = next.valueOrNull;
+        if (offerings != null) {
+          final defaultPackage =
+              offerings.current?.annual ?? offerings.current?.monthly;
+          if (defaultPackage != null && mounted) {
+            setState(() => _selectedPackage = defaultPackage);
+          }
+        }
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('easyPed Pro'),
@@ -125,17 +139,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
                   if (monthly == null && annual == null) {
                     return const _OfferingsUnavailable();
-                  }
-
-                  // Select the first available package by default.
-                  if (_selectedPackage == null) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        setState(() {
-                          _selectedPackage = annual ?? monthly;
-                        });
-                      }
-                    });
                   }
 
                   return Column(
