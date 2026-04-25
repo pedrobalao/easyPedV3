@@ -68,11 +68,11 @@ class SubscriptionService {
       AnalyticsService.setSubscriptionStatus('free');
       return;
     }
-    final periodType = proEntitlement.periodType;
-    if (periodType == PeriodType.annual) {
+    final id = (proEntitlement.productPlanIdentifier ??
+            proEntitlement.productIdentifier)
+        .toLowerCase();
+    if (id.contains('annual') || id.contains('year')) {
       AnalyticsService.setSubscriptionStatus('pro_yearly');
-    } else if (periodType == PeriodType.monthly) {
-      AnalyticsService.setSubscriptionStatus('pro_monthly');
     } else {
       AnalyticsService.setSubscriptionStatus('pro_monthly');
     }

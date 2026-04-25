@@ -268,8 +268,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
-                    onPressed: () =>
-                        _launchUrl('https://easypedapp.com/terms'),
+                    onPressed: () => _launchUrl('https://easypedapp.com/terms'),
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       visualDensity: VisualDensity.compact,
@@ -321,8 +320,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       final annualPrice = annual.storeProduct.price;
       if (monthlyPrice == null || monthlyPrice == 0) return 'Melhor valor';
 
-      final savings =
-          ((1 - annualPrice / (monthlyPrice * 12)) * 100).round();
+      final savings = ((1 - annualPrice / (monthlyPrice * 12)) * 100).round();
       if (savings <= 0) return 'Melhor valor';
       return 'Poupa $savings%';
     } catch (_) {
@@ -384,7 +382,10 @@ class _BenefitsList extends StatelessWidget {
   final ColorScheme colorScheme;
 
   static const _benefits = <({IconData icon, String text})>[
-    (icon: Icons.smart_toy_outlined, text: 'Assistente IA (perguntas ilimitadas)'),
+    (
+      icon: Icons.smart_toy_outlined,
+      text: 'Assistente IA (perguntas ilimitadas)'
+    ),
     (icon: Icons.calculate_outlined, text: 'Calculador de doses ilimitado'),
     (icon: Icons.note_alt_outlined, text: 'Notas clínicas ilimitadas'),
     (icon: Icons.show_chart_outlined, text: 'Gráficos de crescimento'),

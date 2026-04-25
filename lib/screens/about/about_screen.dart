@@ -337,20 +337,20 @@ class _ProDetails extends StatelessWidget {
         if (proEntitlement == null) return const SizedBox.shrink();
 
         final expiryDate = proEntitlement.expirationDate;
-        final periodType = proEntitlement.periodType;
-
-        final planLabel = periodType == PeriodType.annual
+        final id = (proEntitlement.productPlanIdentifier ??
+                proEntitlement.productIdentifier)
+            .toLowerCase();
+        final planLabel = id.contains('annual') || id.contains('year')
             ? 'Plano Anual'
-            : periodType == PeriodType.monthly
+            : id.contains('month')
                 ? 'Plano Mensal'
                 : 'Ativo';
 
-        String expiryLabel = '';
+        var expiryLabel = '';
         if (expiryDate != null) {
           final date = DateTime.tryParse(expiryDate);
           if (date != null) {
-            expiryLabel =
-                ' · Renova a ${date.day}/${date.month}/${date.year}';
+            expiryLabel = ' · Renova a ${date.day}/${date.month}/${date.year}';
           }
         }
 

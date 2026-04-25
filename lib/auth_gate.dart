@@ -16,7 +16,7 @@ class AuthGate extends StatelessWidget {
           return const EPSignScreen();
         }
         // Render your application if authenticated
-        return HomeScreen();
+        return const HomeScreen();
       },
     );
   }

@@ -9,10 +9,10 @@ import 'package:go_router/go_router.dart';
 class _SearchResult {
   const _SearchResult({
     required this.title,
-    this.subtitle,
     required this.icon,
     required this.route,
     required this.type,
+    this.subtitle,
   });
 
   final String title;
@@ -210,10 +210,8 @@ class _SearchResultsViewState extends State<_SearchResultsView> {
   /// Normalises a string for fuzzy comparison by lowering case and removing
   /// diacritical marks (accents).
   static String _normalise(String input) {
-    const accented =
-        'àáâãäåæçèéêëìíîïðñòóôõöùúûüýÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖÙÚÛÜÝ';
-    const plain =
-        'aaaaaaeceeeeiiiidnoooooouuuuyAAAAAAECEEEEIIIIDNOOOOOUUUUY';
+    const accented = 'àáâãäåæçèéêëìíîïðñòóôõöùúûüýÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖÙÚÛÜÝ';
+    const plain = 'aaaaaaeceeeeiiiidnoooooouuuuyAAAAAAECEEEEIIIIDNOOOOOUUUUY';
     var s = input.toLowerCase();
     for (var i = 0; i < accented.length; i++) {
       s = s.replaceAll(accented[i], plain[i]);
@@ -224,7 +222,7 @@ class _SearchResultsViewState extends State<_SearchResultsView> {
   /// Returns true if [text] contains all words in [queryWords] in any order.
   static bool _fuzzyMatch(String text, List<String> queryWords) {
     final normalised = _normalise(text);
-    return queryWords.every((w) => normalised.contains(w));
+    return queryWords.every(normalised.contains);
   }
 
   Future<List<_SearchResult>> _performSearch() async {
@@ -287,8 +285,7 @@ class _SearchResultsViewState extends State<_SearchResultsView> {
   Future<List<_SearchResult>> _searchCalculators(
       List<String> queryWords) async {
     try {
-      final calcs =
-          await widget.calculatorRepository.getMedicalCalculations();
+      final calcs = await widget.calculatorRepository.getMedicalCalculations();
       return calcs
           .where((c) =>
               c.description != null &&
@@ -312,8 +309,7 @@ class _SearchResultsViewState extends State<_SearchResultsView> {
       final referrals =
           await widget.surgeryReferralRepository.getSurgeriesReferral();
       return referrals
-          .where((r) =>
-              r.scope != null && _fuzzyMatch(r.scope!, queryWords))
+          .where((r) => r.scope != null && _fuzzyMatch(r.scope!, queryWords))
           .map((r) => _SearchResult(
                 title: r.scope!,
                 icon: Icons.local_hospital,

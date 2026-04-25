@@ -71,7 +71,7 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         icon: Icon(Icons.note_alt, size: 48, color: colorScheme.primary),
         title: const Text('Limite de notas atingido'),
-        content: Text(
+        content: const Text(
           'O plano gratuito permite até $_freeNoteLimit notas clínicas. '
           'Atualize para Pro para notas ilimitadas.',
           textAlign: TextAlign.center,
@@ -209,7 +209,8 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
                       children: [
                         Icon(Icons.note_alt_outlined,
                             size: 64,
-                            color: colorScheme.onSurface.withValues(alpha: 0.3)),
+                            color:
+                                colorScheme.onSurface.withValues(alpha: 0.3)),
                         const SizedBox(height: 16),
                         Text(
                           'Sem notas clínicas',
@@ -234,8 +235,7 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.only(right: 16),
                           color: colorScheme.error,
-                          child: Icon(Icons.delete,
-                              color: colorScheme.onError),
+                          child: Icon(Icons.delete, color: colorScheme.onError),
                         ),
                         onDismissed: (_) {
                           if (note.id != null) _deleteNote(note.id!);
@@ -250,8 +250,7 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
                               children: [
                                 Text(
                                   note.text ?? '',
-                                  style:
-                                      Theme.of(context).textTheme.bodyLarge,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 const SizedBox(height: 8),
                                 Row(
@@ -260,9 +259,8 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
                                   children: [
                                     Text(
                                       _formatDate(note.createdAt),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
                                     ),
                                     Text(
                                       _timeRemaining(note.createdAt),

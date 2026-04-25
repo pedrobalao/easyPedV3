@@ -38,7 +38,7 @@ Dio createApiClient({AuthenticationService? authService}) {
   );
 
   // Retry interceptor — retry on 5xx errors, max 2 retries
-  dio.interceptors.add(_RetryInterceptor(dio: dio, maxRetries: 2));
+  dio.interceptors.add(_RetryInterceptor(dio: dio));
 
   // Logging interceptor — debug mode only
   if (kDebugMode) {

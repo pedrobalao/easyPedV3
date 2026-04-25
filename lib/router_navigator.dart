@@ -77,12 +77,12 @@ class RouterNavigator {
         } else {
           return MaterialPageRoute<MedicalCalculationsListScreen>(
               settings: settings,
-              builder: (context) => MedicalCalculationsListScreen());
+              builder: (context) => const MedicalCalculationsListScreen());
         }
       } else if (settings.name == '/surgeries-referral') {
         return MaterialPageRoute<SurgeriesReferralListScreen>(
             settings: settings,
-            builder: (context) => SurgeriesReferralListScreen());
+            builder: (context) => const SurgeriesReferralListScreen());
       } else if (settings.name == '/about') {
         return MaterialPageRoute<AboutScreen>(
             settings: settings, builder: (context) => const AboutScreen());

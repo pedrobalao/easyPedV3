@@ -13,8 +13,8 @@ import 'package:go_router/go_router.dart';
 /// `/subscription`.
 class ProFeatureGate extends ConsumerWidget {
   const ProFeatureGate({
-    super.key,
     required this.child,
+    super.key,
     this.featureName,
     this.featureKey,
   });

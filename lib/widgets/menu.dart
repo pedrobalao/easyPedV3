@@ -191,11 +191,11 @@ class Menu extends ConsumerWidget {
                 Icons.workspace_premium,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              title: Row(
+              title: const Row(
                 children: [
-                  const Text('Atualizar para Pro'),
-                  const SizedBox(width: 8),
-                  const ProBadge(),
+                  Text('Atualizar para Pro'),
+                  SizedBox(width: 8),
+                  ProBadge(),
                 ],
               ),
               onTap: () {

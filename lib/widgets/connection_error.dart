@@ -1,4 +1,3 @@
-import 'package:easypedv3/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';

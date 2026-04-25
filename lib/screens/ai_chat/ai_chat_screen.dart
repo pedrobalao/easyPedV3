@@ -228,9 +228,7 @@ class _AiChatBody extends ConsumerWidget {
           child: messages.isEmpty
               ? _EmptyState(
                   suggestions: quickSuggestions,
-                  onSuggestionTap: (suggestion) {
-                    onSend(suggestion);
-                  },
+                  onSuggestionTap: onSend,
                 )
               : ListView.builder(
                   controller: scrollController,
@@ -253,7 +251,7 @@ class _AiChatBody extends ConsumerWidget {
         _InputArea(
           controller: textController,
           isLoading: isLoading,
-          onSend: () => onSend(),
+          onSend: onSend,
         ),
       ],
     );

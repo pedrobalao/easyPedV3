@@ -38,7 +38,6 @@ class BiometricService {
         localizedReason: 'Autentique-se para aceder ao easyPed',
         options: const AuthenticationOptions(
           stickyAuth: true,
-          biometricOnly: false, // allows PIN / passcode fallback
         ),
       );
     } catch (_) {

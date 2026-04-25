@@ -1308,7 +1308,6 @@ class GrowthChart extends StatelessWidget {
           minY: _getMinY(),
           maxY: _getMaxY(),
           gridData: FlGridData(
-            show: true,
             drawVerticalLine: true,
             horizontalInterval: _getInterval(),
             verticalInterval: 12,
@@ -1362,10 +1361,8 @@ class GrowthChart extends StatelessWidget {
                 ),
               ),
             ),
-            rightTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: const AxisTitles(),
+            topTitles: const AxisTitles(),
           ),
           borderData: FlBorderData(
             show: true,
@@ -1373,7 +1370,6 @@ class GrowthChart extends StatelessWidget {
           ),
           lineBarsData: _getLineBars(colorScheme),
           lineTouchData: LineTouchData(
-            enabled: true,
             touchTooltipData: LineTouchTooltipData(
               getTooltipItems: (spots) => spots.map((spot) {
                 return LineTooltipItem(
@@ -1456,9 +1452,7 @@ class GrowthChart extends StatelessWidget {
         patientAgeMonths! <= 60) {
       lines.add(LineChartBarData(
         spots: [FlSpot(patientAgeMonths!, patientValue!)],
-        isCurved: false,
         dotData: FlDotData(
-          show: true,
           getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
             radius: 6,
             color: colorScheme.primary,
@@ -1492,7 +1486,7 @@ class GrowthChart extends StatelessWidget {
       barWidth: strokeWidth,
       isStrokeCapRound: true,
       dotData: const FlDotData(show: false),
-      belowBarData: BarAreaData(show: false),
+      belowBarData: BarAreaData(),
     );
   }
 

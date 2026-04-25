@@ -21,7 +21,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   await dotenv.load();
 
-  runZonedGuarded<Future<void>>(() async {
+  await runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     // Initialize Hive for local caching and preferences

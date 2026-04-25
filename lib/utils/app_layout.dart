@@ -14,12 +14,12 @@ class AppLayout {
   }
 
   static double getHeight(BuildContext context, double pixels) {
-    final double x = getScreenHeight(context) / pixels;
+    final x = getScreenHeight(context) / pixels;
     return getScreenHeight(context) / x;
   }
 
   static double getWidth(BuildContext context, double pixels) {
-    final double x = getScreenWidth(context) / pixels;
+    final x = getScreenWidth(context) / pixels;
     return getScreenWidth(context) / x;
   }
 }

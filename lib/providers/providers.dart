@@ -82,20 +82,22 @@ final categoriesProvider = FutureProvider<List<DrugCategory>>((ref) async {
 });
 
 /// Single drug by ID.
-final drugDetailProvider = FutureProvider.family<Drug, int>((ref, id) async {
+final FutureProviderFamily<Drug, int> drugDetailProvider =
+    FutureProvider.family<Drug, int>((ref, id) async {
   final repo = ref.watch(drugRepositoryProvider);
   return repo.getDrug(id);
 });
 
 /// Sub-categories for a given category.
-final subCategoriesProvider =
+final FutureProviderFamily<List<DrugSubCategory>, int> subCategoriesProvider =
     FutureProvider.family<List<DrugSubCategory>, int>((ref, categoryId) async {
   final repo = ref.watch(drugRepositoryProvider);
   return repo.getSubCategories(categoryId);
 });
 
 /// Drugs for a given sub-category.
-final drugsBySubCategoryProvider =
+final FutureProviderFamily<List<Drug>, ({int categoryId, int subCategoryId})>
+    drugsBySubCategoryProvider =
     FutureProvider.family<List<Drug>, ({int categoryId, int subCategoryId})>(
         (ref, params) async {
   final repo = ref.watch(drugRepositoryProvider);
@@ -111,7 +113,7 @@ final diseaseListProvider = FutureProvider<List<Disease>>((ref) async {
 });
 
 /// Single disease by ID.
-final diseaseDetailProvider =
+final FutureProviderFamily<Disease, int> diseaseDetailProvider =
     FutureProvider.family<Disease, int>((ref, id) async {
   final repo = ref.watch(diseaseRepositoryProvider);
   return repo.getDisease(id);
@@ -127,7 +129,7 @@ final calculatorListProvider =
 });
 
 /// Single medical calculation by ID.
-final calculatorDetailProvider =
+final FutureProviderFamily<MedicalCalculation, int> calculatorDetailProvider =
     FutureProvider.family<MedicalCalculation, int>((ref, id) async {
   final repo = ref.watch(calculatorRepositoryProvider);
   return repo.getMedicalCalculation(id);

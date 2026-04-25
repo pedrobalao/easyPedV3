@@ -123,14 +123,14 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   const Gap(12),
                   // ── Quick Access Grid ──
-                  _SectionHeader(
+                  const _SectionHeader(
                     title: 'Acesso Rápido',
                     icon: Icons.grid_view_rounded,
                   ),
                   const QuickAccessGrid(),
                   const Gap(8),
                   // ── Favourites Section ──
-                  _SectionHeader(
+                  const _SectionHeader(
                     title: 'Favoritos',
                     icon: Icons.favorite,
                   ),
@@ -138,7 +138,7 @@ class HomeScreen extends ConsumerWidget {
                   const Gap(8),
                   // ── Recent Searches Section ──
                   if (recentSearches.isNotEmpty) ...[
-                    _SectionHeader(
+                    const _SectionHeader(
                       title: 'Pesquisas Recentes',
                       icon: Icons.history,
                     ),
@@ -169,7 +169,7 @@ class HomeScreen extends ConsumerWidget {
                     const Gap(8),
                   ],
                   // ── Congresses Carousel ──
-                  _SectionHeader(
+                  const _SectionHeader(
                     title: 'Congressos',
                     icon: Icons.event,
                   ),
@@ -177,7 +177,7 @@ class HomeScreen extends ConsumerWidget {
                   CongressesSlide(congresses: congresses),
                   const Gap(16),
                   // ── News Carousel ──
-                  _SectionHeader(
+                  const _SectionHeader(
                     title: 'Novidades',
                     icon: Icons.newspaper,
                   ),

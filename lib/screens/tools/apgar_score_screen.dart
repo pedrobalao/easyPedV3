@@ -132,8 +132,8 @@ class _ApgarScoreScreenState extends State<ApgarScoreScreen> {
             child: Table(
               columnWidths: const {
                 0: FlexColumnWidth(2),
-                1: FlexColumnWidth(1),
-                2: FlexColumnWidth(1),
+                1: FlexColumnWidth(),
+                2: FlexColumnWidth(),
               },
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               children: [
