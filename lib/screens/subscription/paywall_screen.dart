@@ -1,5 +1,6 @@
 import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/services/analytics_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -172,7 +173,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   final annual = offerings.current?.annual;
 
                   if (monthly == null && annual == null) {
-                    return const _OfferingsUnavailable();
+                    return _OfferingsUnavailable(
+                      onRetry: () => ref.invalidate(offeringsProvider),
+                    );
                   }
 
                   return Column(
@@ -211,7 +214,13 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                     child: CircularProgressIndicator(),
                   ),
                 ),
-                error: (_, __) => const _OfferingsUnavailable(),
+                error: (error, stack) {
+                  debugPrint('Paywall offeringsProvider error: $error\n$stack');
+                  return _OfferingsUnavailable(
+                    error: error,
+                    onRetry: () => ref.invalidate(offeringsProvider),
+                  );
+                },
               ),
 
               const SizedBox(height: 32),
@@ -455,8 +464,6 @@ class _PlanCard extends StatelessWidget {
         return 'Plano Anual';
       case PackageType.monthly:
         return 'Plano Mensal';
-      case PackageType.weekly:
-        return 'Plano Semanal';
       default:
         return package.storeProduct.title;
     }
@@ -547,7 +554,10 @@ class _PlanCard extends StatelessWidget {
 // ── Offerings unavailable ─────────────────────────────────────────────
 
 class _OfferingsUnavailable extends StatelessWidget {
-  const _OfferingsUnavailable();
+  const _OfferingsUnavailable({this.error, this.onRetry});
+
+  final Object? error;
+  final VoidCallback? onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -569,6 +579,24 @@ class _OfferingsUnavailable extends StatelessWidget {
                   color: colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
           ),
+          if (kDebugMode && error != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              error.toString(),
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colorScheme.error,
+                  ),
+            ),
+          ],
+          if (onRetry != null) ...[
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Tentar novamente'),
+            ),
+          ],
         ],
       ),
     );
