@@ -6,7 +6,6 @@ import 'package:easypedv3/providers/theme_provider.dart';
 import 'package:easypedv3/router.dart';
 import 'package:easypedv3/services/app_info_service.dart';
 import 'package:easypedv3/services/subscription_service.dart';
-import 'package:easypedv3/utils/platform_support.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -54,22 +53,22 @@ void main() async {
     // The following lines are the same as previously explained in "Handling uncaught errors"
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-    if (kSupportsRevenueCat) {
-      // Initialize RevenueCat with the authenticated Firebase user ID.
-      final currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        await SubscriptionService.instance.init(currentUser.uid);
-      }
-
-      // Re-initialise (or switch users) whenever the auth state changes so
-      // the SDK is always configured before the paywall or any pro-gated
-      // feature tries to call it.
-      FirebaseAuth.instance.authStateChanges().listen((user) {
-        if (user != null) {
-          SubscriptionService.instance.init(user.uid);
-        }
-      });
+    // Initialise the SubscriptionService with the currently signed-in
+    // Firebase user. On native platforms this configures the RevenueCat
+    // SDK; on the web it stores the UID for the REST entitlement check.
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      await SubscriptionService.instance.init(currentUser.uid);
     }
+
+    // Re-initialise (or switch users) whenever the auth state changes so
+    // the service is always configured before the paywall or any
+    // pro-gated feature tries to call it.
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      if (user != null) {
+        SubscriptionService.instance.init(user.uid);
+      }
+    });
 
     runApp(const ProviderScope(child: MyApp()));
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));

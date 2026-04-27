@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:easypedv3/services/subscription_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -12,14 +17,81 @@ final subscriptionServiceProvider = Provider<SubscriptionService>((ref) {
 
 // ── Pro status ──────────────────────────────────────────────────────
 
+/// How often to refresh the Pro entitlement on the web. Mirrors the cache
+/// TTL used inside `SubscriptionService` (web implementation).
+const Duration _webProRefreshInterval = Duration(minutes: 10);
+
 /// Stream of whether the current user has an active `pro` entitlement.
 ///
-/// Emits real-time updates via the RevenueCat customer info listener.
-/// Falls back to `false` while loading or if RevenueCat is not yet initialised.
+/// On native platforms this is driven by the RevenueCat customer info
+/// listener registered in `SubscriptionService.init`.
+///
+/// On the web — where the SDK is unavailable — there is no native
+/// listener, so we manually refresh the status:
+///   * once on construction,
+///   * whenever the Firebase auth state changes,
+///   * whenever the app returns to the foreground
+///     (`AppLifecycleState.resumed`),
+///   * and on a periodic timer every [_webProRefreshInterval].
 final isProProvider = StreamProvider<bool>((ref) {
   final service = ref.watch(subscriptionServiceProvider);
+
+  if (!kIsWeb) {
+    return service.isProStream;
+  }
+
+  // ── Web refresh strategy ──
+  Future<void> refresh() async {
+    try {
+      await service.isProUser();
+    } catch (e, st) {
+      debugPrint('isProProvider(web) refresh failed: $e\n$st');
+    }
+  }
+
+  // Refresh whenever the signed-in user changes.
+  final authSub =
+      FirebaseAuth.instance.authStateChanges().listen((_) => refresh());
+
+  // Refresh on app resume.
+  final lifecycleListener = _AppLifecycleListener(onResume: refresh);
+
+  // Periodic refresh.
+  final timer = Timer.periodic(_webProRefreshInterval, (_) => refresh());
+
+  // Kick off an immediate refresh so the cached value is populated.
+  refresh();
+
+  ref.onDispose(() {
+    timer.cancel();
+    authSub.cancel();
+    lifecycleListener.dispose();
+  });
+
   return service.isProStream;
 });
+
+/// Lightweight wrapper around [WidgetsBinding] lifecycle callbacks so the
+/// provider can react to `AppLifecycleState.resumed` without requiring a
+/// surrounding widget.
+class _AppLifecycleListener with WidgetsBindingObserver {
+  _AppLifecycleListener({required this.onResume}) {
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  final Future<void> Function() onResume;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      onResume();
+    }
+  }
+
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+  }
+}
 
 // ── Offerings ───────────────────────────────────────────────────────
 
