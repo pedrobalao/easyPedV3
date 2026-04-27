@@ -1,4 +1,5 @@
 import 'package:easypedv3/providers/biometric_provider.dart';
+import 'package:easypedv3/utils/platform_support.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +19,14 @@ class _BiometricScreenState extends ConsumerState<BiometricScreen> {
   @override
   void initState() {
     super.initState();
+    if (!kSupportsBiometrics) {
+      // On web, biometric auth is unsupported — bypass the gate.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(biometricAuthenticatedProvider.notifier).state = true;
+        if (mounted) context.go('/');
+      });
+      return;
+    }
     // Trigger auth prompt as soon as the screen appears.
     WidgetsBinding.instance.addPostFrameCallback((_) => _authenticate());
   }

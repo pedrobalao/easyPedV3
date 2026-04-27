@@ -1,9 +1,15 @@
+import 'package:easypedv3/utils/platform_support.dart';
 import 'package:firebase_ai/firebase_ai.dart';
 
 /// Service that wraps Firebase Vertex AI (Gemini 2.0 Flash) for pediatric
 /// medical chat assistance.
 class AiChatService {
   AiChatService() {
+    if (!kSupportsAiChat) {
+      // Web is not supported yet — skip model initialisation. Callers must
+      // check [isAvailable] before invoking [sendMessage].
+      return;
+    }
     _model = FirebaseAI.vertexAI().generativeModel(
       model: 'gemini-2.5-flash-lite',
       systemInstruction: Content.system(_systemPrompt),
@@ -27,8 +33,12 @@ class AiChatService {
   late final GenerativeModel _model;
   ChatSession? _chatSession;
 
+  /// Whether the AI chat service is available on the current platform.
+  bool get isAvailable => kSupportsAiChat;
+
   /// Start a new chat session, resetting any previous conversation context.
   void startNewChat() {
+    if (!isAvailable) return;
     _chatSession = _model.startChat();
   }
 
@@ -37,6 +47,9 @@ class AiChatService {
   /// Automatically starts a new chat session if none exists.
   /// Throws a user-friendly [String] message on failure.
   Future<String> sendMessage(String prompt) async {
+    if (!isAvailable) {
+      return 'O assistente de IA não está disponível nesta plataforma.';
+    }
     _chatSession ??= _model.startChat();
 
     try {

@@ -32,6 +32,19 @@
 
   <title>easypedv3</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Firebase JS SDK (compat build) - required for firebase_auth and
+       related Firebase Web plugins. Versions should match the
+       firebase-js-sdk version pinned by the FlutterFire packages. -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js"></script>
+
+  <!-- Apple Sign-In JS SDK - required by firebase_ui_oauth_apple on web. -->
+  <script type="text/javascript"
+          src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+          async defer></script>
 </head>
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to

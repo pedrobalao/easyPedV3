@@ -1,3 +1,4 @@
+import 'package:easypedv3/utils/platform_support.dart';
 import 'package:hive/hive.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -17,22 +18,41 @@ class BiometricService {
 
   // ── Device capability checks ────────────────────────────────────────
 
+  /// Whether the biometric APIs are available at all on this platform.
+  ///
+  /// Returns `false` on web, where `local_auth` is not supported.
+  Future<bool> isAvailable() async {
+    if (!kSupportsBiometrics) return false;
+    return _auth.isDeviceSupported();
+  }
+
   /// Whether the device supports any form of biometric or credential auth.
-  Future<bool> isDeviceSupported() => _auth.isDeviceSupported();
+  Future<bool> isDeviceSupported() async {
+    if (!kSupportsBiometrics) return false;
+    return _auth.isDeviceSupported();
+  }
 
   /// Whether biometrics (Face ID / Touch ID / fingerprint) are enrolled.
-  Future<bool> canCheckBiometrics() => _auth.canCheckBiometrics;
+  Future<bool> canCheckBiometrics() async {
+    if (!kSupportsBiometrics) return false;
+    return _auth.canCheckBiometrics;
+  }
 
   /// Lists available biometric types on the device.
-  Future<List<BiometricType>> getAvailableBiometrics() =>
-      _auth.getAvailableBiometrics();
+  Future<List<BiometricType>> getAvailableBiometrics() async {
+    if (!kSupportsBiometrics) return const <BiometricType>[];
+    return _auth.getAvailableBiometrics();
+  }
 
   // ── Authentication ──────────────────────────────────────────────────
 
   /// Triggers the native biometric / device-credential prompt.
   ///
-  /// Returns `true` when the user authenticates successfully.
+  /// Returns `true` when the user authenticates successfully. On web — where
+  /// biometric auth is not supported — this is a no-op that returns `true`
+  /// so callers do not block the user.
   Future<bool> authenticate() async {
+    if (!kSupportsBiometrics) return true;
     try {
       return await _auth.authenticate(
         localizedReason: 'Autentique-se para aceder ao easyPed',
