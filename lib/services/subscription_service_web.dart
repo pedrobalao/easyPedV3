@@ -14,10 +14,13 @@ class SubscriptionService {
 
   static final SubscriptionService instance = SubscriptionService._();
 
-  /// Broadcast stream that always emits `false` to every new subscriber and
-  /// never completes — matching the always-free behaviour of the web stub.
-  Stream<bool> get isProStream =>
-      Stream<bool>.multi((controller) => controller.add(false));
+  /// Stream that emits `false` to every new subscriber and then completes —
+  /// matching the always-free behaviour of the web stub.
+  Stream<bool> get isProStream => Stream<bool>.multi((controller) {
+        controller
+          ..add(false)
+          ..close();
+      });
 
   /// Web stub is considered initialised immediately.
   bool get isInitialized => true;
