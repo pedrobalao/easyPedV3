@@ -102,8 +102,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     return Scaffold(
         appBar: AppBar(title: const Text('easyPed')),
         body: SingleChildScrollView(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child:
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // ── Subscription section ──────────────────────────
             ListTile(
               tileColor: colorScheme.secondary,
@@ -177,6 +180,8 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                     style: Styles.normalText(context))),
             const Gap(5),
           ]),
+            ),
+          ),
         ));
   }
 

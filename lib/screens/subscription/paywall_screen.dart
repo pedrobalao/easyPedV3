@@ -165,14 +165,17 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // ── Header ──
-              _Header(colorScheme: colorScheme),
-              const SizedBox(height: 32),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // ── Header ──
+                  _Header(colorScheme: colorScheme),
+                  const SizedBox(height: 32),
 
               // ── Benefits list ──
               _BenefitsList(colorScheme: colorScheme),
@@ -328,6 +331,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
               const SizedBox(height: 8),
             ],
+          ),
+        ),
           ),
         ),
       ),

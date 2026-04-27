@@ -2,13 +2,16 @@ import 'package:easypedv3/models/drug.dart';
 import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/repositories/repositories.dart';
 import 'package:easypedv3/screens/drugs/drug_screen.dart';
+import 'package:easypedv3/utils/breakpoints.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/drug_categories_list.dart';
 import 'package:easypedv3/widgets/drugs_favourites_list.dart';
 import 'package:easypedv3/widgets/loading.dart';
+import 'package:easypedv3/widgets/master_detail_scaffold.dart';
 import 'package:easypedv3/widgets/skeletons/skeleton_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class DrugsScreen extends ConsumerWidget {
   const DrugsScreen({super.key});
@@ -17,6 +20,13 @@ class DrugsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final favouritesAsync = ref.watch(favouritesProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
+    final wide = !isCompact(context);
+
+    // Read selected drug id from URL query param for deep-linking.
+    final selectedIdStr =
+        GoRouterState.of(context).uri.queryParameters['selected'];
+    final selectedId =
+        selectedIdStr != null ? int.tryParse(selectedIdStr) : null;
 
     return favouritesAsync.when(
       loading: () => Scaffold(
@@ -42,41 +52,57 @@ class DrugsScreen extends ConsumerWidget {
                         context: context,
                         delegate: DrugSearchDelegate(
                           drugRepository: ref.read(drugRepositoryProvider),
+                          wide: wide,
+                          onWideSelect: wide
+                              ? (id) => context.go('/drugs?selected=$id')
+                              : null,
                         ),
                       );
                     })
               ]),
-          body: SingleChildScrollView(
-              keyboardDismissBehavior:
-                  ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTile(
-                      tileColor: Theme.of(context).colorScheme.secondary,
-                      title: Text('Os teus favoritos',
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.clip,
-                          style:
-                              Theme.of(context).textTheme.headlineMedium),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: DrugsFavouritesList(drugs: favourites)),
-                    ListTile(
-                      tileColor: Theme.of(context).colorScheme.secondary,
-                      title: Text('Explora',
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.clip,
-                          style:
-                              Theme.of(context).textTheme.headlineMedium),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: Column(children: [
-                          DrugsCategoriesList(categories: categories),
-                        ]))
-                  ])),
+          body: MasterDetailScaffold(
+            master: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        tileColor: Theme.of(context).colorScheme.secondary,
+                        title: Text('Os teus favoritos',
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.clip,
+                            style:
+                                Theme.of(context).textTheme.headlineMedium),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: DrugsFavouritesList(
+                            drugs: favourites,
+                            selectedId: wide ? selectedId : null,
+                            onSelect: wide
+                                ? (id) =>
+                                    context.go('/drugs?selected=$id')
+                                : null,
+                          )),
+                      ListTile(
+                        tileColor: Theme.of(context).colorScheme.secondary,
+                        title: Text('Explora',
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.clip,
+                            style:
+                                Theme.of(context).textTheme.headlineMedium),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: Column(children: [
+                            DrugsCategoriesList(categories: categories),
+                          ]))
+                    ])),
+            detail: selectedId != null
+                ? DrugScreen(id: selectedId)
+                : const EmptyDetailPane(),
+          ),
         ),
       ),
     );
@@ -84,9 +110,15 @@ class DrugsScreen extends ConsumerWidget {
 }
 
 class DrugSearchDelegate extends SearchDelegate<Drug> {
-  DrugSearchDelegate({required this.drugRepository});
+  DrugSearchDelegate({
+    required this.drugRepository,
+    this.wide = false,
+    this.onWideSelect,
+  });
 
   final DrugRepository drugRepository;
+  final bool wide;
+  final ValueChanged<int>? onWideSelect;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -120,11 +152,16 @@ class DrugSearchDelegate extends SearchDelegate<Drug> {
                     snapshot.data![index].subcategoryDescription ?? '',
                     style: Theme.of(context).textTheme.bodyMedium),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DrugScreen(id: snapshot.data![index].id!)));
+                  final id = snapshot.data![index].id!;
+                  if (wide && onWideSelect != null) {
+                    close(context, snapshot.data![index]);
+                    onWideSelect!(id);
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DrugScreen(id: id)));
+                  }
                 },
               );
             },
