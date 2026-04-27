@@ -6,6 +6,7 @@ import 'package:easypedv3/providers/theme_provider.dart';
 import 'package:easypedv3/router.dart';
 import 'package:easypedv3/services/app_info_service.dart';
 import 'package:easypedv3/services/subscription_service.dart';
+import 'package:easypedv3/utils/platform_support.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -15,10 +16,14 @@ import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
+  // Use clean URLs on the web (e.g. `/home` instead of `/#/home`).
+  setUrlStrategy(PathUrlStrategy());
+
   await dotenv.load();
 
   await runZonedGuarded<Future<void>>(() async {
@@ -49,20 +54,22 @@ void main() async {
     // The following lines are the same as previously explained in "Handling uncaught errors"
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-    // Initialize RevenueCat with the authenticated Firebase user ID.
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      await SubscriptionService.instance.init(currentUser.uid);
-    }
-
-    // Re-initialise (or switch users) whenever the auth state changes so the
-    // SDK is always configured before the paywall or any pro-gated feature
-    // tries to call it.
-    FirebaseAuth.instance.authStateChanges().listen((user) {
-      if (user != null) {
-        SubscriptionService.instance.init(user.uid);
+    if (kSupportsRevenueCat) {
+      // Initialize RevenueCat with the authenticated Firebase user ID.
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await SubscriptionService.instance.init(currentUser.uid);
       }
-    });
+
+      // Re-initialise (or switch users) whenever the auth state changes so
+      // the SDK is always configured before the paywall or any pro-gated
+      // feature tries to call it.
+      FirebaseAuth.instance.authStateChanges().listen((user) {
+        if (user != null) {
+          SubscriptionService.instance.init(user.uid);
+        }
+      });
+    }
 
     runApp(const ProviderScope(child: MyApp()));
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
