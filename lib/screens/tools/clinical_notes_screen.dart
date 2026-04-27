@@ -127,7 +127,10 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
         centerTitle: true,
         title: const Text('Notas Clínicas'),
       ),
-      body: Column(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Column(
         children: [
           // Warning banner
           Container(
@@ -282,6 +285,8 @@ class _ClinicalNotesScreenState extends ConsumerState<ClinicalNotesScreen> {
                   ),
           ),
         ],
+      ),
+        ),
       ),
     );
   }

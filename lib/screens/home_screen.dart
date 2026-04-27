@@ -1,4 +1,5 @@
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/utils/breakpoints.dart';
 import 'package:easypedv3/widgets/congresses_slide.dart';
 import 'package:easypedv3/widgets/connection_error.dart';
 import 'package:easypedv3/widgets/global_search.dart';
@@ -261,11 +262,73 @@ class _FavouritesSection extends StatelessWidget {
             ),
           );
         }
+
+        final displayCount = drugs.length > 5 ? 5 : drugs.length;
+        final wide = !isCompact(context);
+
+        if (wide) {
+          // Horizontal wrapping grid on medium/expanded screens.
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: List.generate(displayCount, (index) {
+                final drug = drugs[index];
+                return SizedBox(
+                  width: 220,
+                  child: Card(
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () => context.push('/drugs/${drug.id}'),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          children: [
+                            Icon(Icons.medication,
+                                color: Theme.of(context).colorScheme.primary),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    drug.name ?? '',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  if ((drug.subcategoryDescription ?? '')
+                                      .isNotEmpty)
+                                    Text(
+                                      drug.subcategoryDescription ?? '',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          );
+        }
+
         return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          itemCount: drugs.length > 5 ? 5 : drugs.length,
+          itemCount: displayCount,
           itemBuilder: (context, index) {
             final drug = drugs[index];
             return Card(
