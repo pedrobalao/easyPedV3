@@ -1,5 +1,6 @@
 import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/services/analytics_service.dart';
+import 'package:easypedv3/utils/platform_support.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Paywall / upgrade screen that presents easyPed Pro benefits and allows
 /// users to subscribe via RevenueCat.
+///
+/// On the web — where in-app purchases are not available — this delegates
+/// to [WebStoreLinksScreen] which directs the user to the iOS / Android
+/// app to subscribe.
 class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key, this.source});
 
@@ -130,6 +135,13 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Web cannot host an in-app purchase flow — show a friendly screen
+    // pointing users to the App Store / Play Store instead of trying to
+    // load offerings from RevenueCat.
+    if (kIsWeb) {
+      return WebStoreLinksScreen(source: widget.source);
+    }
+
     final colorScheme = Theme.of(context).colorScheme;
     final offeringsAsync = ref.watch(offeringsProvider);
 
@@ -598,6 +610,132 @@ class _OfferingsUnavailable extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+// ── Web store-links screen ───────────────────────────────────────────
+
+/// Friendly web-only fallback shown in place of the in-app paywall.
+///
+/// Web cannot host App Store / Play Store purchases, so this screen
+/// explains the situation and links out to the native apps where the
+/// user can subscribe. A subscription bought on mobile then mirrors back
+/// to the web via the RevenueCat REST entitlement check.
+class WebStoreLinksScreen extends StatefulWidget {
+  const WebStoreLinksScreen({super.key, this.source});
+
+  /// Which feature triggered the paywall (used for analytics).
+  final String? source;
+
+  @override
+  State<WebStoreLinksScreen> createState() => _WebStoreLinksScreenState();
+}
+
+class _WebStoreLinksScreenState extends State<WebStoreLinksScreen> {
+  @override
+  void initState() {
+    super.initState();
+    AnalyticsService.logPaywallViewed(
+      source: widget.source ?? 'unknown',
+    );
+  }
+
+  Future<void> _launchUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Não foi possível abrir $url')),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('easyPed Pro'),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 480),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primaryContainer,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.workspace_premium,
+                      size: 44,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                  Text(
+                    'easyPed Pro',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'A subscrição easyPed Pro só pode ser ativada na '
+                    'aplicação móvel. Instale o easyPed no seu telemóvel '
+                    'ou tablet para subscrever — depois de subscrever, o '
+                    'Pro fica também ativo na versão web com a mesma '
+                    'conta.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color:
+                              colorScheme.onSurface.withValues(alpha: 0.7),
+                        ),
+                  ),
+                  const SizedBox(height: 32),
+                  FilledButton.icon(
+                    onPressed: () => _launchUrl(kAppStoreUrl),
+                    icon: const Icon(Icons.apple),
+                    label: const Text('Abrir na App Store'),
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    onPressed: () => _launchUrl(kPlayStoreUrl),
+                    icon: const Icon(Icons.shop),
+                    label: const Text('Abrir no Google Play'),
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

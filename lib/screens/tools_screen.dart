@@ -1,4 +1,5 @@
 import 'package:easypedv3/providers/providers.dart';
+import 'package:easypedv3/utils/platform_support.dart';
 import 'package:easypedv3/widgets/pro_feature_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,11 +21,14 @@ class ToolsScreen extends ConsumerWidget {
     final isPro = ref.watch(isProProvider).value ?? false;
 
     final items = <_ToolItem>[
-      const _ToolItem(
-        title: 'Assistente IA',
-        icon: Icons.smart_toy,
-        route: '/tools/ai-assistant',
-      ),
+      // Firebase AI is not available on the web — hide the entry point so
+      // users don't land on a screen that immediately errors out.
+      if (kSupportsAiChat)
+        const _ToolItem(
+          title: 'Assistente IA',
+          icon: Icons.smart_toy,
+          route: '/tools/ai-assistant',
+        ),
       const _ToolItem(
         title: 'Percentis',
         icon: Icons.percent,

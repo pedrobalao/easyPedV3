@@ -22,3 +22,14 @@ const bool kSupportsAiChat = !kIsWeb;
 
 /// Whether Firebase Cloud Messaging push notifications can be used.
 const bool kSupportsPushNotifications = !kIsWeb;
+
+/// External store URL shown on the web fallback paywall to direct users
+/// to the iOS App Store. Mirrors the URL used by `_openManageSubscription`
+/// in `about_screen.dart`.
+const String kAppStoreUrl = 'https://apps.apple.com/account/subscriptions';
+
+/// External store URL shown on the web fallback paywall to direct users
+/// to Google Play. Mirrors the URL used by `_openManageSubscription`
+/// in `about_screen.dart`.
+const String kPlayStoreUrl =
+    'https://play.google.com/store/account/subscriptions';

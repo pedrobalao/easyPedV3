@@ -42,9 +42,17 @@ class SignIn extends StatelessWidget {
     var googleClientId =
         '330541011565-p4clgm77d42sbqjrkojro5495pp9kdr4.apps.googleusercontent.com';
 
-    if (defaultTargetPlatform == TargetPlatform.android) {
+    // On Android and on the web the Firebase UI Google provider needs the
+    // OAuth web client ID supplied via `.env` (`GOOGLE_CLIENT_ID`). On iOS
+    // the bundled `GoogleService-Info.plist` client ID is used instead.
+    if (defaultTargetPlatform == TargetPlatform.android || kIsWeb) {
       googleClientId = dotenv.env['GOOGLE_CLIENT_ID']!;
     }
+
+    // Apple sign-in is available on iOS natively and on the web via the
+    // Apple JS SDK (loaded in `web/index.html`).
+    final showAppleButton =
+        defaultTargetPlatform == TargetPlatform.iOS || kIsWeb;
 
     return AuthStateListener<OAuthController>(
         listener: (oldState, state, controller) {
@@ -62,7 +70,7 @@ class SignIn extends StatelessWidget {
             provider: GoogleProvider(clientId: googleClientId),
           ),
           const Gap(10),
-          if (defaultTargetPlatform == TargetPlatform.iOS)
+          if (showAppleButton)
             OAuthProviderButton(provider: AppleProvider())
           else
             Container()
