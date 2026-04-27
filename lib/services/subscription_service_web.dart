@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 /// Web stub for [SubscriptionService].
@@ -16,11 +14,10 @@ class SubscriptionService {
 
   static final SubscriptionService instance = SubscriptionService._();
 
-  final StreamController<bool> _isProController =
-      StreamController<bool>.broadcast()..add(false);
-
-  /// Always emits `false` on the web stub.
-  Stream<bool> get isProStream => _isProController.stream;
+  /// Broadcast stream that always emits `false` to every new subscriber and
+  /// never completes — matching the always-free behaviour of the web stub.
+  Stream<bool> get isProStream =>
+      Stream<bool>.multi((controller) => controller.add(false));
 
   /// Web stub is considered initialised immediately.
   bool get isInitialized => true;

@@ -4,17 +4,7 @@ import 'package:firebase_ai/firebase_ai.dart';
 /// Service that wraps Firebase Vertex AI (Gemini 2.0 Flash) for pediatric
 /// medical chat assistance.
 class AiChatService {
-  AiChatService() {
-    if (!kSupportsAiChat) {
-      // Web is not supported yet — skip model initialisation. Callers must
-      // check [isAvailable] before invoking [sendMessage].
-      return;
-    }
-    _model = FirebaseAI.vertexAI().generativeModel(
-      model: 'gemini-2.5-flash-lite',
-      systemInstruction: Content.system(_systemPrompt),
-    );
-  }
+  AiChatService();
 
   static const String _systemPrompt =
       'És um assistente médico pediátrico. Responde a perguntas sobre '
@@ -30,16 +20,22 @@ class AiChatService {
       'fontes adicionais\n'
       '- Sê conciso e objetivo';
 
-  late final GenerativeModel _model;
+  late final GenerativeModel? _model = kSupportsAiChat
+      ? FirebaseAI.vertexAI().generativeModel(
+          model: 'gemini-2.5-flash-lite',
+          systemInstruction: Content.system(_systemPrompt),
+        )
+      : null;
   ChatSession? _chatSession;
 
   /// Whether the AI chat service is available on the current platform.
-  bool get isAvailable => kSupportsAiChat;
+  bool get isAvailable => kSupportsAiChat && _model != null;
 
   /// Start a new chat session, resetting any previous conversation context.
   void startNewChat() {
-    if (!isAvailable) return;
-    _chatSession = _model.startChat();
+    final model = _model;
+    if (model == null) return;
+    _chatSession = model.startChat();
   }
 
   /// Send a user message and return the AI-generated response text.
@@ -47,10 +43,11 @@ class AiChatService {
   /// Automatically starts a new chat session if none exists.
   /// Throws a user-friendly [String] message on failure.
   Future<String> sendMessage(String prompt) async {
-    if (!isAvailable) {
+    final model = _model;
+    if (model == null) {
       return 'O assistente de IA não está disponível nesta plataforma.';
     }
-    _chatSession ??= _model.startChat();
+    _chatSession ??= model.startChat();
 
     try {
       final response = await _chatSession!.sendMessage(Content.text(prompt));
