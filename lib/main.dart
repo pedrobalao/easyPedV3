@@ -19,10 +19,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
-  await dotenv.load();
-
   await runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    await dotenv.load();
 
     // Initialize Hive for local caching and preferences
     await Hive.initFlutter();
@@ -106,11 +106,23 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    const brandPrimary = Color(0xFF017BFF);
+    const brandSecondary = Color(0xFF28A745);
+
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF2963C8),
-      secondary: const Color(0xFF28a745),
+      seedColor: brandPrimary,
+      primary: brandPrimary,
+      onPrimary: Colors.white,
+      secondary: brandSecondary,
       onSecondary: Colors.white,
-      error: const Color(0xFF651F06),
+      error: const Color(0xFFB3261E),
+    );
+
+    final darkColorScheme = ColorScheme.fromSeed(
+      seedColor: brandPrimary,
+      brightness: Brightness.dark,
+      secondary: brandSecondary,
+      onSecondary: Colors.white,
     );
 
     final themeData = ThemeData(
@@ -157,8 +169,13 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
           debugShowCheckedModeBanner: false,
           theme: themeData,
           darkTheme: themeData.copyWith(
-            colorScheme: themeData.colorScheme.copyWith(
-              brightness: Brightness.dark,
+            brightness: Brightness.dark,
+            colorScheme: darkColorScheme,
+            appBarTheme: AppBarTheme(
+              backgroundColor: darkColorScheme.surface,
+              foregroundColor: darkColorScheme.onSurface,
+              titleTextStyle: GoogleFonts.openSans(
+                  fontSize: 20, color: darkColorScheme.onSurface),
             ),
           ),
           themeMode: themeMode,

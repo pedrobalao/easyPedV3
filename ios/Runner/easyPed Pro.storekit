@@ -1,0 +1,115 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "2A7F2AB8",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1158594702",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "F39T9H2Q78",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 798978373.10885596,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "22055137",
+      "localizations" : [
+        {
+          "description" : "",
+          "displayName" : "easyPed Pro",
+          "locale" : "pt_PT"
+        }
+      ],
+      "name" : "easyPed Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "34.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6764022378",
+          "introductoryOffers" : [
+
+          ],
+          "localizations" : [
+            {
+              "description" : "Subscrição Anual da easyPed Pro",
+              "displayName" : "easyPed Pro",
+              "locale" : "pt_PT"
+            }
+          ],
+          "productID" : "subscrition_yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Subscrição Anual",
+          "subscriptionGroupID" : "22055137",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "3.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6764022697",
+          "introductoryOffers" : [
+
+          ],
+          "localizations" : [
+            {
+              "description" : "Subscrição Mensal da easyPed Pro",
+              "displayName" : "Subscrição Mensal",
+              "locale" : "pt_PT"
+            }
+          ],
+          "productID" : "subscrition_monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Subscrição Mensal",
+          "subscriptionGroupID" : "22055137",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 5,
+    "minor" : 0
+  }
+}

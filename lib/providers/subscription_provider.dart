@@ -78,7 +78,6 @@ class DoseUsageNotifier extends StateNotifier<int> {
 }
 
 /// Current daily dose-calculation count.
-final doseUsageProvider =
-    StateNotifierProvider<DoseUsageNotifier, int>((ref) {
+final doseUsageProvider = StateNotifierProvider<DoseUsageNotifier, int>((ref) {
   return DoseUsageNotifier();
 });

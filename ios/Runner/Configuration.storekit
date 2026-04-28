@@ -1,0 +1,87 @@
+{
+  "identifier" : "B7E7A4E8-4F5E-4F5E-9D5E-4F5E4F5E0001",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : {
+    "_applicationInternalID" : "0",
+    "_developerTeamID" : "0",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 0,
+    "_locale" : "pt_PT",
+    "_storefront" : "PRT",
+    "_storeKitErrors" : [
+      { "current" : null, "enabled" : false, "name" : "Load Products" },
+      { "current" : null, "enabled" : false, "name" : "Purchase" },
+      { "current" : null, "enabled" : false, "name" : "Verification" },
+      { "current" : null, "enabled" : false, "name" : "App Store Sync" },
+      { "current" : null, "enabled" : false, "name" : "Subscription Status" },
+      { "current" : null, "enabled" : false, "name" : "App Transaction" },
+      { "current" : null, "enabled" : false, "name" : "Manage Subscriptions Sheet" },
+      { "current" : null, "enabled" : false, "name" : "Refund Request Sheet" },
+      { "current" : null, "enabled" : false, "name" : "Offer Code Redeem Sheet" }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21000001",
+      "localizations" : [
+        {
+          "description" : "easyPed Pro subscription group",
+          "displayName" : "easyPed Pro",
+          "locale" : "pt_PT"
+        }
+      ],
+      "name" : "easyPed Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "30000001",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Acesso completo a easyPed Pro (mensal)",
+              "displayName" : "easyPed Pro Mensal",
+              "locale" : "pt_PT"
+            }
+          ],
+          "productID" : "subscrition_monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "easyPed Pro Monthly",
+          "subscriptionGroupID" : "21000001",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : []
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "41.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "30000002",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Acesso completo a easyPed Pro (anual)",
+              "displayName" : "easyPed Pro Anual",
+              "locale" : "pt_PT"
+            }
+          ],
+          "productID" : "subscrition_yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "easyPed Pro Yearly",
+          "subscriptionGroupID" : "21000001",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : []
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
