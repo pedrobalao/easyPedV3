@@ -15,10 +15,16 @@ import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
+  // Use clean URLs on the web (e.g. `/home` instead of `/#/home`).
+  setUrlStrategy(PathUrlStrategy());
+
+  await dotenv.load();
+
   await runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -49,15 +55,17 @@ void main() async {
     // The following lines are the same as previously explained in "Handling uncaught errors"
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-    // Initialize RevenueCat with the authenticated Firebase user ID.
+    // Initialise the SubscriptionService with the currently signed-in
+    // Firebase user. On native platforms this configures the RevenueCat
+    // SDK; on the web it stores the UID for the REST entitlement check.
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       await SubscriptionService.instance.init(currentUser.uid);
     }
 
-    // Re-initialise (or switch users) whenever the auth state changes so the
-    // SDK is always configured before the paywall or any pro-gated feature
-    // tries to call it.
+    // Re-initialise (or switch users) whenever the auth state changes so
+    // the service is always configured before the paywall or any
+    // pro-gated feature tries to call it.
     FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user != null) {
         SubscriptionService.instance.init(user.uid);

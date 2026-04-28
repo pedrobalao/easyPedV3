@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:easypedv3/providers/providers.dart';
 import 'package:easypedv3/utils/app_styles.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -103,8 +102,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     return Scaffold(
         appBar: AppBar(title: const Text('easyPed')),
         body: SingleChildScrollView(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child:
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // ── Subscription section ──────────────────────────
             ListTile(
               tileColor: colorScheme.secondary,
@@ -178,6 +180,8 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                     style: Styles.normalText(context))),
             const Gap(5),
           ]),
+            ),
+          ),
         ));
   }
 
@@ -206,9 +210,16 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
   }
 
   Future<void> _openManageSubscription() async {
-    final url = Platform.isIOS
-        ? 'https://apps.apple.com/account/subscriptions'
-        : 'https://play.google.com/store/account/subscriptions';
+    final String url;
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        url = 'https://apps.apple.com/account/subscriptions';
+      case TargetPlatform.android:
+        url = 'https://play.google.com/store/account/subscriptions';
+      default:
+        // Web and desktop: fall back to a generic web account URL.
+        url = 'https://play.google.com/store/account/subscriptions';
+    }
     final uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (mounted) {

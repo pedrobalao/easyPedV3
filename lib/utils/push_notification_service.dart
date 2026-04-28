@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:easypedv3/utils/platform_support.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,8 +41,12 @@ class PushNotificationService {
   /// - Get and log the FCM token
   /// - Set up message handlers
   /// - Restore topic subscriptions
+  ///
+  /// On web (where FCM is not wired up here) this is a no-op.
   Future<void> initialise() async {
-    if (Platform.isIOS) {
+    if (!kSupportsPushNotifications) return;
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       await _messaging.requestPermission();
     }
 
@@ -73,12 +76,20 @@ class PushNotificationService {
 
   /// Subscribe to a notification topic.
   Future<void> subscribeToTopic(String topic) async {
+    if (!kSupportsPushNotifications) {
+      await _box.put(topic, true);
+      return;
+    }
     await _messaging.subscribeToTopic(topic);
     await _box.put(topic, true);
   }
 
   /// Unsubscribe from a notification topic.
   Future<void> unsubscribeFromTopic(String topic) async {
+    if (!kSupportsPushNotifications) {
+      await _box.put(topic, false);
+      return;
+    }
     await _messaging.unsubscribeFromTopic(topic);
     await _box.put(topic, false);
   }
@@ -90,6 +101,7 @@ class PushNotificationService {
 
   /// Re-subscribe to all previously selected topics.
   Future<void> _restoreSubscriptions() async {
+    if (!kSupportsPushNotifications) return;
     for (final topic in availableTopics.keys) {
       if (isSubscribed(topic)) {
         await _messaging.subscribeToTopic(topic);

@@ -22,6 +22,7 @@ import 'package:easypedv3/screens/tools/fluid_resuscitation_screen.dart';
 import 'package:easypedv3/screens/tools/glasgow_scale_screen.dart';
 import 'package:easypedv3/screens/tools/vital_signs_screen.dart';
 import 'package:easypedv3/screens/tools_screen.dart';
+import 'package:easypedv3/utils/platform_support.dart';
 import 'package:easypedv3/widgets/scaffold_with_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -88,6 +89,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Already authenticated biometrically — leave biometric screen.
       if (isAuthenticated && biometricAuthenticated && isOnBiometric) {
         return '/';
+      }
+
+      // Web does not support Firebase AI — redirect any deep link to the
+      // AI assistant back to the tools index.
+      if (!kSupportsAiChat &&
+          state.matchedLocation == '/tools/ai-assistant') {
+        return '/tools';
       }
 
       return null;
